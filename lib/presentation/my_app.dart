@@ -1,3 +1,5 @@
+import 'package:boilerplate_new_version/presentation/splashScreen/splash_screen.dart';
+
 import '../constants/app_theme.dart';
 import '../constants/strings.dart';
 import 'home/home.dart';
@@ -28,14 +30,16 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: Strings.appName,
-          theme: _themeStore.darkMode
-              ? AppThemeData.darkThemeData
-              : AppThemeData.lightThemeData,
+          theme:
+              _themeStore.darkMode
+                  ? AppThemeData.darkThemeData
+                  : AppThemeData.lightThemeData,
           routes: Routes.routes,
           locale: Locale(_languageStore.locale),
-          supportedLocales: _languageStore.supportedLanguages
-              .map((language) => Locale(language.locale, language.code))
-              .toList(),
+          supportedLocales:
+              _languageStore.supportedLanguages
+                  .map((language) => Locale(language.locale, language.code))
+                  .toList(),
           localizationsDelegates: [
             // A class which loads the translations from JSON files
             AppLocalizations.delegate,
@@ -46,7 +50,8 @@ class MyApp extends StatelessWidget {
             // Built-in localization of basic text for Cupertino widgets
             GlobalCupertinoLocalizations.delegate,
           ],
-          home: _userStore.isLoggedIn ? HomeScreen() : LoginScreen(),
+          home: HomeScreen(), // SplashScreen(),
+          // _userStore.isLoggedIn ? HomeScreen() : LoginScreen(),
         );
       },
     );

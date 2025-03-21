@@ -1,4 +1,8 @@
 import 'package:another_flushbar/flushbar_helper.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../constants/assets.dart';
 import '../../core/stores/form/form_store.dart';
 import '../../core/widgets/app_icon_widget.dart';
@@ -7,16 +11,12 @@ import '../../core/widgets/progress_indicator_widget.dart';
 import '../../core/widgets/rounded_button_widget.dart';
 import '../../core/widgets/textfield_widget.dart';
 import '../../data/sharedpref/constants/preferences.dart';
-import '../home/store/theme/theme_store.dart';
-import 'store/login_store.dart';
+import '../../di/service_locator.dart';
 import '../../utils/device/device_utils.dart';
 import '../../utils/locale/app_localization.dart';
 import '../../utils/routes/routes.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../di/service_locator.dart';
+import '../home/store/theme/theme_store.dart';
+import 'store/login_store.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -215,7 +215,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (message.isNotEmpty) {
           FlushbarHelper.createError(
             message: message,
-            title: AppLocalizations.of(context).translate('home_tv_error'),
+            title: AppLocalizations.of(context).translate('home_error'),
             duration: Duration(seconds: 3),
           )..show(context);
         }
