@@ -26,16 +26,54 @@ class AppThemeData {
   static const _lightFillColor = Colors.black;
   static const _darkFillColor = Colors.white;
 
-  static final Color _lightFocusColor = Colors.black.withOpacity(0.12);
   static final Color _darkFocusColor = Colors.white.withOpacity(0.12);
+  static final Color _lightFocusColor = Colors.black.withOpacity(0.12);
+  // static ThemeData lightThemeData = themeData(
+  //   lightColorScheme,
+  //   _lightFocusColor,
+  // );
 
-  static ThemeData lightThemeData = themeData(
-    lightColorScheme,
-    _lightFocusColor,
+static ThemeData lightThemeData = themeData(lightColorScheme, _lightFocusColor);
+
+static ThemeData themeData(ColorScheme colorScheme, Color focusColor) {
+  return ThemeData(
+    colorScheme: colorScheme,
+    textTheme: _textTheme,
+    // Matches manifest.json colors and background color.
+    primaryColor: const Color(0xFFF5F5F5),
+    appBarTheme: AppBarTheme(
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Color.fromRGBO(220, 220, 220, 1),
+        statusBarIconBrightness: Brightness.dark,
+      ),
+      titleTextStyle: TextStyle(
+        color: Colors.black,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
+      centerTitle: true,
+      backgroundColor: const Color.fromARGB(255, 240, 240, 240),
+      elevation: 0.0,
+      iconTheme: IconThemeData(color: Colors.black),
+    ),
+    iconTheme: IconThemeData(color: colorScheme.onPrimary),
+    canvasColor: colorScheme.surface,
+    scaffoldBackgroundColor: Color.fromARGB(255, 245, 245, 245),
+    highlightColor: Colors.transparent,
+    focusColor: focusColor,
+    snackBarTheme: SnackBarThemeData(
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Color.alphaBlend(
+        _darkFillColor.withOpacity(0.80),
+        _lightFillColor,
+      ),
+      contentTextStyle: _textTheme.titleMedium!.apply(color: _lightFillColor),
+    ),
   );
-  static ThemeData darkThemeData = themeData(darkColorScheme, _darkFocusColor);
+}
 
-  static ThemeData themeData(ColorScheme colorScheme, Color focusColor) {
+  static ThemeData darkThemeData = themeData2(darkColorScheme, _darkFocusColor);
+  static ThemeData themeData2(ColorScheme colorScheme, Color focusColor) {
     return ThemeData(
       colorScheme: colorScheme,
       textTheme: _textTheme,
@@ -71,6 +109,7 @@ class AppThemeData {
       ),
     );
   }
+
 
   static const ColorScheme lightColorScheme = ColorScheme(
     primary: Color(0xFFd21e1d),

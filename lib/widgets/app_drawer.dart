@@ -2,7 +2,7 @@ import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import '../store/theme/theme_store.dart';
+import '../presentation/home/store/theme/theme_store.dart';
 
 class AppDrawer extends StatefulWidget {
   @override

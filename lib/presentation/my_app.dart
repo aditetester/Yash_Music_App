@@ -1,9 +1,9 @@
-import 'package:boilerplate_new_version/presentation/ads/ads_screen.dart';
+import 'package:boilerplate_new_version/presentation/categories/all_categories.dart';
+import 'package:boilerplate_new_version/presentation/categories/store/category.dart';
 
 import '../constants/app_theme.dart';
 import '../constants/strings.dart';
 import 'home/store/theme/theme_store.dart';
-import 'login/store/login_store.dart';
 import '../utils/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -13,7 +13,7 @@ import 'package:boilerplate_new_version/presentation/splashScreen/splash_screen.
 
 class MyApp extends StatelessWidget {
   final ThemeStore _themeStore = getIt<ThemeStore>();
-  final UserStore _userStore = getIt<UserStore>();
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +27,8 @@ class MyApp extends StatelessWidget {
                   ? AppThemeData.darkThemeData
                   : AppThemeData.lightThemeData,
           routes: Routes.routes,
-          // initialRoute: Routes.mainDashboard,
           home: HomeScreen(), // SplashScreen(),
-
-          //path : SplashScreen() --> HomeScreen() 
-          // _userStore.isLoggedIn ? HomeScreen() : LoginScreen(),
+          //path : SplashScreen() --> HomeScreen()
         );
       },
     );

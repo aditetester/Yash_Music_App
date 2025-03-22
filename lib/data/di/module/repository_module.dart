@@ -1,14 +1,8 @@
 import 'dart:async';
-
-import '../../local/datasources/post/post_datasource.dart';
-import '../../network/apis/posts/post_api.dart';
-import '../../repository/post/post_repository_impl.dart';
 import '../../repository/setting/setting_repository_impl.dart';
-import '../../repository/user/user_repository_impl.dart';
 import '../../sharedpref/shared_preference_helper.dart';
-import '../../../domain/repository/post/post_repository.dart';
 import '../../../domain/repository/setting/setting_repository.dart';
-import '../../../domain/repository/user/user_repository.dart';
+
 
 import '../../../di/service_locator.dart';
 
@@ -19,13 +13,5 @@ class RepositoryModule {
       getIt<SharedPreferenceHelper>(),
     ));
 
-    getIt.registerSingleton<UserRepository>(UserRepositoryImpl(
-      getIt<SharedPreferenceHelper>(),
-    ));
-
-    getIt.registerSingleton<PostRepository>(PostRepositoryImpl(
-      getIt<PostApi>(),
-      getIt<PostDataSource>(),
-    ));
   }
 }

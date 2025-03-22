@@ -2,11 +2,8 @@ class NetworkConstants {
   NetworkConstants._();
 
   // base url
-  static const String baseUrl = 'http://jsonplaceholder.typicode.com';
+  static const String baseUrl = 'http://192.168.1.143:3000/';
 
-  // receiveTimeout
-  static const int receiveTimeout = 15000;
-
-  // connectTimeout
-  static const int connectionTimeout = 30000;
+  //All category list
+  static const String categories = "${baseUrl}v1/user/categories/";
 }

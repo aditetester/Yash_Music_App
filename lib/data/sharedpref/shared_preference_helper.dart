@@ -35,19 +35,11 @@ class SharedPreferenceHelper {
 
   // Theme:------------------------------------------------------
   bool get isDarkMode {
-    return _sharedPreference.getBool(Preferences.is_dark_mode) ?? false;
+    return _sharedPreference.getBool(Preferences.is_dark_mode) ?? true;
   }
 
   Future<void> changeBrightnessToDark(bool value) {
     return _sharedPreference.setBool(Preferences.is_dark_mode, value);
   }
 
-  // Language:---------------------------------------------------
-  String? get currentLanguage {
-    return _sharedPreference.getString(Preferences.current_language);
-  }
-
-  Future<void> changeLanguage(String language) {
-    return _sharedPreference.setString(Preferences.current_language, language);
-  }
 }

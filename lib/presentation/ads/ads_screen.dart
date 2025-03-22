@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:boilerplate_new_version/widgets/check_connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -10,16 +8,9 @@ class AdsScreen extends StatefulWidget {
 }
 
 class _AdsScreenState extends State<AdsScreen> {
-
   BannerAd? _bannerAd;
   bool _isAdLoaded = false;
-  
 
-  final adUnitId = Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/6300978111'
-      : 'ca-app-pub-3940256099942544/2934735716';
-
- 
   @override
   void initState() {
     CheckConnectivity.connection(context); // Assuming this works as expected
@@ -54,26 +45,19 @@ class _AdsScreenState extends State<AdsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
-
-    // TODO: implement build
-    return SafeArea(
-        child: Scaffold(
-            body: _bannerAd != null
-                ? Container(
-                    width: screenWidth,
-                    height: screenHeight * 0.07,
-                    child: Center(
-                      child: Container(
-                        width: _bannerAd!.size.width.toDouble(),
-                        height: _bannerAd!.size.height.toDouble(),
-                        child: AdWidget(ad: _bannerAd!),
-                      ),
-                    ),
-                  )
-                : Container(
-              height: 0,
-            )));
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          if (_isAdLoaded)
+            Container(
+              alignment: Alignment.center,
+              width: _bannerAd!.size.width.toDouble(),
+              height: _bannerAd!.size.height.toDouble(),
+              child: AdWidget(ad: _bannerAd!),
+            ),
+        ],
+      ),
+    );
   }
 }
