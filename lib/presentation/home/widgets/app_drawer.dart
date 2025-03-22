@@ -2,7 +2,6 @@ import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import '../store/language/language_store.dart';
 import '../store/theme/theme_store.dart';
 
 class AppDrawer extends StatefulWidget {
@@ -12,7 +11,6 @@ class AppDrawer extends StatefulWidget {
 
 class _AppDrawerState extends State<AppDrawer> {
   final ThemeStore _themeStore = getIt<ThemeStore>();
-  final LanguageStore _languageStore = getIt<LanguageStore>();
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -98,8 +96,6 @@ class _AppDrawerState extends State<AppDrawer> {
             ),
             Divider(color: Colors.white),
             _buildThemeButton(),
-            Divider(color: Colors.white),
-            _buildLanguageButton(),
           ],
         ),
       ),
@@ -120,64 +116,5 @@ class _AppDrawerState extends State<AppDrawer> {
         );
       },
     );
-  }
-
-  Widget _buildLanguageButton() {
-    return ListTile(
-      onTap: () {
-        _buildLanguageDialog();
-      },
-      leading: Icon(Icons.language),
-      title: Text("CHANGE LANGUAGE"),
-    );
-  }
-
-  _buildLanguageDialog() {
-    _showDialog<String>(
-      context: context,
-      child: AlertDialog(
-        // borderRadius: 5.0,
-        // enableFullWidth: true,
-        title: Text(
-          AppLocalizations.of(context).translate('home_tv_choose_language'),
-        ),
-        // headerColor: Theme.of(context).primaryColor,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        // closeButtonColor: Colors.white,
-        // enableCloseButton: true,
-        // enableBackButton: false,
-        // onCloseButtonClicked: () {
-        //   Navigator.of(context).pop();
-        // },
-        actions:
-            _languageStore.supportedLanguages
-                // children: _languageStore.supportedLanguages
-                .map(
-                  (object) => ListTile(
-                    dense: true,
-                    contentPadding: EdgeInsets.all(0.0),
-                    title: Text(
-                      object.language,
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      // change user language based on selected locale
-                      _languageStore.changeLanguage(object.locale);
-                    },
-                  ),
-                )
-                .toList(),
-      ),
-    );
-  }
-
-  _showDialog<T>({required BuildContext context, required Widget child}) {
-    showDialog<T>(
-      context: context,
-      builder: (BuildContext context) => child,
-    ).then<void>((T? value) {
-      // The value passed to Navigator.pop() or null.
-    });
   }
 }

@@ -7,7 +7,6 @@ import '../../../domain/usecase/post/get_post_usecase.dart';
 import '../../../domain/usecase/user/is_logged_in_usecase.dart';
 import '../../../domain/usecase/user/login_usecase.dart';
 import '../../../domain/usecase/user/save_login_in_status_usecase.dart';
-import '../../home/store/language/language_store.dart';
 import '../../home/store/theme/theme_store.dart';
 import '../../login/store/login_store.dart';
 import '../../post/store/post_store.dart';
@@ -43,13 +42,6 @@ class StoreModule {
 
     getIt.registerSingleton<ThemeStore>(
       ThemeStore(
-        getIt<SettingRepository>(),
-        getIt<ErrorStore>(),
-      ),
-    );
-
-    getIt.registerSingleton<LanguageStore>(
-      LanguageStore(
         getIt<SettingRepository>(),
         getIt<ErrorStore>(),
       ),

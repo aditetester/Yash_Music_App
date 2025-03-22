@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'di/service_locator.dart';
 import 'presentation/my_app.dart';
 import 'package:flutter/material.dart';
