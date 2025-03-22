@@ -1,3 +1,5 @@
+import 'package:boilerplate_new_version/presentation/ads/ads_screen.dart';
+
 import '../constants/app_theme.dart';
 import '../constants/strings.dart';
 import 'home/store/theme/theme_store.dart';
@@ -25,6 +27,7 @@ class MyApp extends StatelessWidget {
                   ? AppThemeData.darkThemeData
                   : AppThemeData.lightThemeData,
           routes: Routes.routes,
+          // initialRoute: Routes.mainDashboard,
           home: HomeScreen(), // SplashScreen(),
 
           //path : SplashScreen() --> HomeScreen() 

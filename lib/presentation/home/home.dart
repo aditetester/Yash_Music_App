@@ -1,3 +1,5 @@
+import 'package:boilerplate_new_version/presentation/ads/ads_screen.dart';
+import 'package:boilerplate_new_version/presentation/dashboard/main_dashboard.dart';
 import 'package:boilerplate_new_version/presentation/home/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 import '../../utils/locale/app_localization.dart';
@@ -16,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: _buildAppBar(),
       drawer: AppDrawer(),
-      body: Container(),
+      body: MainDashboard(),
     );
   }
 

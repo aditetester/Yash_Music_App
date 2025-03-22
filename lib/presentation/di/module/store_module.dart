@@ -39,7 +39,7 @@ class StoreModule {
         getIt<ErrorStore>(),
       ),
     );
-
+    
     getIt.registerSingleton<ThemeStore>(
       ThemeStore(
         getIt<SettingRepository>(),

@@ -39,6 +39,7 @@ dependencies:
   # B
   # C
   cupertino_icons: ^1.0.5
+  connectivity_plus: ^6.1.3
   # D
   dio: ^5.1.1
   # E
