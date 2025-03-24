@@ -23,7 +23,7 @@ abstract class _CategoriesStore with Store {
 
   // @computed
   // Future<List<dynamic>>? get getCategoryList {
-  //   return CategoryList;
+  //   return CategoryList!['categories'];
   // }
 
   // actions:-------------------------------------------------------------------

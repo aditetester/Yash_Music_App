@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
                   ? AppThemeData.darkThemeData
                   : AppThemeData.lightThemeData,
           routes: Routes.routes,
-          home:  SplashScreen(),
+          home:  HomeScreen(), //SplashScreen(),
           //path : SplashScreen() --> HomeScreen()
         );
       },

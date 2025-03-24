@@ -1,6 +1,6 @@
 import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/presentation/categories/store/categories.dart';
-import 'package:boilerplate_new_version/widgets/categories_items.dart';
+import 'package:boilerplate_new_version/presentation/home/widgets/categories_items.dart';
 import 'package:flutter/material.dart';
 
 class AllCategories extends StatefulWidget {
@@ -11,9 +11,9 @@ class AllCategories extends StatefulWidget {
 }
 
 class _AllCategoriesState extends State<AllCategories> {
- Categories _CategoriesStore = getIt<Categories>();
- Future<List<dynamic>>? categories;
- 
+  Categories _CategoriesStore = getIt<Categories>();
+  Future<List<dynamic>>? categories;
+
   @override
   void initState() {
     super.initState();
@@ -24,13 +24,10 @@ class _AllCategoriesState extends State<AllCategories> {
     categories = _CategoriesStore.fetchCategories();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Music Categories"),
-      ),
+      appBar: AppBar(title: Text("Music Categories")),
       body: FutureBuilder<List<dynamic>>(
         future: categories,
         builder: (context, snapshot) {
@@ -42,7 +39,7 @@ class _AllCategoriesState extends State<AllCategories> {
             return Center(child: Text("No categories available."));
           } else {
             final data = snapshot.data!;
-
+            print(data);
             return Container(
               padding: EdgeInsets.all(10),
               child: GridView(
@@ -52,13 +49,14 @@ class _AllCategoriesState extends State<AllCategories> {
                   crossAxisSpacing: 20,
                   mainAxisSpacing: 20,
                 ),
-                children: data.map((category) {
-                  return CategoriesItem(
-                    category['_id'], // Pass category ID
-                    category['category_name'], // Pass category name
-                    "http://192.168.1.149:3000/v1/user/${category['image']['file']}", // Construct image URL
-                  );
-                }).toList(),
+                children:
+                    data.map((category) {
+                      return CategoriesItem(
+                        category['_id'], // Pass category ID
+                        category['category_name'], // Pass category name
+                        "http://192.168.1.143:3000/${category['image']['file']}", // Construct image URL
+                      );
+                    }).toList(),
               ),
             );
           }
