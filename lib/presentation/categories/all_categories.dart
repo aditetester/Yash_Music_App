@@ -1,4 +1,5 @@
-import 'package:boilerplate_new_version/presentation/categories/store/category.dart';
+import 'package:boilerplate_new_version/di/service_locator.dart';
+import 'package:boilerplate_new_version/presentation/categories/store/categories.dart';
 import 'package:boilerplate_new_version/widgets/categories_items.dart';
 import 'package:flutter/material.dart';
 
@@ -10,13 +11,19 @@ class AllCategories extends StatefulWidget {
 }
 
 class _AllCategoriesState extends State<AllCategories> {
- late Future<List<dynamic>> categories;
- CategoriesPage ct = CategoriesPage();
+ Categories _CategoriesStore = getIt<Categories>();
+ Future<List<dynamic>>? categories;
+ 
   @override
   void initState() {
     super.initState();
-    categories = ct.fetchCategories();
+    getData();
   }
+
+  Future<void> getData() async {
+    categories = _CategoriesStore.fetchCategories();
+  }
+
 
   @override
   Widget build(BuildContext context) {

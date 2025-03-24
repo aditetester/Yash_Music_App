@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:boilerplate_new_version/data/network/constants/music_api.dart';
+
 import '../../../../core/data/network/dio/dio_client.dart';
-import '../../../../domain/entity/post/post_list.dart';
+
 
 class PostApi {
   // dio instance
@@ -12,10 +14,13 @@ class PostApi {
   PostApi(this._dioClient);
 
   /// Returns list of post in response
-  Future<PostList> getPosts() async {
+  Future<Map<String,dynamic>> getCategories() async {
     try {
-      final res = await _dioClient.dio.get("");
-      return PostList.fromJson(res.data);
+      final res = await _dioClient.dio.get(MusicApis.categories);
+
+      return res.data;
+      
+
     } catch (e) {
       print(e.toString());
       throw e;
