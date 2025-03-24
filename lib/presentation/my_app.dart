@@ -1,5 +1,5 @@
-import 'package:boilerplate_new_version/presentation/categories/all_categories.dart';
-import 'package:boilerplate_new_version/presentation/categories/store/categories.dart';
+import 'package:boilerplate_new_version/presentation/categories/category_list.dart';
+import 'package:boilerplate_new_version/presentation/categories/store/categories_store.dart';
 
 import '../constants/app_theme.dart';
 import '../constants/strings.dart';
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
                   ? AppThemeData.darkThemeData
                   : AppThemeData.lightThemeData,
           routes: Routes.routes,
-          home:  HomeScreen(), //SplashScreen(),
+          home:  CategoryList(), //SplashScreen(),
           //path : SplashScreen() --> HomeScreen()
         );
       },

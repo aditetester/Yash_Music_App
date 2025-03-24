@@ -1,12 +1,9 @@
-import 'package:boilerplate_new_version/data/repository/all_categories/categories_respository_imp.dart';
-
+import 'package:boilerplate_new_version/data/repository/categories/categories_respository_imp.dart';
 import 'package:mobx/mobx.dart';
 
+part 'categories_store.g.dart';
 
-
-part 'categories.g.dart';
-
-class Categories = _CategoriesStore with _$Categories;
+class CategoriesStore = _CategoriesStore with _$CategoriesStore;
 
 abstract class _CategoriesStore with Store {
   CategoriesRepositoryImp? _repository;
@@ -21,16 +18,11 @@ abstract class _CategoriesStore with Store {
   @observable
   bool success = false;
 
-  // @computed
-  // Future<List<dynamic>>? get getCategoryList {
-  //   return CategoryList!['categories'];
-  // }
-
   // actions:-------------------------------------------------------------------
   @action
   Future<List<dynamic>> fetchCategories() async {
    
-   CategoryList = await _repository!.getAllCategories();
+   CategoryList = await _repository!.getCategoryList();
    
    return CategoryList!['categories'];
    

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'categories.dart';
+part of 'sub_categories_store.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -8,9 +8,9 @@ part of 'categories.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$Categories on _CategoriesStore, Store {
+mixin _$SubCategoriesStore on _SubCategoriesStore, Store {
   late final _$CategoryListAtom =
-      Atom(name: '_CategoriesStore.CategoryList', context: context);
+      Atom(name: '_SubCategoriesStore.CategoryList', context: context);
 
   @override
   Map<String, dynamic>? get CategoryList {
@@ -26,7 +26,7 @@ mixin _$Categories on _CategoriesStore, Store {
   }
 
   late final _$successAtom =
-      Atom(name: '_CategoriesStore.success', context: context);
+      Atom(name: '_SubCategoriesStore.success', context: context);
 
   @override
   bool get success {
@@ -41,12 +41,13 @@ mixin _$Categories on _CategoriesStore, Store {
     });
   }
 
-  late final _$fetchCategoriesAsyncAction =
-      AsyncAction('_CategoriesStore.fetchCategories', context: context);
+  late final _$fetchSubCategoriesAsyncAction =
+      AsyncAction('_SubCategoriesStore.fetchSubCategories', context: context);
 
   @override
-  Future<List<dynamic>> fetchCategories() {
-    return _$fetchCategoriesAsyncAction.run(() => super.fetchCategories());
+  Future<List<dynamic>> fetchSubCategories(dynamic categoryId) {
+    return _$fetchSubCategoriesAsyncAction
+        .run(() => super.fetchSubCategories(categoryId));
   }
 
   @override

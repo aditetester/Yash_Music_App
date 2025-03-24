@@ -1,18 +1,21 @@
-import 'package:boilerplate_new_version/presentation/categories/all_categories.dart';
+import 'package:boilerplate_new_version/presentation/subCategories/sub_category_list.dart';
 import 'package:flutter/material.dart';
+import 'package:boilerplate_new_version/presentation/categories/category_list.dart';
 import '../../presentation/home/home.dart';
-
 
 class Routes {
   Routes._();
 
   //static variables
   static const String home = '/home';
-  static const String allCategories = '/allCategroies';
+  static const String categoryList = '/categroiesList';
+  static const String subCategoryList = '/subCategroiesList';
   
+
   static final routes = <String, WidgetBuilder>{
     home: (BuildContext context) => HomeScreen(),
-   allCategories: (BuildContext context) => AllCategories(),
-    
+    categoryList: (BuildContext context) => CategoryList(),
+    subCategoryList : (BuildContext context) => SubCategoryList(),
+
   };
 }

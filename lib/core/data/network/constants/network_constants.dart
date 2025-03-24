@@ -6,4 +6,8 @@ class NetworkConstants {
 
   //All category list
   static const String categories = "${baseUrl}v1/user/categories/";
+  
+  //All subCategory list
+  static const String subCategories = "${baseUrl}v1/user/subcategories/";
+  
 }

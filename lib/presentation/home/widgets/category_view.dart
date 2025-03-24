@@ -1,7 +1,7 @@
 import 'package:boilerplate_new_version/di/service_locator.dart';
-import 'package:boilerplate_new_version/presentation/categories/store/categories.dart';
-import 'package:flutter/material.dart';
+import 'package:boilerplate_new_version/presentation/categories/store/categories_store.dart';
 import 'package:boilerplate_new_version/utils/routes/routes.dart';
+import 'package:flutter/material.dart';
 
 class CategoryViewScreen extends StatefulWidget {
   const CategoryViewScreen({super.key});
@@ -11,7 +11,7 @@ class CategoryViewScreen extends StatefulWidget {
 }
 
 class _CategoryViewScreenState extends State<CategoryViewScreen> {
-  Categories _CategoriesStore = getIt<Categories>();
+  CategoriesStore _CategoriesStore = getIt<CategoriesStore>();
   Future<List<dynamic>>? categories;
 
   @override
@@ -42,7 +42,7 @@ class _CategoryViewScreenState extends State<CategoryViewScreen> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context).pushNamed(Routes.allCategories);
+                  Navigator.of(context).pushNamed(Routes.categoryList);
                 },
                 child: Text(
                   "View All",
@@ -72,7 +72,7 @@ class _CategoryViewScreenState extends State<CategoryViewScreen> {
                       final item = data[index];
                       return GestureDetector(
                         onTap: () {
-                          Navigator.of(context).pushNamed(Routes.allCategories);
+                          Navigator.of(context).pushNamed(Routes.categoryList);
                         },
                         child: Container(
                           width: 120,

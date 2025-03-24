@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'package:boilerplate_new_version/data/network/apis/posts/post_api.dart';
-import 'package:boilerplate_new_version/data/repository/all_categories/categories_respository_imp.dart';
-import 'package:boilerplate_new_version/domain/repository/categories/Categories_repository.dart';
-import 'package:boilerplate_new_version/presentation/categories/store/categories.dart';
+import 'package:boilerplate_new_version/data/repository/categories/categories_respository_imp.dart';
+import 'package:boilerplate_new_version/data/repository/subcategories/subCategories_respository_imp.dart';
+import 'package:boilerplate_new_version/presentation/categories/store/categories_store.dart';
+import 'package:boilerplate_new_version/presentation/subCategories/store/sub_categories_store.dart';
 
 import '../../../core/stores/error/error_store.dart';
 import '../../../core/stores/form/form_store.dart';
@@ -28,8 +28,11 @@ class StoreModule {
       ),
     );
     
-     getIt.registerSingleton<Categories>(
-      Categories(getIt<CategoriesRepositoryImp>()),
+     getIt.registerSingleton<CategoriesStore>(
+      CategoriesStore(getIt<CategoriesRepositoryImp>()),
+    );
+     getIt.registerSingleton<SubCategoriesStore>(
+      SubCategoriesStore(getIt<SubCategoriesRepositoryImp>()),
     );
   }
 }

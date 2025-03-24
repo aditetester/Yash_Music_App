@@ -1,17 +1,17 @@
 import 'package:boilerplate_new_version/di/service_locator.dart';
-import 'package:boilerplate_new_version/presentation/categories/store/categories.dart';
-import 'package:boilerplate_new_version/presentation/home/widgets/categories_items.dart';
+import 'package:boilerplate_new_version/presentation/categories/store/categories_store.dart';
+import 'package:boilerplate_new_version/presentation/categories/widgets/categories_items.dart';
 import 'package:flutter/material.dart';
 
-class AllCategories extends StatefulWidget {
-  const AllCategories({super.key});
+class CategoryList extends StatefulWidget {
+  const CategoryList({super.key});
 
   @override
-  State<AllCategories> createState() => _AllCategoriesState();
+  State<CategoryList> createState() => _CategoryListState();
 }
 
-class _AllCategoriesState extends State<AllCategories> {
-  Categories _CategoriesStore = getIt<Categories>();
+class _CategoryListState extends State<CategoryList> {
+  CategoriesStore _CategoriesStore = getIt<CategoriesStore>();
   Future<List<dynamic>>? categories;
 
   @override
@@ -39,13 +39,12 @@ class _AllCategoriesState extends State<AllCategories> {
             return Center(child: Text("No categories available."));
           } else {
             final data = snapshot.data!;
-            print(data);
             return Container(
               padding: EdgeInsets.all(10),
               child: GridView(
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 300,
-                  childAspectRatio: 2.4 / 3,
+                  maxCrossAxisExtent: 400,
+                  childAspectRatio: 4 / 3,
                   crossAxisSpacing: 20,
                   mainAxisSpacing: 20,
                 ),

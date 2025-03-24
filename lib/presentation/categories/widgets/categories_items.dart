@@ -1,3 +1,4 @@
+import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
 class CategoriesItem extends StatelessWidget {
   final String id;
@@ -8,8 +9,8 @@ class CategoriesItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void productView() async {
-
+    void ViewSubCategories() async {
+      Navigator.of(context).pushNamed(Routes.subCategoryList , arguments: id);
     }
 
     return ClipRRect(
@@ -18,14 +19,14 @@ class CategoriesItem extends StatelessWidget {
         bottomRight: Radius.circular(10),
       ),
       child: GestureDetector(
-        onTap: () => productView(),
+        onTap: () => ViewSubCategories(),
         child: GridTile(
           footer: GridTileBar(
             backgroundColor: Colors.black87,
             title: Text(
               title,
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white, fontSize: 20),
+              style: TextStyle(color: Colors.white, fontSize: 30),
             ),
           ),
           child: Hero(

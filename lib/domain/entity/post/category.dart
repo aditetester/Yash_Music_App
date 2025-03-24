@@ -1,17 +1,17 @@
-class Post {
+class Category {
   int? userId;
   int? id;
   String? title;
   String? body;
 
-  Post({
+  Category({
     this.userId,
     this.id,
     this.title,
     this.body,
   });
 
-  factory Post.fromMap(Map<String, dynamic> json) => Post(
+  factory Category.fromMap(Map<String, dynamic> json) => Category(
         userId: json["userId"],
         id: json["id"],
         title: json["title"],
