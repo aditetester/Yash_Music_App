@@ -1,6 +1,4 @@
 import 'package:boilerplate_new_version/presentation/categories/category_list.dart';
-import 'package:boilerplate_new_version/presentation/categories/store/categories_store.dart';
-
 import '../constants/app_theme.dart';
 import '../constants/strings.dart';
 import 'home/store/theme/theme_store.dart';
@@ -8,7 +6,6 @@ import '../utils/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../di/service_locator.dart';
-import 'home/home.dart';
 import 'package:boilerplate_new_version/presentation/splashScreen/splash_screen.dart';
 
 class MyApp extends StatelessWidget {
@@ -27,7 +24,7 @@ class MyApp extends StatelessWidget {
                   ? AppThemeData.darkThemeData
                   : AppThemeData.lightThemeData,
           routes: Routes.routes,
-          home:  CategoryList(), //SplashScreen(),
+          home:  SplashScreen(),
           //path : SplashScreen() --> HomeScreen()
         );
       },

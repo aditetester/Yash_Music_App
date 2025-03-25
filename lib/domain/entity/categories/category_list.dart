@@ -1,17 +1,17 @@
 import 'package:boilerplate_new_version/domain/entity/categories/category.dart';
 
 class AllCategoryList {
-  final List<CategoryModule>? posts;
+  final List<CategoryModule>? categorytdata;
 
-  AllCategoryList({this.posts});
+  AllCategoryList({this.categorytdata});
 
   factory AllCategoryList.fromJson(List<dynamic> json) {
     
-    List<CategoryModule> posts = <CategoryModule>[];
+    List<CategoryModule> categorytdata = <CategoryModule>[];
     
      // Parse JSON string into a List of Map
-    posts =  json.map((categ) => CategoryModule.fromMap(categ)).toList();
+    categorytdata =  json.map((categ) => CategoryModule.fromMap(categ)).toList();
   
-    return AllCategoryList(posts: posts);
+    return AllCategoryList(categorytdata: categorytdata);
   }
 }

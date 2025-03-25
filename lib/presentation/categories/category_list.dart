@@ -1,7 +1,7 @@
 import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/domain/entity/categories/category.dart';
 import 'package:boilerplate_new_version/presentation/categories/store/categories_store.dart';
-import 'package:boilerplate_new_version/widgets/category_items.dart';
+import 'package:boilerplate_new_version/presentation/categories/widgets/category_items.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';

@@ -39,7 +39,7 @@ abstract class _CategoryStore with Store {
     fetchPostsFuture = ObservableFuture(future);
       
     await future.then((categoryList) {
-      CategoryList = categoryList.posts;
+      CategoryList = categoryList.categorytdata;
     }).catchError((error) {
       errorStore.errorMessage = DioExceptionUtil.handleError(error);
     

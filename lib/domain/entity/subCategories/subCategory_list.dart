@@ -2,17 +2,17 @@
 import 'package:boilerplate_new_version/domain/entity/subCategories/subCategory.dart';
 
 class AllSubCategoryList {
-  final List<SubCategoryModule>? posts;
+  final List<SubCategoryModule>? subCategorytData;
 
-  AllSubCategoryList({this.posts});
+  AllSubCategoryList({this.subCategorytData});
 
   factory AllSubCategoryList.fromJson(List<dynamic> json) {
     
-    List<SubCategoryModule> posts = <SubCategoryModule>[];
+    List<SubCategoryModule> subCategorytData = <SubCategoryModule>[];
     
      // Parse JSON string into a List of Map
-    posts =  json.map((categ) => SubCategoryModule.fromMap(categ)).toList();
+    subCategorytData =  json.map((categ) => SubCategoryModule.fromMap(categ)).toList();
   
-    return AllSubCategoryList(posts: posts);
+    return AllSubCategoryList(subCategorytData: subCategorytData);
   }
 }

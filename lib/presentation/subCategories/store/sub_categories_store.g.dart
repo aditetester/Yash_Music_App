@@ -41,12 +41,22 @@ mixin _$SubCategoriesStore on _SubCategoriesStore, Store {
     });
   }
 
-  late final _$fetchCategoriesAsyncAction =
-      AsyncAction('_SubCategoriesStore.fetchCategories', context: context);
+  late final _$fetchSubCategoriesAsyncAction =
+      AsyncAction('_SubCategoriesStore.fetchSubCategories', context: context);
 
   @override
-  Future<void> fetchCategories() {
-    return _$fetchCategoriesAsyncAction.run(() => super.fetchCategories());
+  Future<void> fetchSubCategories() {
+    return _$fetchSubCategoriesAsyncAction
+        .run(() => super.fetchSubCategories());
+  }
+
+  late final _$SelectSubCategoriesAsyncAction =
+      AsyncAction('_SubCategoriesStore.SelectSubCategories', context: context);
+
+  @override
+  Future<void> SelectSubCategories(String categoryId) {
+    return _$SelectSubCategoriesAsyncAction
+        .run(() => super.SelectSubCategories(categoryId));
   }
 
   @override
