@@ -9,52 +9,51 @@ part of 'sub_categories_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$SubCategoriesStore on _SubCategoriesStore, Store {
-  late final _$CategoryListAtom =
-      Atom(name: '_SubCategoriesStore.CategoryList', context: context);
+  late final _$fetchPostsFutureAtom =
+      Atom(name: '_SubCategoriesStore.fetchPostsFuture', context: context);
 
   @override
-  Map<String, dynamic>? get CategoryList {
-    _$CategoryListAtom.reportRead();
-    return super.CategoryList;
+  ObservableFuture<AllSubCategoryList?> get fetchPostsFuture {
+    _$fetchPostsFutureAtom.reportRead();
+    return super.fetchPostsFuture;
   }
 
   @override
-  set CategoryList(Map<String, dynamic>? value) {
-    _$CategoryListAtom.reportWrite(value, super.CategoryList, () {
-      super.CategoryList = value;
+  set fetchPostsFuture(ObservableFuture<AllSubCategoryList?> value) {
+    _$fetchPostsFutureAtom.reportWrite(value, super.fetchPostsFuture, () {
+      super.fetchPostsFuture = value;
     });
   }
 
-  late final _$successAtom =
-      Atom(name: '_SubCategoriesStore.success', context: context);
+  late final _$subCategoryListAtom =
+      Atom(name: '_SubCategoriesStore.subCategoryList', context: context);
 
   @override
-  bool get success {
-    _$successAtom.reportRead();
-    return super.success;
+  List<SubCategoryModule>? get subCategoryList {
+    _$subCategoryListAtom.reportRead();
+    return super.subCategoryList;
   }
 
   @override
-  set success(bool value) {
-    _$successAtom.reportWrite(value, super.success, () {
-      super.success = value;
+  set subCategoryList(List<SubCategoryModule>? value) {
+    _$subCategoryListAtom.reportWrite(value, super.subCategoryList, () {
+      super.subCategoryList = value;
     });
   }
 
-  late final _$fetchSubCategoriesAsyncAction =
-      AsyncAction('_SubCategoriesStore.fetchSubCategories', context: context);
+  late final _$fetchCategoriesAsyncAction =
+      AsyncAction('_SubCategoriesStore.fetchCategories', context: context);
 
   @override
-  Future<List<dynamic>> fetchSubCategories(dynamic categoryId) {
-    return _$fetchSubCategoriesAsyncAction
-        .run(() => super.fetchSubCategories(categoryId));
+  Future<void> fetchCategories() {
+    return _$fetchCategoriesAsyncAction.run(() => super.fetchCategories());
   }
 
   @override
   String toString() {
     return '''
-CategoryList: ${CategoryList},
-success: ${success}
+fetchPostsFuture: ${fetchPostsFuture},
+subCategoryList: ${subCategoryList}
     ''';
   }
 }

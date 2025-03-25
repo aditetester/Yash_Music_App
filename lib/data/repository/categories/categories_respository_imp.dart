@@ -1,6 +1,6 @@
 
 import 'package:boilerplate_new_version/data/network/apis/categories/categories_api.dart';
-import 'package:boilerplate_new_version/domain/entity/post/category_list.dart';
+import 'package:boilerplate_new_version/domain/entity/categories/category_list.dart';
 import 'package:boilerplate_new_version/domain/repository/categories/Categories_repository.dart';
 
 class CategoriesRepositoryImp extends CategoriesRepository {

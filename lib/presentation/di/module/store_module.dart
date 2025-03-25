@@ -1,16 +1,15 @@
 import 'dart:async';
-import 'package:boilerplate_new_version/data/repository/categories/categories_respository_imp.dart';
-import 'package:boilerplate_new_version/data/repository/subcategories/subCategories_respository_imp.dart';
-import 'package:boilerplate_new_version/domain/usecase/post/get_post_usecase.dart';
+
+import 'package:boilerplate_new_version/domain/usecase/categories/get_category_usecase.dart';
+import 'package:boilerplate_new_version/domain/usecase/sub_categories/get_subcategories_usecase.dart';
 import 'package:boilerplate_new_version/presentation/categories/store/categories_store.dart';
 import 'package:boilerplate_new_version/presentation/subCategories/store/sub_categories_store.dart';
 
 import '../../../core/stores/error/error_store.dart';
 import '../../../core/stores/form/form_store.dart';
+import '../../../di/service_locator.dart';
 import '../../../domain/repository/setting/setting_repository.dart';
 import '../../home/store/theme/theme_store.dart';
-
-import '../../../di/service_locator.dart';
 
 class StoreModule {
   static Future<void> configureStoreModuleInjection() async {
@@ -29,12 +28,12 @@ class StoreModule {
       ),
     );
     
-     getIt.registerSingleton<CategoriesStore>(
-      CategoriesStore(  getIt<GetPostUseCase>(),
+     getIt.registerSingleton<CategoryStore>(
+      CategoryStore(  getIt<GetCategoryUseCase>(),
         getIt<ErrorStore>(),),
     );
      getIt.registerSingleton<SubCategoriesStore>(
-      SubCategoriesStore(getIt<SubCategoriesRepositoryImp>()),
-    );
+      SubCategoriesStore(getIt<GetSubCategoryUseCase>(),
+        getIt<ErrorStore>(),));
   }
 }

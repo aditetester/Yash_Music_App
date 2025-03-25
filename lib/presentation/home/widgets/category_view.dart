@@ -1,5 +1,5 @@
 import 'package:boilerplate_new_version/di/service_locator.dart';
-import 'package:boilerplate_new_version/domain/entity/post/category.dart';
+import 'package:boilerplate_new_version/domain/entity/categories/category.dart';
 import 'package:boilerplate_new_version/presentation/categories/store/categories_store.dart';
 import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
@@ -14,13 +14,13 @@ class CategoryViewScreen extends StatefulWidget {
 }
 
 class _CategoryViewScreenState extends State<CategoryViewScreen> {
-  CategoriesStore _CategoriesStore = getIt<CategoriesStore>();
-  List<Category>? categories = [];
+  CategoryStore _CategoryStore = getIt<CategoryStore>();
+  List<CategoryModule>? categories = [];
 
   @override
   void initState() {
     super.initState();
-    _CategoriesStore.fetchCategories();
+    _CategoryStore.fetchCategories();
   }
 
   @override
@@ -55,12 +55,12 @@ class _CategoryViewScreenState extends State<CategoryViewScreen> {
             height: 150,
             child: Observer(
               builder: (_) {
-                if (_CategoriesStore.fetchPostsFuture.status ==
+                if (_CategoryStore.fetchPostsFuture.status ==
                     FutureStatus.pending) {
                   return Center(child: CircularProgressIndicator());
-                } else if (_CategoriesStore.fetchPostsFuture.status ==
+                } else if (_CategoryStore.fetchPostsFuture.status ==
                     FutureStatus.fulfilled) {
-                  categories = _CategoriesStore.CategoryList;
+                  categories = _CategoryStore.CategoryList;
 
                   if (categories == null || categories!.isEmpty) {
                     return Center(child: Text("No categories available"));

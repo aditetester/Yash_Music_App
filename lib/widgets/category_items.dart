@@ -1,11 +1,11 @@
 import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
-class CategoriesItem extends StatelessWidget {
+class CategoryItem extends StatelessWidget {
   final String id;
   final String title;
   final String image;
 
-  const CategoriesItem(this.id, this.title, this.image, {super.key});
+  const CategoryItem(this.id, this.title, this.image, {super.key});
 
   @override
   Widget build(BuildContext context) {

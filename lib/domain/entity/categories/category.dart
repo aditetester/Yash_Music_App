@@ -1,13 +1,13 @@
 import 'package:boilerplate_new_version/core/data/network/constants/network_constants.dart';
 
-class Category {
+class CategoryModule {
   String? id;
   String? name;
   String? image;
 
-  Category({this.id, this.name, this.image});
+  CategoryModule({this.id, this.name, this.image});
 
-  factory Category.fromMap(Map<String, dynamic> json) => Category(
+  factory CategoryModule.fromMap(Map<String, dynamic> json) => CategoryModule(
     id: json['_id'],
     image: "${NetworkConstants.baseUrl}${json['image']['file']}",
     name: json['category_name'],

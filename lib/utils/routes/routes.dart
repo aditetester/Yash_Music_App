@@ -10,12 +10,10 @@ class Routes {
   static const String home = '/home';
   static const String categoryList = '/categroiesList';
   static const String subCategoryList = '/subCategroiesList';
-  
 
   static final routes = <String, WidgetBuilder>{
     home: (BuildContext context) => HomeScreen(),
     categoryList: (BuildContext context) => CategoryList(),
-    subCategoryList : (BuildContext context) => SubCategoryList(),
-
+    subCategoryList: (BuildContext context) => SubCategoryList(),
   };
 }

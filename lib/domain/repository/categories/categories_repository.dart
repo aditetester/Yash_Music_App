@@ -1,5 +1,5 @@
 
-import 'package:boilerplate_new_version/domain/entity/post/category_list.dart';
+import 'package:boilerplate_new_version/domain/entity/categories/category_list.dart';
 
 abstract class CategoriesRepository {
 

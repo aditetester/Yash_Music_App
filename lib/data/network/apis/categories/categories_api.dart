@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:boilerplate_new_version/core/data/network/constants/network_constants.dart';
-import 'package:boilerplate_new_version/domain/entity/post/category_list.dart';
+import 'package:boilerplate_new_version/domain/entity/categories/category_list.dart';
 import '../../../../core/data/network/dio/dio_client.dart';
 
 class CategoriesApi {
@@ -22,15 +22,4 @@ class CategoriesApi {
       throw e;
     }
   }
-
-  /// sample api call with default rest client
-//   Future<PostList> getPosts() async {
-//     try {
-//       final res = await _restClient.get(Endpoints.getPosts);
-//       return PostList.fromJson(res.data);
-//     } catch (e) {
-//       print(e.toString());
-//       throw e;
-//     }
-//   }
 }
