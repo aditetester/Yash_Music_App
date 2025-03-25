@@ -1,4 +1,5 @@
 import 'package:boilerplate_new_version/presentation/categories/category_list.dart';
+import 'package:boilerplate_new_version/presentation/music/music_list.dart';
 import '../constants/app_theme.dart';
 import '../constants/strings.dart';
 import 'home/store/theme/theme_store.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
                   ? AppThemeData.darkThemeData
                   : AppThemeData.lightThemeData,
           routes: Routes.routes,
-          home:  SplashScreen(),
+          home:  MusicList() // SplashScreen(),
           //path : SplashScreen() --> HomeScreen()
         );
       },
