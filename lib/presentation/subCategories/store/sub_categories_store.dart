@@ -1,4 +1,5 @@
 import 'package:boilerplate_new_version/data/repository/subcategories/subCategories_respository_imp.dart';
+import 'package:boilerplate_new_version/domain/entity/post/category.dart';
 import 'package:mobx/mobx.dart';
 
 part 'sub_categories_store.g.dart';

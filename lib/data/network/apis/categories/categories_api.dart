@@ -15,7 +15,7 @@ class CategoriesApi {
     try {
       final res = await _dioClient.dio.get(NetworkConstants.categories);
   
-      return AllCategoryList.fromJson(res.data);
+      return AllCategoryList.fromJson(res.data['categories']);
 
     } catch (e) {
       print(e.toString());

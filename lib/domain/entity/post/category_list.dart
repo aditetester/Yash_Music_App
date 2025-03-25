@@ -1,22 +1,17 @@
+import 'package:boilerplate_new_version/domain/entity/post/category.dart';
+
 class AllCategoryList {
-  final List<dynamic>? posts;
+  final List<Category>? posts;
 
   AllCategoryList({this.posts});
 
-  factory AllCategoryList.fromJson(Map<String, dynamic> json) {
+  factory AllCategoryList.fromJson(List<dynamic> json) {
     
-    List<dynamic> posts = <dynamic>[];
-    posts = json['categories'];
-        // json2
-        //     .map(
-        //       (ele) => Category(
-        //         id: ele['_id'],
-        //         name: ele['category_name'],
-        //         image: "http://192.168.1.143:3000/${ele['image']['file']}",
-        //       ),
-        //     )
-        //     .toList();
-   
+    List<Category> posts = <Category>[];
+    
+     // Parse JSON string into a List of Map
+    posts =  json.map((categ) => Category.fromMap(categ)).toList();
+  
     return AllCategoryList(posts: posts);
   }
 }

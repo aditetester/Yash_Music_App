@@ -1,5 +1,5 @@
 import 'package:boilerplate_new_version/core/stores/error/error_store.dart';
-
+import 'package:boilerplate_new_version/domain/entity/post/category.dart';
 import 'package:boilerplate_new_version/domain/entity/post/category_list.dart';
 import 'package:boilerplate_new_version/domain/usecase/post/get_post_usecase.dart';
 import 'package:boilerplate_new_version/utils/dio/dio_error_util.dart';
@@ -30,26 +30,21 @@ abstract class _CategoriesStore with Store {
       ObservableFuture<AllCategoryList?>(emptyPostResponse);
 
   @observable
-  List<dynamic>? CategoryList;
+  List<Category>? CategoryList;
 
-  @observable
-  bool success = false;
-
-  List<dynamic>? get getCategories => CategoryList;
   // actions:-------------------------------------------------------------------
   @action
-  List<dynamic>? fetchCategories() {
+  Future<void> fetchCategories() async {
     final future = _getPostUseCase.call(params: null);
     fetchPostsFuture = ObservableFuture(future);
       
-    future.then((postList) {
-      this.CategoryList = postList.posts;
-      return this.CategoryList;
+    await future.then((postList) {
+      CategoryList = postList.posts;
     }).catchError((error) {
       errorStore.errorMessage = DioExceptionUtil.handleError(error);
-
+    
     });
-   return null;
+   
    
   }
 }
@@ -71,7 +66,7 @@ abstract class _CategoriesStore with Store {
 // class CategoriesPage {
 //   final Dio _dio = Dio();
   
-//   Future<List<dynamic>> fetchCategories() async {
+//   Future<List<Category>> fetchCategories() async {
 
 //     try {
 //       // Replace this with your actual API endpoint

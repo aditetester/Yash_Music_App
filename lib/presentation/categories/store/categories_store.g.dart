@@ -29,54 +29,31 @@ mixin _$CategoriesStore on _CategoriesStore, Store {
       Atom(name: '_CategoriesStore.CategoryList', context: context);
 
   @override
-  List<dynamic>? get CategoryList {
+  List<Category>? get CategoryList {
     _$CategoryListAtom.reportRead();
     return super.CategoryList;
   }
 
   @override
-  set CategoryList(List<dynamic>? value) {
+  set CategoryList(List<Category>? value) {
     _$CategoryListAtom.reportWrite(value, super.CategoryList, () {
       super.CategoryList = value;
     });
   }
 
-  late final _$successAtom =
-      Atom(name: '_CategoriesStore.success', context: context);
+  late final _$fetchCategoriesAsyncAction =
+      AsyncAction('_CategoriesStore.fetchCategories', context: context);
 
   @override
-  bool get success {
-    _$successAtom.reportRead();
-    return super.success;
-  }
-
-  @override
-  set success(bool value) {
-    _$successAtom.reportWrite(value, super.success, () {
-      super.success = value;
-    });
-  }
-
-  late final _$_CategoriesStoreActionController =
-      ActionController(name: '_CategoriesStore', context: context);
-
-  @override
-  List<dynamic>? fetchCategories() {
-    final _$actionInfo = _$_CategoriesStoreActionController.startAction(
-        name: '_CategoriesStore.fetchCategories');
-    try {
-      return super.fetchCategories();
-    } finally {
-      _$_CategoriesStoreActionController.endAction(_$actionInfo);
-    }
+  Future<void> fetchCategories() {
+    return _$fetchCategoriesAsyncAction.run(() => super.fetchCategories());
   }
 
   @override
   String toString() {
     return '''
 fetchPostsFuture: ${fetchPostsFuture},
-CategoryList: ${CategoryList},
-success: ${success}
+CategoryList: ${CategoryList}
     ''';
   }
 }

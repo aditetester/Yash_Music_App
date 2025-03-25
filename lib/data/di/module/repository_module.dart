@@ -19,7 +19,7 @@ class RepositoryModule {
       getIt<SharedPreferenceHelper>(),
     ));
     
-    getIt.registerSingleton<CategoriesRepository>(CategoriesRepositoryImp(
+    getIt.registerSingleton<CategoriesRepositoryImp>(CategoriesRepositoryImp(
       getIt<CategoriesApi>(),
     ));
      

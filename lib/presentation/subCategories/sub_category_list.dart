@@ -19,7 +19,7 @@ class _SubCategoryListState extends State<SubCategoryList> {
   }
 
   Future<void> getData(var categoryId) async {
-    subCategories = _SubCategoriesStore.fetchSubCategories(categoryId);
+    // subCategories = _SubCategoriesStore.fetchSubCategories(categoryId);
     
   }
   @override
