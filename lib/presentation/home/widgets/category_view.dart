@@ -12,7 +12,7 @@ class CategoryViewScreen extends StatefulWidget {
 
 class _CategoryViewScreenState extends State<CategoryViewScreen> {
   CategoriesStore _CategoriesStore = getIt<CategoriesStore>();
-  Future<List<dynamic>>? categories;
+ List<dynamic>? categories;
 
   @override
   void initState() {
@@ -54,17 +54,17 @@ class _CategoryViewScreenState extends State<CategoryViewScreen> {
           SizedBox(height: 10),
           SizedBox(
             height: 150,
-            child: FutureBuilder<List<dynamic>>(
-              future: categories,
+            child: FutureBuilder<void>(
+              future: getData(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return Center(child: Text("Error: ${snapshot.error}"));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                } else if (!snapshot.hasData ) {
                   return Center(child: Text("No categories available."));
                 } else {
-                  final data = snapshot.data!;
+                  final data = categories!;
                   return ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: 3, // Example data count

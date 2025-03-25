@@ -1,4 +1,8 @@
-import 'package:boilerplate_new_version/data/repository/categories/categories_respository_imp.dart';
+import 'package:boilerplate_new_version/core/stores/error/error_store.dart';
+
+import 'package:boilerplate_new_version/domain/entity/post/category_list.dart';
+import 'package:boilerplate_new_version/domain/usecase/post/get_post_usecase.dart';
+import 'package:boilerplate_new_version/utils/dio/dio_error_util.dart';
 import 'package:mobx/mobx.dart';
 
 part 'categories_store.g.dart';
@@ -6,25 +10,46 @@ part 'categories_store.g.dart';
 class CategoriesStore = _CategoriesStore with _$CategoriesStore;
 
 abstract class _CategoriesStore with Store {
-  CategoriesRepositoryImp? _repository;
+ 
+  // use cases:-----------------------------------------------------------------
+  final GetPostUseCase _getPostUseCase;
 
+  // stores:--------------------------------------------------------------------
+  // store for handling errors
+  final ErrorStore errorStore;
 
   // constructor:---------------------------------------------------------------
-  _CategoriesStore(CategoriesRepositoryImp repository) : this._repository = repository;
+  _CategoriesStore(this._getPostUseCase, this.errorStore);
+
+  // store variables:-----------------------------------------------------------
+  static ObservableFuture<AllCategoryList?> emptyPostResponse =
+      ObservableFuture.value(null);
 
   @observable
-  Map<String, dynamic>? CategoryList;
+  ObservableFuture<AllCategoryList?> fetchPostsFuture =
+      ObservableFuture<AllCategoryList?>(emptyPostResponse);
+
+  @observable
+  List<dynamic>? CategoryList;
 
   @observable
   bool success = false;
 
+  List<dynamic>? get getCategories => CategoryList;
   // actions:-------------------------------------------------------------------
   @action
-  Future<List<dynamic>> fetchCategories() async {
-   
-   CategoryList = await _repository!.getCategoryList();
-   
-   return CategoryList!['categories'];
+  List<dynamic>? fetchCategories() {
+    final future = _getPostUseCase.call(params: null);
+    fetchPostsFuture = ObservableFuture(future);
+      
+    future.then((postList) {
+      this.CategoryList = postList.posts;
+      return this.CategoryList;
+    }).catchError((error) {
+      errorStore.errorMessage = DioExceptionUtil.handleError(error);
+
+    });
+   return null;
    
   }
 }

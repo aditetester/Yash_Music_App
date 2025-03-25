@@ -1,5 +1,6 @@
 
 import 'package:boilerplate_new_version/data/network/apis/categories/categories_api.dart';
+import 'package:boilerplate_new_version/domain/entity/post/category_list.dart';
 import 'package:boilerplate_new_version/domain/repository/categories/Categories_repository.dart';
 
 class CategoriesRepositoryImp extends CategoriesRepository {
@@ -11,7 +12,7 @@ class CategoriesRepositoryImp extends CategoriesRepository {
   CategoriesRepositoryImp(this._CategoriesApi);
 
   @override
-  Future<Map<String,dynamic>> getCategoryList() async {
+  Future<AllCategoryList> getCategoryList() async {
     return await _CategoriesApi.getCategories();
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:boilerplate_new_version/data/repository/categories/categories_respository_imp.dart';
 import 'package:boilerplate_new_version/data/repository/subcategories/subCategories_respository_imp.dart';
+import 'package:boilerplate_new_version/domain/usecase/post/get_post_usecase.dart';
 import 'package:boilerplate_new_version/presentation/categories/store/categories_store.dart';
 import 'package:boilerplate_new_version/presentation/subCategories/store/sub_categories_store.dart';
 
@@ -29,7 +30,8 @@ class StoreModule {
     );
     
      getIt.registerSingleton<CategoriesStore>(
-      CategoriesStore(getIt<CategoriesRepositoryImp>()),
+      CategoriesStore(  getIt<GetPostUseCase>(),
+        getIt<ErrorStore>(),),
     );
      getIt.registerSingleton<SubCategoriesStore>(
       SubCategoriesStore(getIt<SubCategoriesRepositoryImp>()),

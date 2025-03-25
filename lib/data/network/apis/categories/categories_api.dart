@@ -11,10 +11,12 @@ class CategoriesApi {
   CategoriesApi(this._dioClient);
 
   /// Returns list of post in response
-  Future<Map<String,dynamic>> getCategories() async {
+  Future<AllCategoryList> getCategories() async {
     try {
       final res = await _dioClient.dio.get(NetworkConstants.categories);
+  
       return AllCategoryList.fromJson(res.data);
+
     } catch (e) {
       print(e.toString());
       throw e;
