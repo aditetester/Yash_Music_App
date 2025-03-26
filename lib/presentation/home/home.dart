@@ -1,5 +1,4 @@
 import 'package:boilerplate_new_version/presentation/ads/ads_screen.dart';
-
 import 'package:boilerplate_new_version/widgets/app_drawer.dart';
 import 'package:boilerplate_new_version/presentation/home/widgets/category_view.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +9,29 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  TextEditingController _searchController = TextEditingController();
+  bool _isSearching = false;
+  List<String> _recentlyPlayedSongs = ["Song A", "Song B", "Song C", "Song D", "Song E"];
+  List<String> _filteredSongs = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _filteredSongs = _recentlyPlayedSongs;
+  }
+
+  void _filterSongs(String query) {
+    setState(() {
+      if (query.isEmpty) {
+        _filteredSongs = _recentlyPlayedSongs;
+      } else {
+        _filteredSongs = _recentlyPlayedSongs
+            .where((song) => song.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     // Categories Section
                     CategoryViewScreen(),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     // Recently Played Section
                     _builderRecentPlay(context),
                   ],
@@ -41,17 +63,48 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Appbar methods:-----------------------------------------------------------
+  // AppBar methods
   PreferredSizeWidget _buildAppBar() {
-    return AppBar(title: Text("Music App"), actions: _buildActions(context));
+    return AppBar(
+      title: _isSearching
+          ? TextField(
+              controller: _searchController,
+              autofocus: true,
+              decoration: InputDecoration(
+                hintText: 'Search...',
+                border: InputBorder.none,
+                hintStyle: TextStyle(color: Colors.white70),
+              ),
+              style: TextStyle(color: Colors.white),
+              onChanged: _filterSongs,
+            )
+          : Text("Music App"),
+      actions: [
+        if (!_isSearching)
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              setState(() {
+                _isSearching = true;
+              });
+            },
+          )
+        else
+          IconButton(
+            icon: Icon(Icons.close),
+            onPressed: () {
+              setState(() {
+                _isSearching = false;
+                _searchController.clear();
+                _filterSongs('');
+              });
+            },
+          ),
+      ],
+    );
   }
 
-  List<Widget> _buildActions(BuildContext context) {
-    return <Widget>[IconButton(onPressed: () {}, icon: Icon(Icons.search))];
-  }
-
-  // Body methods:-----------------------------------------------------------
-
+  // Body methods
   Widget _builderRecentPlay(BuildContext context) {
     return Container(
       child: Column(
@@ -78,12 +131,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           SizedBox(
             height: 150,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: 5, // Example data count
+              itemCount: _filteredSongs.length,
               itemBuilder: (context, index) {
                 return Container(
                   width: 120,
@@ -101,9 +154,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         size: 48,
                         color: Colors.white,
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
-                        "Song Name",
+                        _filteredSongs[index],
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.white,
@@ -111,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
                         "Artist",
                         style: TextStyle(fontSize: 12, color: Colors.grey[300]),
@@ -128,17 +181,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-
-//   Widget _buildLogoutButton() {
-//     return IconButton(
-//       onPressed: () {
-//         SharedPreferences.getInstance().then((preference) {
-//           preference.setBool(Preferences.is_logged_in, false);
-//           Navigator.of(context).pushReplacementNamed(Routes.login);
-//         });
-//       },
-//       icon: Icon(Icons.power_settings_new),
-//     );
-//   }
-

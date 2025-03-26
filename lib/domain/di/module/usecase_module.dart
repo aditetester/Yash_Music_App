@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:boilerplate_new_version/data/repository/categories/categories_respository_imp.dart';
+import 'package:boilerplate_new_version/data/repository/musicList/musicList_respository_imp.dart';
 import 'package:boilerplate_new_version/data/repository/subcategories/subCategories_respository_imp.dart';
 import 'package:boilerplate_new_version/domain/usecase/categories/get_category_usecase.dart';
+import 'package:boilerplate_new_version/domain/usecase/music_list/get_musicList_usecase.dart';
 import 'package:boilerplate_new_version/domain/usecase/sub_categories/get_subcategories_usecase.dart';
 
 import '../../../di/service_locator.dart';
@@ -16,6 +18,9 @@ class UseCaseModule {
     );
      getIt.registerSingleton<GetSubCategoryUseCase>(
       GetSubCategoryUseCase(getIt<SubCategoriesRepositoryImp>()),
+    );
+     getIt.registerSingleton<GetMusiclistUsecase>(
+      GetMusiclistUsecase(getIt<MusicListRepositoryImp>()),
     );
   }
 }

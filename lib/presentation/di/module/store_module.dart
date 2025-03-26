@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:boilerplate_new_version/domain/usecase/categories/get_category_usecase.dart';
+import 'package:boilerplate_new_version/domain/usecase/music_list/get_musicList_usecase.dart';
 import 'package:boilerplate_new_version/domain/usecase/sub_categories/get_subcategories_usecase.dart';
 import 'package:boilerplate_new_version/presentation/categories/store/categories_store.dart';
+import 'package:boilerplate_new_version/presentation/music/store/music_list_store.dart';
 import 'package:boilerplate_new_version/presentation/subCategories/store/sub_categories_store.dart';
 
 import '../../../core/stores/error/error_store.dart';
@@ -34,6 +36,10 @@ class StoreModule {
     );
      getIt.registerSingleton<SubCategoriesStore>(
       SubCategoriesStore(getIt<GetSubCategoryUseCase>(),
+        getIt<ErrorStore>(),));
+
+      getIt.registerSingleton<MusicListStore>(
+      MusicListStore(getIt<GetMusiclistUsecase>(),
         getIt<ErrorStore>(),));
   }
 }

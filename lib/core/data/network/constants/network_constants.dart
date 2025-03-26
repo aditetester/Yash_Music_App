@@ -9,5 +9,10 @@ class NetworkConstants {
   
   //All subCategory list
   static const String subCategories = "${baseUrl}v1/user/subcategories/";
+
+  //All Music list
+  static const String musicList = "${baseUrl}v1/user/audios/";
+
+  
   
 }
