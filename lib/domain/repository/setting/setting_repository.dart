@@ -6,8 +6,4 @@ abstract class SettingRepository {
 
   bool get isDarkMode;
 
-  // Language: -----------------------------------------------------------------
-  Future<void> changeLanguage(String value);
-
-  String? get currentLanguage;
 }

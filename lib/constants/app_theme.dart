@@ -19,33 +19,84 @@
 /// `import` this file in your project, anywhere you needed it.
 /// `import 'path/to/setting.dart';`
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppThemeData {
   static const _lightFillColor = Colors.black;
   static const _darkFillColor = Colors.white;
 
-  static final Color _lightFocusColor = Colors.black.withOpacity(0.12);
   static final Color _darkFocusColor = Colors.white.withOpacity(0.12);
+  static final Color _lightFocusColor = Colors.black.withOpacity(0.12);
+  // static ThemeData lightThemeData = themeData(
+  //   lightColorScheme,
+  //   _lightFocusColor,
+  // );
 
-  static ThemeData lightThemeData =
-  themeData(lightColorScheme, _lightFocusColor);
-  static ThemeData darkThemeData = themeData(darkColorScheme, _darkFocusColor);
+static ThemeData lightThemeData = themeData(lightColorScheme, _lightFocusColor);
 
-  static ThemeData themeData(ColorScheme colorScheme, Color focusColor) {
+static ThemeData themeData(ColorScheme colorScheme, Color focusColor) {
+  return ThemeData(
+    colorScheme: colorScheme,
+    textTheme: _textTheme,
+    // Matches manifest.json colors and background color.
+    primaryColor: const Color(0xFFF5F5F5),
+    appBarTheme: AppBarTheme(
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Color.fromRGBO(220, 220, 220, 1),
+        statusBarIconBrightness: Brightness.dark,
+      ),
+      titleTextStyle: TextStyle(
+        color: Colors.black,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
+      centerTitle: true,
+      backgroundColor: const Color.fromARGB(255, 240, 240, 240),
+      elevation: 0.0,
+      iconTheme: IconThemeData(color: Colors.black),
+    ),
+    iconTheme: IconThemeData(color: colorScheme.onPrimary),
+    canvasColor: colorScheme.surface,
+    scaffoldBackgroundColor: Color.fromARGB(255, 245, 245, 245),
+    highlightColor: Colors.transparent,
+    focusColor: focusColor,
+    snackBarTheme: SnackBarThemeData(
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Color.alphaBlend(
+        _darkFillColor.withOpacity(0.80),
+        _lightFillColor,
+      ),
+      contentTextStyle: _textTheme.titleMedium!.apply(color: _lightFillColor),
+    ),
+  );
+}
+
+  static ThemeData darkThemeData = themeData2(darkColorScheme, _darkFocusColor);
+  static ThemeData themeData2(ColorScheme colorScheme, Color focusColor) {
     return ThemeData(
       colorScheme: colorScheme,
       textTheme: _textTheme,
       // Matches manifest.json colors and background color.
       primaryColor: const Color(0xFF030303),
       appBarTheme: AppBarTheme(
-        backgroundColor: colorScheme.surface,
-        elevation: 0,
-        iconTheme: IconThemeData(color: colorScheme.primary),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Color.fromRGBO(127, 122, 122, 1),
+          statusBarIconBrightness: Brightness.light,
+        ),
+        titleTextStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+        centerTitle: true,
+        backgroundColor: const Color.fromARGB(204, 34, 51, 63),
+        elevation: 0.0,
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       iconTheme: IconThemeData(color: colorScheme.onPrimary),
       canvasColor: colorScheme.surface,
-      scaffoldBackgroundColor: colorScheme.surface,
+      scaffoldBackgroundColor: Color.fromARGB(214, 22, 97, 101),
       highlightColor: Colors.transparent,
       focusColor: focusColor,
       snackBarTheme: SnackBarThemeData(
@@ -58,6 +109,7 @@ class AppThemeData {
       ),
     );
   }
+
 
   static const ColorScheme lightColorScheme = ColorScheme(
     primary: Color(0xFFd21e1d),
@@ -94,7 +146,11 @@ class AppThemeData {
   static const _bold = FontWeight.w700;
 
   static final TextTheme _textTheme = TextTheme(
-    headlineMedium: GoogleFonts.montserrat(fontWeight: _bold, fontSize: 20.0),
+    headlineMedium: GoogleFonts.montserrat(
+      fontWeight: _bold,
+      fontSize: 20.0,
+      color: Colors.white,
+    ),
     bodySmall: GoogleFonts.oswald(fontWeight: _semiBold, fontSize: 16.0),
     headlineSmall: GoogleFonts.oswald(fontWeight: _medium, fontSize: 16.0),
     titleMedium: GoogleFonts.montserrat(fontWeight: _medium, fontSize: 16.0),

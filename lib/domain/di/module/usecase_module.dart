@@ -1,46 +1,26 @@
 import 'dart:async';
 
-import '../../repository/post/post_repository.dart';
-import '../../repository/user/user_repository.dart';
-import '../../usecase/post/delete_post_usecase.dart';
-import '../../usecase/post/find_post_by_id_usecase.dart';
-import '../../usecase/post/get_post_usecase.dart';
-import '../../usecase/post/insert_post_usecase.dart';
-import '../../usecase/post/udpate_post_usecase.dart';
-import '../../usecase/user/is_logged_in_usecase.dart';
-import '../../usecase/user/login_usecase.dart';
-import '../../usecase/user/save_login_in_status_usecase.dart';
+import 'package:boilerplate_new_version/data/repository/categories/categories_respository_imp.dart';
+import 'package:boilerplate_new_version/data/repository/musicList/musicList_respository_imp.dart';
+import 'package:boilerplate_new_version/data/repository/subcategories/subCategories_respository_imp.dart';
+import 'package:boilerplate_new_version/domain/usecase/categories/get_category_usecase.dart';
+import 'package:boilerplate_new_version/domain/usecase/music_list/get_musicList_usecase.dart';
+import 'package:boilerplate_new_version/domain/usecase/sub_categories/get_subcategories_usecase.dart';
 
 import '../../../di/service_locator.dart';
 
 class UseCaseModule {
   static Future<void> configureUseCaseModuleInjection() async {
-    // user:--------------------------------------------------------------------
-    getIt.registerSingleton<IsLoggedInUseCase>(
-      IsLoggedInUseCase(getIt<UserRepository>()),
+   
+    // category:--------------------------------------------------------------------
+    getIt.registerSingleton<GetCategoryUseCase>(
+      GetCategoryUseCase(getIt<CategoriesRepositoryImp>()),
     );
-    getIt.registerSingleton<SaveLoginStatusUseCase>(
-      SaveLoginStatusUseCase(getIt<UserRepository>()),
+     getIt.registerSingleton<GetSubCategoryUseCase>(
+      GetSubCategoryUseCase(getIt<SubCategoriesRepositoryImp>()),
     );
-    getIt.registerSingleton<LoginUseCase>(
-      LoginUseCase(getIt<UserRepository>()),
-    );
-
-    // post:--------------------------------------------------------------------
-    getIt.registerSingleton<GetPostUseCase>(
-      GetPostUseCase(getIt<PostRepository>()),
-    );
-    getIt.registerSingleton<FindPostByIdUseCase>(
-      FindPostByIdUseCase(getIt<PostRepository>()),
-    );
-    getIt.registerSingleton<InsertPostUseCase>(
-      InsertPostUseCase(getIt<PostRepository>()),
-    );
-    getIt.registerSingleton<UpdatePostUseCase>(
-      UpdatePostUseCase(getIt<PostRepository>()),
-    );
-    getIt.registerSingleton<DeletePostUseCase>(
-      DeletePostUseCase(getIt<PostRepository>()),
+     getIt.registerSingleton<GetMusiclistUsecase>(
+      GetMusiclistUsecase(getIt<MusicListRepositoryImp>()),
     );
   }
 }

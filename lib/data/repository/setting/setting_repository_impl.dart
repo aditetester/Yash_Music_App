@@ -18,11 +18,5 @@ class SettingRepositoryImpl extends SettingRepository {
   @override
   bool get isDarkMode => _sharedPrefsHelper.isDarkMode;
 
-  // Language: -----------------------------------------------------------------
-  @override
-  Future<void> changeLanguage(String value) =>
-      _sharedPrefsHelper.changeLanguage(value);
 
-  @override
-  String? get currentLanguage => _sharedPrefsHelper.currentLanguage;
 }

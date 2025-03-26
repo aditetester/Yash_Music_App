@@ -1,14 +1,11 @@
+import 'package:boilerplate_new_version/data/network/apis/musicList/musicList_api.dart';
+import 'package:boilerplate_new_version/data/network/apis/subCategories/subCategories_api.dart';
+
 import '../../../core/data/network/dio/configs/dio_configs.dart';
 import '../../../core/data/network/dio/dio_client.dart';
-import '../../../core/data/network/dio/interceptors/auth_interceptor.dart';
-import '../../../core/data/network/dio/interceptors/logging_interceptor.dart';
-import '../../network/apis/posts/post_api.dart';
-import '../../network/constants/endpoints.dart';
-import '../../network/interceptors/error_interceptor.dart';
-import '../../network/rest_client.dart';
-import '../../sharedpref/shared_preference_helper.dart';
+import '../../network/apis/categories/categories_api.dart';
+import '/core/data/network/constants/network_constants.dart';
 import 'package:event_bus/event_bus.dart';
-
 import '../../../di/service_locator.dart';
 
 class NetworkModule {
@@ -16,38 +13,16 @@ class NetworkModule {
     // event bus:---------------------------------------------------------------
     getIt.registerSingleton<EventBus>(EventBus());
 
-    // interceptors:------------------------------------------------------------
-    getIt.registerSingleton<LoggingInterceptor>(LoggingInterceptor());
-    getIt.registerSingleton<ErrorInterceptor>(ErrorInterceptor(getIt()));
-    getIt.registerSingleton<AuthInterceptor>(
-      AuthInterceptor(
-        accessToken: () async => await getIt<SharedPreferenceHelper>().authToken,
-      ),
-    );
-
-    // rest client:-------------------------------------------------------------
-    getIt.registerSingleton(RestClient());
-
     // dio:---------------------------------------------------------------------
     getIt.registerSingleton<DioConfigs>(
-      const DioConfigs(
-        baseUrl: Endpoints.baseUrl,
-        connectionTimeout: Endpoints.connectionTimeout,
-        receiveTimeout:Endpoints.receiveTimeout,
-      ),
+      const DioConfigs(baseUrl: NetworkConstants.baseUrl),
     );
-    getIt.registerSingleton<DioClient>(
-      DioClient(dioConfigs: getIt())
-        ..addInterceptors(
-          [
-            getIt<AuthInterceptor>(),
-            getIt<ErrorInterceptor>(),
-            getIt<LoggingInterceptor>(),
-          ],
-        ),
-    );
+    getIt.registerSingleton<DioClient>(DioClient(dioConfigs: getIt()));
 
     // api's:-------------------------------------------------------------------
-    getIt.registerSingleton(PostApi(getIt<DioClient>(), getIt<RestClient>()));
+    getIt.registerSingleton<CategoriesApi>(CategoriesApi(getIt<DioClient>()));
+    getIt.registerSingleton<SubCategoriesApi>(SubCategoriesApi(getIt<DioClient>()));
+    getIt.registerSingleton<MusicListApi>(MusicListApi(getIt<DioClient>()));
+    
   }
 }

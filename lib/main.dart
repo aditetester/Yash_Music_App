@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'di/service_locator.dart';
 import 'presentation/my_app.dart';
@@ -9,6 +10,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await setPreferredOrientations();
   await ServiceLocator.configureDependencies();
+  MobileAds.instance.initialize();
   runApp(MyApp());
 }
 
