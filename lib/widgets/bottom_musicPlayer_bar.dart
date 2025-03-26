@@ -65,10 +65,7 @@ class BottomMusicPlayerBar extends StatelessWidget {
                           musicControllerStore.pause();
                         } else {
                           // Play the last played or default song
-                          musicControllerStore.play(
-                            musicControllerStore.currentSongUrl ??
-                                'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-                          );
+                          musicControllerStore.play();
                         }
                       },
                     );

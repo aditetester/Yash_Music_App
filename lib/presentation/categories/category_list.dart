@@ -45,7 +45,7 @@ class _CategoryListState extends State<CategoryList> {
             }
           }
           return Container(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(2),
             child: GridView(
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 400,
@@ -65,16 +65,17 @@ class _CategoryListState extends State<CategoryList> {
           );
         },
       ),
-         bottomNavigationBar: SizedBox(
-        height: 150, // Adjust the height as needed
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            BottomMusicPlayerBar(musicControllerStore: _musicControllerStore),
-            AdsScreen(),
-          ],
-        ),
-      ),
+      
+         bottomNavigationBar: 
+         IntrinsicHeight(
+    child: Column(
+      mainAxisSize: MainAxisSize.min, // Ensure the column takes only required height
+      children: [
+        BottomMusicPlayerBar(musicControllerStore: _musicControllerStore),
+        // AdsScreen(),
+      ],
+    ),
+         ),
     );
   }
 }

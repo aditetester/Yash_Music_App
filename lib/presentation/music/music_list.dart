@@ -19,7 +19,8 @@ class MusicList extends StatefulWidget {
 
 class _MusicListState extends State<MusicList> {
   MusicListStore _MusicListStore = getIt<MusicListStore>();
-  final MusicControllerStore _musicControllerStore = getIt<MusicControllerStore>();
+  final MusicControllerStore _musicControllerStore =
+      getIt<MusicControllerStore>();
   TextEditingController _searchController = TextEditingController();
 
   List<MusicListModule>? allMusicList = [];
@@ -133,11 +134,15 @@ class _MusicListState extends State<MusicList> {
                     itemCount: filteredMusicList.length,
                     itemBuilder: (context, index) {
                       return GestureDetector(
-                        onTap: () =>  Navigator.of(context).pushNamed(Routes.musicPlayer),
+                        onTap:
+                            () => Navigator.of(
+                              context,
+                            ).pushNamed(Routes.musicPlayer),
                         child: MusicItems(
                           id: filteredMusicList[index].id.toString(),
                           title: filteredMusicList[index].title.toString(),
-                          subTitle: filteredMusicList[index].subtitle.toString(),
+                          subTitle:
+                              filteredMusicList[index].subtitle.toString(),
                           image: filteredMusicList[index].image.toString(),
                         ),
                       );
@@ -151,13 +156,13 @@ class _MusicListState extends State<MusicList> {
           ),
         ],
       ),
-     bottomNavigationBar: SizedBox(
-        height: 150, // Adjust the height as needed
+      bottomNavigationBar: IntrinsicHeight(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisSize:
+              MainAxisSize.min, // Ensure the column takes only required height
           children: [
             BottomMusicPlayerBar(musicControllerStore: _musicControllerStore),
-            AdsScreen(),
+            // AdsScreen(),
           ],
         ),
       ),

@@ -67,13 +67,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
 
-      bottomNavigationBar: SizedBox(
-        height: 150, // Adjust the height as needed
+      bottomNavigationBar: IntrinsicHeight(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisSize:
+              MainAxisSize.min, // Ensure the column takes only required height
           children: [
             BottomMusicPlayerBar(musicControllerStore: _musicControllerStore),
-            AdsScreen(),
+            // AdsScreen(),
           ],
         ),
       ),

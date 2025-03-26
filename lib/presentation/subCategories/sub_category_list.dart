@@ -17,24 +17,26 @@ class SubCategoryList extends StatefulWidget {
 }
 
 class _SubCategoryListState extends State<SubCategoryList> {
-  final MusicControllerStore _musicControllerStore = getIt<MusicControllerStore>();
+  final MusicControllerStore _musicControllerStore =
+      getIt<MusicControllerStore>();
   SubCategoriesStore _subCategoryStore = getIt<SubCategoriesStore>();
   List<SubCategoryModule>? subcategoryList = [];
-  
+
   @override
   void initState() {
     super.initState();
-     _subCategoryStore.fetchSubCategories();
+    _subCategoryStore.fetchSubCategories();
   }
 
   @override
   Widget build(BuildContext context) {
-    final String categoryId = ModalRoute.of(context)!.settings.arguments as String;
+    final String categoryId =
+        ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
       appBar: AppBar(title: Text("Music Section")),
       body: Observer(
         builder: (_) {
-           _subCategoryStore.SelectSubCategories(categoryId);
+          _subCategoryStore.SelectSubCategories(categoryId);
           if (_subCategoryStore.fetchPostsFuture.status ==
               FutureStatus.pending) {
             return Center(child: CircularProgressIndicator());
@@ -67,13 +69,13 @@ class _SubCategoryListState extends State<SubCategoryList> {
           );
         },
       ),
-    bottomNavigationBar: SizedBox(
-        height: 150, // Adjust the height as needed
+      bottomNavigationBar: IntrinsicHeight(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisSize:
+              MainAxisSize.min, // Ensure the column takes only required height
           children: [
             BottomMusicPlayerBar(musicControllerStore: _musicControllerStore),
-            AdsScreen(),
+            // AdsScreen(),
           ],
         ),
       ),

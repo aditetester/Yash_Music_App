@@ -1,13 +1,12 @@
-import 'package:boilerplate_new_version/di/service_locator.dart';
-import 'package:boilerplate_new_version/presentation/ads/ads_screen.dart';
-import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
-import 'package:boilerplate_new_version/widgets/bottom_musicPlayer_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:boilerplate_new_version/di/service_locator.dart';
+import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
+import 'package:boilerplate_new_version/widgets/bottom_musicPlayer_bar.dart';
 
 class MusicPlayerScreen extends StatelessWidget {
-  
-  final MusicControllerStore _musicControllerStore = getIt<MusicControllerStore>();
+  final MusicControllerStore _musicControllerStore =
+      getIt<MusicControllerStore>();
 
   MusicPlayerScreen({Key? key}) : super(key: key);
 
@@ -15,8 +14,7 @@ class MusicPlayerScreen extends StatelessWidget {
     if (_musicControllerStore.isPlaying) {
       await _musicControllerStore.pause();
     } else {
-      await _musicControllerStore.play(_musicControllerStore.currentSongUrl ??
-          'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+      await _musicControllerStore.play();
     }
   }
 
@@ -34,19 +32,17 @@ class MusicPlayerScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // Album Art Section
           Expanded(
             flex: 6,
             child: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/icon/icon.png'), // Ensure this asset is available
+                  image: AssetImage('assets/icon/icon.png'),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
           ),
-          // Player Controls Section
           Expanded(
             flex: 4,
             child: Container(
@@ -54,7 +50,6 @@ class MusicPlayerScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Play, Pause, and Skip Buttons
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -62,9 +57,7 @@ class MusicPlayerScreen extends StatelessWidget {
                         icon: Icon(Icons.skip_previous),
                         color: Colors.white,
                         iconSize: 40,
-                        onPressed: () {
-                          _musicControllerStore.playPrevious();
-                        },
+                        onPressed: _musicControllerStore.playPrevious,
                       ),
                       Container(
                         height: 80,
@@ -74,34 +67,29 @@ class MusicPlayerScreen extends StatelessWidget {
                           color: Colors.teal.shade700,
                         ),
                         child: Observer(
-                          builder: (context) {
-                            return IconButton(
-                              icon: Icon(
-                                _musicControllerStore.isPlaying
-                                    ? Icons.pause
-                                    : Icons.play_arrow,
-                              ),
-                              color: Colors.white,
-                              iconSize: 40,
-                              onPressed: _playPause,
-                            );
-                          },
+                          builder: (_) => IconButton(
+                            icon: Icon(
+                              _musicControllerStore.isPlaying
+                                  ? Icons.pause
+                                  : Icons.play_arrow,
+                            ),
+                            color: Colors.white,
+                            iconSize: 40,
+                            onPressed: _playPause,
+                          ),
                         ),
                       ),
                       IconButton(
                         icon: Icon(Icons.skip_next),
                         color: Colors.white,
                         iconSize: 40,
-                        onPressed: () {
-                          _musicControllerStore.playNext();
-                        },
+                        onPressed: _musicControllerStore.playNext,
                       ),
                     ],
                   ),
                   SizedBox(height: 20),
-                  // Slider and Timer
                   Observer(
-                    builder: (context) {
+                    builder: (_) {
                       final currentPosition = _musicControllerStore.currentPosition;
                       final totalDuration = _musicControllerStore.totalDuration;
 
@@ -115,9 +103,11 @@ class MusicPlayerScreen extends StatelessWidget {
                           Expanded(
                             child: Slider(
                               value: currentPosition.inSeconds.toDouble(),
-                              max: totalDuration.inSeconds > 0 ? totalDuration.inSeconds.toDouble() : 1,
+                              max: totalDuration.inSeconds.toDouble(),
                               onChanged: (value) {
-                                _musicControllerStore.seek(Duration(seconds: value.toInt()));
+                                _musicControllerStore.seek(
+                                  Duration(seconds: value.toInt()),
+                                );
                               },
                               activeColor: Colors.orange,
                               inactiveColor: Colors.white,
@@ -137,13 +127,11 @@ class MusicPlayerScreen extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: SizedBox(
-        height: 150, // Adjust the height as needed
+      bottomNavigationBar: IntrinsicHeight(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
           children: [
             BottomMusicPlayerBar(musicControllerStore: _musicControllerStore),
-            AdsScreen(),
           ],
         ),
       ),

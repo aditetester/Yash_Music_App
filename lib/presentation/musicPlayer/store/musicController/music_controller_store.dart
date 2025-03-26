@@ -1,4 +1,6 @@
-import 'package:audioplayers/audioplayers.dart';
+import 'package:audio_service/audio_service.dart';
+import 'package:boilerplate_new_version/presentation/musicPlayer/widgets/musicPlayer_Handler.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:mobx/mobx.dart';
 import '../../../../core/stores/error/error_store.dart';
 import '../../../../domain/repository/setting/setting_repository.dart';
@@ -10,14 +12,12 @@ class MusicControllerStore = _MusicControllerStore with _$MusicControllerStore;
 abstract class _MusicControllerStore with Store {
   final String TAG = "_MusicControllerStore";
 
-  // Repository instance
   final SettingRepository _repository;
-
-  // Store for handling errors
   final ErrorStore errorStore;
 
   // AudioPlayer instance
   final AudioPlayer _audioPlayer = AudioPlayer();
+  late final AudioHandler _audioHandler;
 
   // Playlist
   final ObservableList<Map<String, String>> _playlist = ObservableList.of([
@@ -30,7 +30,7 @@ abstract class _MusicControllerStore with Store {
   @observable
   int _currentTrackIndex = 0;
 
-  // store variables:-----------------------------------------------------------
+  // Playback state
   @observable
   bool _isPlaying = false;
 
@@ -40,59 +40,86 @@ abstract class _MusicControllerStore with Store {
   @observable
   Duration totalDuration = Duration.zero;
 
-  // getters:-------------------------------------------------------------------
+  // Getters
   bool get isPlaying => _isPlaying;
   String? get currentSongUrl => _playlist.isNotEmpty ? _playlist[_currentTrackIndex]['url'] : null;
   String? get currentSongTitle => _playlist.isNotEmpty ? _playlist[_currentTrackIndex]['title'] : null;
 
-  // constructor:---------------------------------------------------------------
+  // Constructor
   _MusicControllerStore(this._repository, this.errorStore) {
-    init();
+    _initAudioHandler();
+    _observeAudioPlayer();
   }
 
-  // actions:-------------------------------------------------------------------
-  @action
-  Future<void> changeIsPlaying(bool value) async {
-    _isPlaying = value;
-    await _repository.changeIsPlaying(value);
-  }
-
-  @action
-  Future<void> play(String url) async {
+  Future<void> _initAudioHandler() async {
     try {
-      await _audioPlayer.play(UrlSource(url));
-      _isPlaying = true;
+      final mediaItems = _playlist.map((track) {
+        return MediaItem(
+          id: track['url']!,
+          title: track['title']!,
+          artist: 'Unknown Artist',
+        );
+      }).toList();
+
+      _audioHandler = await AudioService.init(
+        builder: () => AudioPlayerHandler(_audioPlayer, mediaItems),
+        config: const AudioServiceConfig(
+          androidNotificationChannelId: 'com.example.music.channel.audio',
+          androidNotificationChannelName: 'Music Playback',
+          androidNotificationOngoing: true,
+        ),
+      );
+
+      print('AudioHandler initialized successfully');
     } catch (e) {
-      errorStore.errorMessage = "Failed to play audio: $e";
+      print('Error initializing AudioHandler: $e');
+    }
+  }
+
+  void _observeAudioPlayer() {
+    _audioPlayer.positionStream.listen((position) {
+      currentPosition = position;
+    });
+    _audioPlayer.durationStream.listen((duration) {
+      totalDuration = duration ?? Duration.zero;
+    });
+    _audioPlayer.playingStream.listen((isPlaying) {
+      _isPlaying = isPlaying;
+    });
+  }
+
+  // Actions
+  @action
+  Future<void> play() async {
+    try {
+      if (_audioHandler == null) {
+        await _initAudioHandler();
+      }
+      if (currentSongUrl != null) {
+        print('Attempting to play: $currentSongUrl');
+        await _audioHandler.playMediaItem(
+          MediaItem(id: currentSongUrl!, title: currentSongTitle ?? 'Unknown'),
+        );
+        _isPlaying = true;
+      } else {
+        print('No song URL available to play');
+      }
+    } catch (e) {
+      print('Error during play: $e');
     }
   }
 
   @action
   Future<void> pause() async {
-    try {
-      await _audioPlayer.pause();
-      _isPlaying = false;
-    } catch (e) {
-      errorStore.errorMessage = "Failed to pause audio: $e";
-    }
-  }
-
-  @action
-  Future<void> seek(Duration position) async {
-    try {
-      await _audioPlayer.seek(position);
-    } catch (e) {
-      errorStore.errorMessage = "Failed to seek audio: $e";
-    }
+    await _audioHandler.pause();
+    _isPlaying = false;
   }
 
   @action
   Future<void> playNext() async {
     if (_currentTrackIndex < _playlist.length - 1) {
       _currentTrackIndex++;
-      await play(currentSongUrl!);
-    } else {
-      errorStore.errorMessage = "No next track available.";
+      await play();
     }
   }
 
@@ -100,46 +127,16 @@ abstract class _MusicControllerStore with Store {
   Future<void> playPrevious() async {
     if (_currentTrackIndex > 0) {
       _currentTrackIndex--;
-      await play(currentSongUrl!);
-    } else {
-      errorStore.errorMessage = "No previous track available.";
+      await play();
     }
   }
 
   @action
-  void addToPlaylist(String title, String url) {
-    _playlist.add({'title': title, 'url': url});
-  }
-
-  @action
-  void removeFromPlaylist(int index) {
-    if (index >= 0 && index < _playlist.length) {
-      _playlist.removeAt(index);
-    }
-  }
-
-  // general methods:-----------------------------------------------------------
-  Future<void> init() async {
-    _isPlaying = _repository.isPlaying;
-
-    // Listen to position changes
-    _audioPlayer.onPositionChanged.listen((position) {
-      currentPosition = position;
-    });
-
-    // Listen to duration changes
-    _audioPlayer.onDurationChanged.listen((duration) {
-      totalDuration = duration;
-    });
-
-    // Handle playback completion
-    _audioPlayer.onPlayerComplete.listen((_) async {
-      _isPlaying = false;
-      await playNext(); // Automatically play the next track on completion
-    });
+  Future<void> seek(Duration position) async {
+    await _audioHandler.seek(position);
   }
 
   void dispose() {
-    _audioPlayer.dispose();
+    _audioHandler.stop();
   }
 }

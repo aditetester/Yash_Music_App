@@ -73,20 +73,12 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
     });
   }
 
-  late final _$changeIsPlayingAsyncAction =
-      AsyncAction('_MusicControllerStore.changeIsPlaying', context: context);
-
-  @override
-  Future<void> changeIsPlaying(bool value) {
-    return _$changeIsPlayingAsyncAction.run(() => super.changeIsPlaying(value));
-  }
-
   late final _$playAsyncAction =
       AsyncAction('_MusicControllerStore.play', context: context);
 
   @override
-  Future<void> play(String url) {
-    return _$playAsyncAction.run(() => super.play(url));
+  Future<void> play() {
+    return _$playAsyncAction.run(() => super.play());
   }
 
   late final _$pauseAsyncAction =
@@ -95,14 +87,6 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
   @override
   Future<void> pause() {
     return _$pauseAsyncAction.run(() => super.pause());
-  }
-
-  late final _$seekAsyncAction =
-      AsyncAction('_MusicControllerStore.seek', context: context);
-
-  @override
-  Future<void> seek(Duration position) {
-    return _$seekAsyncAction.run(() => super.seek(position));
   }
 
   late final _$playNextAsyncAction =
@@ -121,29 +105,12 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
     return _$playPreviousAsyncAction.run(() => super.playPrevious());
   }
 
-  late final _$_MusicControllerStoreActionController =
-      ActionController(name: '_MusicControllerStore', context: context);
+  late final _$seekAsyncAction =
+      AsyncAction('_MusicControllerStore.seek', context: context);
 
   @override
-  void addToPlaylist(String title, String url) {
-    final _$actionInfo = _$_MusicControllerStoreActionController.startAction(
-        name: '_MusicControllerStore.addToPlaylist');
-    try {
-      return super.addToPlaylist(title, url);
-    } finally {
-      _$_MusicControllerStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void removeFromPlaylist(int index) {
-    final _$actionInfo = _$_MusicControllerStoreActionController.startAction(
-        name: '_MusicControllerStore.removeFromPlaylist');
-    try {
-      return super.removeFromPlaylist(index);
-    } finally {
-      _$_MusicControllerStoreActionController.endAction(_$actionInfo);
-    }
+  Future<void> seek(Duration position) {
+    return _$seekAsyncAction.run(() => super.seek(position));
   }
 
   @override

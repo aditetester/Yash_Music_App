@@ -37,7 +37,8 @@ dependencies:
   # A
   another_flushbar: ^1.12.29
   audioplayers: ^6.4.0
-  audio_service: ^0.18.17
+  audio_service: ^0.18.0
+  audio_session: ^0.1.10
   # B
   # C
   cupertino_icons: ^1.0.5
