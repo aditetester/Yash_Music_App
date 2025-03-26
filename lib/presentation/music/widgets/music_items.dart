@@ -1,4 +1,5 @@
 import 'package:boilerplate_new_version/presentation/music/widgets/addPlayList_dialogBox.dart';
+import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
 
 class MusicItems extends StatelessWidget {
@@ -49,9 +50,10 @@ class MusicItems extends StatelessWidget {
           PopupMenuButton<String>(
             onSelected: (value) {
               if (value == 'Play') {
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text("'Playing $title")));
+                Navigator.of(context).pushNamed(Routes.musicPlayer);
+                // ScaffoldMessenger.of(
+                //   context,
+                // ).showSnackBar(SnackBar(content: Text("'Playing $title")));
               } else if (value == 'Add to Playlist') {
                 showAddToPlaylistDialog(context);
               }

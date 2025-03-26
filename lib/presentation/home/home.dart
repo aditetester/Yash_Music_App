@@ -1,6 +1,9 @@
+import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/presentation/ads/ads_screen.dart';
+import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
 import 'package:boilerplate_new_version/widgets/app_drawer.dart';
 import 'package:boilerplate_new_version/presentation/home/widgets/category_view.dart';
+import 'package:boilerplate_new_version/widgets/bottom_musicPlayer_bar.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -9,9 +12,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final MusicControllerStore _musicControllerStore =
+      getIt<MusicControllerStore>();
   TextEditingController _searchController = TextEditingController();
   bool _isSearching = false;
-  List<String> _recentlyPlayedSongs = ["Song A", "Song B", "Song C", "Song D", "Song E"];
+  List<String> _recentlyPlayedSongs = [
+    "Song A",
+    "Song B",
+    "Song C",
+    "Song D",
+    "Song E",
+  ];
   List<String> _filteredSongs = [];
 
   @override
@@ -25,9 +36,12 @@ class _HomeScreenState extends State<HomeScreen> {
       if (query.isEmpty) {
         _filteredSongs = _recentlyPlayedSongs;
       } else {
-        _filteredSongs = _recentlyPlayedSongs
-            .where((song) => song.toLowerCase().contains(query.toLowerCase()))
-            .toList();
+        _filteredSongs =
+            _recentlyPlayedSongs
+                .where(
+                  (song) => song.toLowerCase().contains(query.toLowerCase()),
+                )
+                .toList();
       }
     });
   }
@@ -38,27 +52,30 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: _buildAppBar(),
       drawer: AppDrawer(),
       drawerScrimColor: Theme.of(context).scaffoldBackgroundColor,
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Categories Section
-                    CategoryViewScreen(),
-                    const SizedBox(height: 20),
-                    // Recently Played Section
-                    _builderRecentPlay(context),
-                  ],
-                ),
-              ),
-            ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              // Categories Section
+              CategoryViewScreen(),
+              const SizedBox(height: 20),
+              // Recently Played Section
+              _builderRecentPlay(context),
+            ],
           ),
-          AdsScreen(),
-        ],
+        ),
+      ),
+
+      bottomNavigationBar: SizedBox(
+        height: 150, // Adjust the height as needed
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            BottomMusicPlayerBar(musicControllerStore: _musicControllerStore),
+            AdsScreen(),
+          ],
+        ),
       ),
     );
   }
@@ -66,19 +83,20 @@ class _HomeScreenState extends State<HomeScreen> {
   // AppBar methods
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      title: _isSearching
-          ? TextField(
-              controller: _searchController,
-              autofocus: true,
-              decoration: InputDecoration(
-                hintText: 'Search...',
-                border: InputBorder.none,
-                hintStyle: TextStyle(color: Colors.white70),
-              ),
-              style: TextStyle(color: Colors.white),
-              onChanged: _filterSongs,
-            )
-          : Text("Music App"),
+      title:
+          _isSearching
+              ? TextField(
+                controller: _searchController,
+                autofocus: true,
+                decoration: InputDecoration(
+                  hintText: 'Search...',
+                  border: InputBorder.none,
+                  hintStyle: TextStyle(color: Colors.white70),
+                ),
+                style: TextStyle(color: Colors.white),
+                onChanged: _filterSongs,
+              )
+              : Text("Music App"),
       actions: [
         if (!_isSearching)
           IconButton(

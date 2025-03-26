@@ -18,5 +18,11 @@ class SettingRepositoryImpl extends SettingRepository {
   @override
   bool get isDarkMode => _sharedPrefsHelper.isDarkMode;
 
+ @override
+  Future<void> changeIsPlaying(bool value) =>
+      _sharedPrefsHelper.changeIsPlaying(value);
+
+  @override
+  bool get isPlaying => _sharedPrefsHelper.isPlaying;
 
 }

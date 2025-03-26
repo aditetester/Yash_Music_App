@@ -1,7 +1,10 @@
 import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/domain/entity/categories/category.dart';
+import 'package:boilerplate_new_version/presentation/ads/ads_screen.dart';
 import 'package:boilerplate_new_version/presentation/categories/store/categories_store.dart';
 import 'package:boilerplate_new_version/presentation/categories/widgets/category_items.dart';
+import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
+import 'package:boilerplate_new_version/widgets/bottom_musicPlayer_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
@@ -15,6 +18,7 @@ class CategoryList extends StatefulWidget {
 
 class _CategoryListState extends State<CategoryList> {
   CategoryStore _categoryStore = getIt<CategoryStore>();
+  final MusicControllerStore _musicControllerStore = getIt<MusicControllerStore>();
   List<CategoryModule>? categoryList = [];
 
   @override
@@ -60,6 +64,16 @@ class _CategoryListState extends State<CategoryList> {
             ),
           );
         },
+      ),
+         bottomNavigationBar: SizedBox(
+        height: 150, // Adjust the height as needed
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            BottomMusicPlayerBar(musicControllerStore: _musicControllerStore),
+            AdsScreen(),
+          ],
+        ),
       ),
     );
   }
