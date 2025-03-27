@@ -9,6 +9,38 @@ part of 'music_controller_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$MusicControllerStore on _MusicControllerStore, Store {
+  late final _$fetchPostsFutureAtom =
+      Atom(name: '_MusicControllerStore.fetchPostsFuture', context: context);
+
+  @override
+  ObservableFuture<AllMusicList?> get fetchPostsFuture {
+    _$fetchPostsFutureAtom.reportRead();
+    return super.fetchPostsFuture;
+  }
+
+  @override
+  set fetchPostsFuture(ObservableFuture<AllMusicList?> value) {
+    _$fetchPostsFutureAtom.reportWrite(value, super.fetchPostsFuture, () {
+      super.fetchPostsFuture = value;
+    });
+  }
+
+  late final _$AllMusicAtom =
+      Atom(name: '_MusicControllerStore.AllMusic', context: context);
+
+  @override
+  List<MusicListModule>? get AllMusic {
+    _$AllMusicAtom.reportRead();
+    return super.AllMusic;
+  }
+
+  @override
+  set AllMusic(List<MusicListModule>? value) {
+    _$AllMusicAtom.reportWrite(value, super.AllMusic, () {
+      super.AllMusic = value;
+    });
+  }
+
   late final _$_currentTrackIndexAtom =
       Atom(name: '_MusicControllerStore._currentTrackIndex', context: context);
 
@@ -73,6 +105,14 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
     });
   }
 
+  late final _$changeIsplayingAsyncAction =
+      AsyncAction('_MusicControllerStore.changeIsplaying', context: context);
+
+  @override
+  Future<dynamic> changeIsplaying(bool value) {
+    return _$changeIsplayingAsyncAction.run(() => super.changeIsplaying(value));
+  }
+
   late final _$playAsyncAction =
       AsyncAction('_MusicControllerStore.play', context: context);
 
@@ -116,6 +156,8 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
   @override
   String toString() {
     return '''
+fetchPostsFuture: ${fetchPostsFuture},
+AllMusic: ${AllMusic},
 currentPosition: ${currentPosition},
 totalDuration: ${totalDuration}
     ''';
