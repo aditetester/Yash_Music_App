@@ -90,8 +90,10 @@ class MusicPlayerScreen extends StatelessWidget {
                   SizedBox(height: 20),
                   Observer(
                     builder: (_) {
-                      final currentPosition = _musicControllerStore.currentPosition;
-                      final totalDuration = _musicControllerStore.totalDuration;
+                      final currentPosition =
+                          _musicControllerStore.currentPosition;
+                      final totalDuration =
+                          _musicControllerStore.totalDuration;
 
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -103,11 +105,12 @@ class MusicPlayerScreen extends StatelessWidget {
                           Expanded(
                             child: Slider(
                               value: currentPosition.inSeconds.toDouble(),
-                              max: totalDuration.inSeconds.toDouble(),
-                              onChanged: (value) {
-                                _musicControllerStore.seek(
-                                  Duration(seconds: value.toInt()),
-                                );
+                              max: totalDuration.inSeconds > 0
+                                  ? totalDuration.inSeconds.toDouble()
+                                  : 1.0,
+                              onChanged: (value) async {
+                                await _musicControllerStore
+                                    .seek(Duration(seconds: value.toInt()));
                               },
                               activeColor: Colors.orange,
                               inactiveColor: Colors.white,

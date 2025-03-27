@@ -1,5 +1,3 @@
-import 'package:audio_service/audio_service.dart';
-import 'package:boilerplate_new_version/presentation/musicPlayer/widgets/musicPlayer_Handler.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:mobx/mobx.dart';
 import '../../../../core/stores/error/error_store.dart';
@@ -17,7 +15,6 @@ abstract class _MusicControllerStore with Store {
 
   // AudioPlayer instance
   final AudioPlayer _audioPlayer = AudioPlayer();
-  late final AudioHandler _audioHandler;
 
   // Playlist
   final ObservableList<Map<String, String>> _playlist = ObservableList.of([
@@ -42,65 +39,47 @@ abstract class _MusicControllerStore with Store {
 
   // Getters
   bool get isPlaying => _isPlaying;
-  String? get currentSongUrl => _playlist.isNotEmpty ? _playlist[_currentTrackIndex]['url'] : null;
-  String? get currentSongTitle => _playlist.isNotEmpty ? _playlist[_currentTrackIndex]['title'] : null;
+  String? get currentSongUrl =>
+      _playlist.isNotEmpty ? _playlist[_currentTrackIndex]['url'] : null;
+  String? get currentSongTitle =>
+      _playlist.isNotEmpty ? _playlist[_currentTrackIndex]['title'] : null;
 
   // Constructor
   _MusicControllerStore(this._repository, this.errorStore) {
-    _initAudioHandler();
-    _observeAudioPlayer();
+    _initialize();
   }
 
-  Future<void> _initAudioHandler() async {
-    try {
-      final mediaItems = _playlist.map((track) {
-        return MediaItem(
-          id: track['url']!,
-          title: track['title']!,
-          artist: 'Unknown Artist',
-        );
-      }).toList();
-
-      _audioHandler = await AudioService.init(
-        builder: () => AudioPlayerHandler(_audioPlayer, mediaItems),
-        config: const AudioServiceConfig(
-          androidNotificationChannelId: 'com.example.music.channel.audio',
-          androidNotificationChannelName: 'Music Playback',
-          androidNotificationOngoing: true,
-        ),
-      );
-
-      print('AudioHandler initialized successfully');
-    } catch (e) {
-      print('Error initializing AudioHandler: $e');
-    }
+  Future<void> _initialize() async {
+    _observeAudioPlayer();
   }
 
   void _observeAudioPlayer() {
     _audioPlayer.positionStream.listen((position) {
-      currentPosition = position;
+      runInAction(() {
+        currentPosition = position;
+      });
     });
+
     _audioPlayer.durationStream.listen((duration) {
-      totalDuration = duration ?? Duration.zero;
+      runInAction(() {
+        totalDuration = duration ?? Duration.zero;
+      });
     });
-    _audioPlayer.playingStream.listen((isPlaying) {
-      _isPlaying = isPlaying;
+
+    _audioPlayer.playerStateStream.listen((state) {
+      runInAction(() {
+        _isPlaying = state.playing;
+      });
     });
   }
 
-  // Actions
   @action
   Future<void> play() async {
     try {
-      if (_audioHandler == null) {
-        await _initAudioHandler();
-      }
       if (currentSongUrl != null) {
-        print('Attempting to play: $currentSongUrl');
-        await _audioHandler.playMediaItem(
-          MediaItem(id: currentSongUrl!, title: currentSongTitle ?? 'Unknown'),
-        );
-        _isPlaying = true;
+        print('Playing: $currentSongUrl');
+        await _audioPlayer.setUrl(currentSongUrl!); // Set the audio URL
+        await _audioPlayer.play(); // Start playback
       } else {
         print('No song URL available to play');
       }
@@ -111,8 +90,11 @@ abstract class _MusicControllerStore with Store {
 
   @action
   Future<void> pause() async {
-    await _audioHandler.pause();
-    _isPlaying = false;
+    try {
+      await _audioPlayer.pause();
+    } catch (e) {
+      print('Error during pause: $e');
+    }
   }
 
   @action
@@ -133,10 +115,14 @@ abstract class _MusicControllerStore with Store {
 
   @action
   Future<void> seek(Duration position) async {
-    await _audioHandler.seek(position);
+    try {
+      await _audioPlayer.seek(position);
+    } catch (e) {
+      print('Error during seek: $e');
+    }
   }
 
   void dispose() {
-    _audioHandler.stop();
+    _audioPlayer.dispose();
   }
 }

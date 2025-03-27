@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
                   ? AppThemeData.darkThemeData
                   : AppThemeData.lightThemeData,
           routes: Routes.routes,
-          home:  MusicPlayerScreen(), //SplashScreen()
+          home:  CategoryList(), //SplashScreen()
         );
       },
     );
