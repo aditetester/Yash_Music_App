@@ -4,17 +4,20 @@ class MusicListModule {
   String? id;
   String? title;
   String? subtitle;
+  String? audio;
   String? image;
   String? subCategoryId;
 
-  MusicListModule({this.id, this.title, this.image, this.subCategoryId, this.subtitle,});
+  MusicListModule({this.id, this.title, this.image, this.subCategoryId, this.subtitle, this.audio});
 
   factory MusicListModule.fromMap(Map<String, dynamic> json) => MusicListModule(
     id: json['_id'],
     image: "${NetworkConstants.baseUrl}${json['image']['file']}",
     title: json['title'],
     subtitle: json['title'], //json['audio']['fileName'],
+    audio: "${NetworkConstants.baseUrl}${json['audio']['file']}",
     subCategoryId: json['subcategory']['_id'],
+    
 
   );
   

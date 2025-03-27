@@ -28,7 +28,6 @@ class MusicPlayerScreen extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
         ),
-        backgroundColor: Colors.teal,
       ),
       body: Column(
         children: [

@@ -1,3 +1,6 @@
+import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
+import 'package:boilerplate_new_version/domain/entity/music_list/musicModule_list.dart';
+import 'package:boilerplate_new_version/domain/usecase/music_list/get_musicList_usecase.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:mobx/mobx.dart';
 import '../../../../core/stores/error/error_store.dart';
@@ -10,11 +13,23 @@ class MusicControllerStore = _MusicControllerStore with _$MusicControllerStore;
 abstract class _MusicControllerStore with Store {
   final String TAG = "_MusicControllerStore";
 
+
+  final GetMusiclistUsecase _getMusicListUseCase;
   final SettingRepository _repository;
   final ErrorStore errorStore;
 
   // AudioPlayer instance
   final AudioPlayer _audioPlayer = AudioPlayer();
+
+  static ObservableFuture<AllMusicList?> emptyMusicListResponse =
+      ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<AllMusicList?> fetchPostsFuture =
+      ObservableFuture<AllMusicList?>(emptyMusicListResponse);
+
+  @observable
+  List<MusicListModule>? AllMusic;
 
   // Playlist
   final ObservableList<Map<String, String>> _playlist = ObservableList.of([
@@ -22,7 +37,6 @@ abstract class _MusicControllerStore with Store {
     {'title': 'Song 2', 'url': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'},
     {'title': 'Song 3', 'url': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3'},
   ]);
-
   // Current track index
   @observable
   int _currentTrackIndex = 0;
@@ -30,6 +44,9 @@ abstract class _MusicControllerStore with Store {
   // Playback state
   @observable
   bool _isPlaying = false;
+  
+  // Getters
+  bool get isPlaying => _isPlaying;
 
   @observable
   Duration currentPosition = Duration.zero;
@@ -37,15 +54,15 @@ abstract class _MusicControllerStore with Store {
   @observable
   Duration totalDuration = Duration.zero;
 
-  // Getters
-  bool get isPlaying => _isPlaying;
+
   String? get currentSongUrl =>
       _playlist.isNotEmpty ? _playlist[_currentTrackIndex]['url'] : null;
   String? get currentSongTitle =>
       _playlist.isNotEmpty ? _playlist[_currentTrackIndex]['title'] : null;
 
   // Constructor
-  _MusicControllerStore(this._repository, this.errorStore) {
+  _MusicControllerStore(this._getMusicListUseCase, this._repository, this.errorStore) {
+     init();
     _initialize();
   }
 
@@ -68,9 +85,17 @@ abstract class _MusicControllerStore with Store {
 
     _audioPlayer.playerStateStream.listen((state) {
       runInAction(() {
-        _isPlaying = state.playing;
+        // _isPlaying = state.playing;
+        changeIsplaying(state.playing);
       });
     });
+  }
+
+  // actions:-------------------------------------------------------------------
+  @action
+  Future changeIsplaying(bool value) async {
+    _isPlaying = value;
+    await _repository.changeIsPlaying(value);
   }
 
   @action
@@ -125,4 +150,11 @@ abstract class _MusicControllerStore with Store {
   void dispose() {
     _audioPlayer.dispose();
   }
+
+
+  // general methods:-----------------------------------------------------------
+  Future init() async {
+    _isPlaying = _repository.isPlaying;
+  }
+
 }
