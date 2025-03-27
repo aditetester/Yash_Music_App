@@ -135,15 +135,14 @@ class _MusicListState extends State<MusicList> {
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap:
-                            () => Navigator.of(
-                              context,
-                            ).pushNamed(Routes.musicPlayer),
+                            ()  {
+                            
+                             _musicControllerStore.playNext(filteredMusicList[index]);
+                            
+                             Navigator.of(context).pushNamed(Routes.musicPlayer, arguments: filteredMusicList[index]);
+                            } , 
                         child: MusicItems(
-                          id: filteredMusicList[index].id.toString(),
-                          title: filteredMusicList[index].title.toString(),
-                          subTitle:
-                              filteredMusicList[index].subtitle.toString(),
-                          image: filteredMusicList[index].image.toString(),
+                         music:  filteredMusicList[index],
                         ),
                       );
                     },

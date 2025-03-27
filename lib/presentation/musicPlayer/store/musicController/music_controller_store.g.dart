@@ -9,6 +9,38 @@ part of 'music_controller_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$MusicControllerStore on _MusicControllerStore, Store {
+  late final _$fetchPostsFutureAtom =
+      Atom(name: '_MusicControllerStore.fetchPostsFuture', context: context);
+
+  @override
+  ObservableFuture<AllMusicList?> get fetchPostsFuture {
+    _$fetchPostsFutureAtom.reportRead();
+    return super.fetchPostsFuture;
+  }
+
+  @override
+  set fetchPostsFuture(ObservableFuture<AllMusicList?> value) {
+    _$fetchPostsFutureAtom.reportWrite(value, super.fetchPostsFuture, () {
+      super.fetchPostsFuture = value;
+    });
+  }
+
+  late final _$AllMusicAtom =
+      Atom(name: '_MusicControllerStore.AllMusic', context: context);
+
+  @override
+  List<MusicListModule>? get AllMusic {
+    _$AllMusicAtom.reportRead();
+    return super.AllMusic;
+  }
+
+  @override
+  set AllMusic(List<MusicListModule>? value) {
+    _$AllMusicAtom.reportWrite(value, super.AllMusic, () {
+      super.AllMusic = value;
+    });
+  }
+
   late final _$_currentTrackIndexAtom =
       Atom(name: '_MusicControllerStore._currentTrackIndex', context: context);
 
@@ -38,6 +70,38 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
   set _isPlaying(bool value) {
     _$_isPlayingAtom.reportWrite(value, super._isPlaying, () {
       super._isPlaying = value;
+    });
+  }
+
+  late final _$_recentPlayAtom =
+      Atom(name: '_MusicControllerStore._recentPlay', context: context);
+
+  @override
+  String get _recentPlay {
+    _$_recentPlayAtom.reportRead();
+    return super._recentPlay;
+  }
+
+  @override
+  set _recentPlay(String value) {
+    _$_recentPlayAtom.reportWrite(value, super._recentPlay, () {
+      super._recentPlay = value;
+    });
+  }
+
+  late final _$_recentMusicAtom =
+      Atom(name: '_MusicControllerStore._recentMusic', context: context);
+
+  @override
+  MusicListModule get _recentMusic {
+    _$_recentMusicAtom.reportRead();
+    return super._recentMusic;
+  }
+
+  @override
+  set _recentMusic(MusicListModule value) {
+    _$_recentMusicAtom.reportWrite(value, super._recentMusic, () {
+      super._recentMusic = value;
     });
   }
 
@@ -73,12 +137,20 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
     });
   }
 
+  late final _$changeIsplayingAsyncAction =
+      AsyncAction('_MusicControllerStore.changeIsplaying', context: context);
+
+  @override
+  Future<dynamic> changeIsplaying(bool value) {
+    return _$changeIsplayingAsyncAction.run(() => super.changeIsplaying(value));
+  }
+
   late final _$playAsyncAction =
       AsyncAction('_MusicControllerStore.play', context: context);
 
   @override
-  Future<void> play() {
-    return _$playAsyncAction.run(() => super.play());
+  Future<void> play(String musicUrl) {
+    return _$playAsyncAction.run(() => super.play(musicUrl));
   }
 
   late final _$pauseAsyncAction =
@@ -93,8 +165,8 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
       AsyncAction('_MusicControllerStore.playNext', context: context);
 
   @override
-  Future<void> playNext() {
-    return _$playNextAsyncAction.run(() => super.playNext());
+  Future<void> playNext(MusicListModule nextplay) {
+    return _$playNextAsyncAction.run(() => super.playNext(nextplay));
   }
 
   late final _$playPreviousAsyncAction =
@@ -116,6 +188,8 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
   @override
   String toString() {
     return '''
+fetchPostsFuture: ${fetchPostsFuture},
+AllMusic: ${AllMusic},
 currentPosition: ${currentPosition},
 totalDuration: ${totalDuration}
     ''';

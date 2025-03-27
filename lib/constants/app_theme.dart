@@ -96,7 +96,7 @@ static ThemeData themeData(ColorScheme colorScheme, Color focusColor) {
       ),
       iconTheme: IconThemeData(color: colorScheme.onPrimary),
       canvasColor: colorScheme.surface,
-      scaffoldBackgroundColor: Color.fromARGB(214, 22, 97, 101),
+      scaffoldBackgroundColor: Color.fromARGB(214, 22, 97, 101), //  Colors.teal.shade800
       highlightColor: Colors.transparent,
       focusColor: focusColor,
       snackBarTheme: SnackBarThemeData(
