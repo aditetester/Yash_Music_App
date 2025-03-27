@@ -13,7 +13,6 @@ class MusicControllerStore = _MusicControllerStore with _$MusicControllerStore;
 abstract class _MusicControllerStore with Store {
   final String TAG = "_MusicControllerStore";
 
-
   final GetMusiclistUsecase _getMusicListUseCase;
   final SettingRepository _repository;
   final ErrorStore errorStore;
@@ -32,11 +31,11 @@ abstract class _MusicControllerStore with Store {
   List<MusicListModule>? AllMusic;
 
   // Playlist
-  final ObservableList<Map<String, String>> _playlist = ObservableList.of([
-    {'title': 'Song 1', 'url': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'},
-    {'title': 'Song 2', 'url': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'},
-    {'title': 'Song 3', 'url': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3'},
-  ]);
+  // final ObservableList<Map<String, String>> _playlist = ObservableList.of([
+  //   {'title': 'Song 1', 'url': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'},
+  //   {'title': 'Song 2', 'url': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'},
+  //   {'title': 'Song 3', 'url': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3'},
+  // ]);
   // Current track index
   @observable
   int _currentTrackIndex = 0;
@@ -44,9 +43,22 @@ abstract class _MusicControllerStore with Store {
   // Playback state
   @observable
   bool _isPlaying = false;
-  
+
   // Getters
   bool get isPlaying => _isPlaying;
+  // recent play
+  @observable
+  String _recentPlay = '';
+
+  // Getters
+  String get recentPlay => _recentPlay;
+
+  // recent play
+  @observable
+  MusicListModule _recentMusic = MusicListModule(image: '',audio: '',title: 'Not Played Recently');
+
+  // Getters
+  MusicListModule get recentMusic => _recentMusic;
 
   @observable
   Duration currentPosition = Duration.zero;
@@ -54,15 +66,18 @@ abstract class _MusicControllerStore with Store {
   @observable
   Duration totalDuration = Duration.zero;
 
-
-  String? get currentSongUrl =>
-      _playlist.isNotEmpty ? _playlist[_currentTrackIndex]['url'] : null;
-  String? get currentSongTitle =>
-      _playlist.isNotEmpty ? _playlist[_currentTrackIndex]['title'] : null;
+  // String? get currentSongUrl =>
+  //     _playlist.isNotEmpty ? _playlist[_currentTrackIndex]['url'] : null;
+  // String? get currentSongTitle =>
+  //     _playlist.isNotEmpty ? _playlist[_currentTrackIndex]['title'] : null;
 
   // Constructor
-  _MusicControllerStore(this._getMusicListUseCase, this._repository, this.errorStore) {
-     init();
+  _MusicControllerStore(
+    this._getMusicListUseCase,
+    this._repository,
+    this.errorStore,
+  ) {
+    init();
     _initialize();
   }
 
@@ -99,12 +114,19 @@ abstract class _MusicControllerStore with Store {
   }
 
   @action
-  Future<void> play() async {
+  Future<void> play(String musicUrl) async {
     try {
-      if (currentSongUrl != null) {
-        print('Playing: $currentSongUrl');
-        await _audioPlayer.setUrl(currentSongUrl!); // Set the audio URL
-        await _audioPlayer.play(); // Start playback
+      if (musicUrl.isNotEmpty) {
+        if (_recentPlay == musicUrl && _audioPlayer.playing == false) {
+          // Resume playback if the same track is already loaded
+          await _audioPlayer.play();
+        } else {
+          // Load new track and play
+          _recentPlay = musicUrl;
+          print('Playing: $musicUrl');
+          await _audioPlayer.setUrl(musicUrl); // Set the audio URL
+          await _audioPlayer.play(); // Start playback
+        }
       } else {
         print('No song URL available to play');
       }
@@ -123,19 +145,17 @@ abstract class _MusicControllerStore with Store {
   }
 
   @action
-  Future<void> playNext() async {
-    if (_currentTrackIndex < _playlist.length - 1) {
-      _currentTrackIndex++;
-      await play();
-    }
+  Future<void> playNext(MusicListModule nextplay) async {
+    _recentMusic = nextplay;
+    await play(nextplay.audio.toString());
   }
 
   @action
   Future<void> playPrevious() async {
-    if (_currentTrackIndex > 0) {
-      _currentTrackIndex--;
-      await play();
-    }
+    // if (_currentTrackIndex > 0) {
+    //   _currentTrackIndex--;
+    await play('');
+    // }
   }
 
   @action
@@ -147,14 +167,12 @@ abstract class _MusicControllerStore with Store {
     }
   }
 
-  void dispose() {
-    _audioPlayer.dispose();
+  void dispose() async {
+    await _audioPlayer.dispose();
   }
-
 
   // general methods:-----------------------------------------------------------
   Future init() async {
     _isPlaying = _repository.isPlaying;
   }
-
 }

@@ -73,6 +73,38 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
     });
   }
 
+  late final _$_recentPlayAtom =
+      Atom(name: '_MusicControllerStore._recentPlay', context: context);
+
+  @override
+  String get _recentPlay {
+    _$_recentPlayAtom.reportRead();
+    return super._recentPlay;
+  }
+
+  @override
+  set _recentPlay(String value) {
+    _$_recentPlayAtom.reportWrite(value, super._recentPlay, () {
+      super._recentPlay = value;
+    });
+  }
+
+  late final _$_recentMusicAtom =
+      Atom(name: '_MusicControllerStore._recentMusic', context: context);
+
+  @override
+  MusicListModule get _recentMusic {
+    _$_recentMusicAtom.reportRead();
+    return super._recentMusic;
+  }
+
+  @override
+  set _recentMusic(MusicListModule value) {
+    _$_recentMusicAtom.reportWrite(value, super._recentMusic, () {
+      super._recentMusic = value;
+    });
+  }
+
   late final _$currentPositionAtom =
       Atom(name: '_MusicControllerStore.currentPosition', context: context);
 
@@ -117,8 +149,8 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
       AsyncAction('_MusicControllerStore.play', context: context);
 
   @override
-  Future<void> play() {
-    return _$playAsyncAction.run(() => super.play());
+  Future<void> play(String musicUrl) {
+    return _$playAsyncAction.run(() => super.play(musicUrl));
   }
 
   late final _$pauseAsyncAction =
@@ -133,8 +165,8 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
       AsyncAction('_MusicControllerStore.playNext', context: context);
 
   @override
-  Future<void> playNext() {
-    return _$playNextAsyncAction.run(() => super.playNext());
+  Future<void> playNext(MusicListModule nextplay) {
+    return _$playNextAsyncAction.run(() => super.playNext(nextplay));
   }
 
   late final _$playPreviousAsyncAction =
