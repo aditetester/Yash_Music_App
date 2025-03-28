@@ -1,6 +1,8 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicModule_list.dart';
 import 'package:boilerplate_new_version/domain/usecase/music_list/get_musicList_usecase.dart';
+import 'package:boilerplate_new_version/presentation/musicPlayer/widgets/musicPlayer_handler.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:mobx/mobx.dart';
 import '../../../../core/stores/error/error_store.dart';
@@ -30,12 +32,8 @@ abstract class _MusicControllerStore with Store {
   @observable
   List<MusicListModule>? AllMusic;
 
-  // Playlist
-  // final ObservableList<Map<String, String>> _playlist = ObservableList.of([
-  //   {'title': 'Song 1', 'url': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'},
-  //   {'title': 'Song 2', 'url': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'},
-  //   {'title': 'Song 3', 'url': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3'},
-  // ]);
+  final AudioHandler _audioHandler = MyAudioHandler();
+
   // Current track index
   @observable
   int _currentTrackIndex = 0;
@@ -55,7 +53,11 @@ abstract class _MusicControllerStore with Store {
 
   // recent play
   @observable
-  MusicListModule _recentMusic = MusicListModule(image: '',audio: '',title: 'Not Played Recently');
+  MusicListModule _recentMusic = MusicListModule(
+    image: '',
+    audio: '',
+    title: 'Not Played Recently',
+  );
 
   // Getters
   MusicListModule get recentMusic => _recentMusic;
@@ -104,6 +106,12 @@ abstract class _MusicControllerStore with Store {
         changeIsplaying(state.playing);
       });
     });
+    _audioHandler.playbackState.listen((state) {
+      runInAction(() {
+        _isPlaying = state.playing;
+        currentPosition = state.updatePosition;
+      });
+    });
   }
 
   // actions:-------------------------------------------------------------------
@@ -120,7 +128,15 @@ abstract class _MusicControllerStore with Store {
         if (_recentPlay == musicUrl && _audioPlayer.playing == false) {
           // Resume playback if the same track is already loaded
           await _audioPlayer.play();
-        } else {
+        }
+         else {
+          await _audioHandler.addQueueItem(
+            MediaItem(
+              id: musicUrl,
+              title: _recentMusic.title.toString(),
+              artist: _recentMusic.subtitle.toString(),
+            ),
+          );
           // Load new track and play
           _recentPlay = musicUrl;
           print('Playing: $musicUrl');
