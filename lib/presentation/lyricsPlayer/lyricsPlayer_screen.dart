@@ -13,6 +13,7 @@ class LyricsPlayerScreen extends StatefulWidget {
 }
 
 class _LyricsPlayerScreenState extends State<LyricsPlayerScreen> {
+  final ScrollController _scrollController = ScrollController();
   final MusicControllerStore _musicControllerStore =
       getIt<MusicControllerStore>();
 
@@ -23,7 +24,12 @@ class _LyricsPlayerScreenState extends State<LyricsPlayerScreen> {
   @override
   void initState() {
     super.initState();
-    lrcData = """[00:03.30]Ooh, ooh
+    lrcData = """[id: dqsxdkbu]
+[ar: Lady Gaga]
+[al: Lady Gaga]
+[ti: Die With A Smile]
+[length: 04:12]
+[00:03.30]Ooh, ooh
 [00:06.75]
 [00:09.16]I, I just woke up from a dream
 [00:15.97]But you and I had to say goodbye
@@ -68,6 +74,7 @@ class _LyricsPlayerScreenState extends State<LyricsPlayerScreen> {
 [04:02.63] """;
     print(_musicControllerStore.recentMusic.lyrics.toString());
     lyrics = parseLRC(lrcData);
+  
   }
 
   List<Lyric> parseLRC(String lrc) {
@@ -98,12 +105,22 @@ class _LyricsPlayerScreenState extends State<LyricsPlayerScreen> {
     final _audioPlayer =
         ModalRoute.of(context)!.settings.arguments as AudioPlayer;
 
+    void _scrollToCurrentLyric() {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          currentIndex * 50.0,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
+    }
     void _seekToLyric(int index) {
       if (index >= 0 && index < lyrics.length) {
         _audioPlayer.seek(lyrics[index].time);
-        
+        _scrollToCurrentLyric();
       }
     }
+
 
     return Scaffold(
       appBar: AppBar(title: Text("Lyrics Player")),
@@ -111,6 +128,7 @@ class _LyricsPlayerScreenState extends State<LyricsPlayerScreen> {
         children: [
           Expanded(
             child: ListView.builder(
+              controller: _scrollController,
               itemCount: lyrics.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
@@ -140,7 +158,7 @@ class _LyricsPlayerScreenState extends State<LyricsPlayerScreen> {
                             color:
                                 index == currentIndex
                                     ? Colors.blue
-                                    : Colors.black,
+                                    : Colors.white,
                           ),
                         );
                       },
@@ -153,6 +171,11 @@ class _LyricsPlayerScreenState extends State<LyricsPlayerScreen> {
         ],
       ),
     );
-    ;
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }
