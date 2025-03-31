@@ -6,6 +6,7 @@ import 'package:boilerplate_new_version/domain/usecase/sub_categories/get_subcat
 import 'package:boilerplate_new_version/presentation/categories/store/categories_store.dart';
 import 'package:boilerplate_new_version/presentation/music/store/music_list_store.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
+import 'package:boilerplate_new_version/presentation/musicPlayer/widgets/audioPlayer_initialiser.dart';
 import 'package:boilerplate_new_version/presentation/subCategories/store/sub_categories_store.dart';
 
 import '../../../core/stores/error/error_store.dart';
@@ -49,7 +50,9 @@ class StoreModule {
         getIt<GetMusiclistUsecase>(),
         getIt<SettingRepository>(),
         getIt<ErrorStore>(),
-      ),
-    );   
+      ));
+
+      getIt.registerSingleton<AudioPlayerInit>(AudioPlayerInit());
+
   }
 }

@@ -5,19 +5,19 @@ import 'package:just_audio/just_audio.dart';
 
 class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   final AudioPlayer _player = AudioPlayer();
-  final MusicListModule music;
+  MusicListModule? music;
   String audioUrl =
       "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
 
-  AudioPlayerHandler(this.music) {
-    _init(music.audio.toString());
+  AudioPlayerHandler() {
+    _init();
     _player.playbackEventStream.map(_transformEvent).pipe(playbackState);
     _notifyAudioHandler();
   }
 
-  Future<void> _init(String url) async {
+  Future<void> _init() async {
     try {
-      await _player.setUrl(url);
+      await _player.setUrl(audioUrl);
       _notifyAudioHandler();
     } catch (e) {
       print("Error loading audio: $e");
@@ -29,8 +29,8 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
       MediaItem(
         id: audioUrl,
         album: "Lofi",
-        title: "${music.title}",
-        artist: "${music.subtitle}",
+        title: "sdds",
+        artist: "ef",
         duration: _player.duration,
         artUri: Uri.parse(
           "https://via.placeholder.com/150",
