@@ -32,8 +32,6 @@ abstract class _MusicControllerStore with Store {
   @observable
   List<MusicListModule>? AllMusic;
 
-  final AudioHandler _audioHandler = MyAudioHandler();
-
   // Current track index
   @observable
   int _currentTrackIndex = 0;
@@ -106,12 +104,7 @@ abstract class _MusicControllerStore with Store {
         changeIsplaying(state.playing);
       });
     });
-    _audioHandler.playbackState.listen((state) {
-      runInAction(() {
-        _isPlaying = state.playing;
-        currentPosition = state.updatePosition;
-      });
-    });
+   
   }
 
   // actions:-------------------------------------------------------------------
@@ -130,13 +123,6 @@ abstract class _MusicControllerStore with Store {
           await _audioPlayer.play();
         }
          else {
-          await _audioHandler.addQueueItem(
-            MediaItem(
-              id: musicUrl,
-              title: _recentMusic.title.toString(),
-              artist: _recentMusic.subtitle.toString(),
-            ),
-          );
           // Load new track and play
           _recentPlay = musicUrl;
           print('Playing: $musicUrl');
@@ -162,8 +148,8 @@ abstract class _MusicControllerStore with Store {
 
   @action
   Future<void> playNext(MusicListModule nextplay) async {
-    _recentMusic = nextplay;
-    await play(nextplay.audio.toString());
+    // _recentMusic = nextplay;
+    // await play(nextplay.audio.toString());
   }
 
   @action

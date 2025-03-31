@@ -4,6 +4,7 @@ import 'package:boilerplate_new_version/presentation/ads/ads_screen.dart';
 import 'package:boilerplate_new_version/presentation/music/store/music_list_store.dart';
 import 'package:boilerplate_new_version/presentation/music/widgets/music_items.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
+import 'package:boilerplate_new_version/presentation/musicPlayer/widgets/musicPlayer_handler.dart';
 import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:boilerplate_new_version/widgets/bottom_musicPlayer_bar.dart';
 import 'package:flutter/material.dart';
@@ -60,8 +61,8 @@ class _MusicListState extends State<MusicList> {
 
   @override
   Widget build(BuildContext context) {
-    final String subcategoryId =
-        ModalRoute.of(context)!.settings.arguments as String;
+    final String subcategoryId = "6715f190725b819f0474bbd9";
+        // ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
       appBar: AppBar(title: Text('Music List'), centerTitle: true),
       body: Column(
@@ -136,7 +137,7 @@ class _MusicListState extends State<MusicList> {
                       return GestureDetector(
                         onTap:
                             ()  {
-                            
+                              
                              _musicControllerStore.playNext(filteredMusicList[index]);
                             
                              Navigator.of(context).pushNamed(Routes.musicPlayer, arguments: filteredMusicList[index]);

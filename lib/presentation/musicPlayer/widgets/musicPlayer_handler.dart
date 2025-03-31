@@ -1,50 +1,114 @@
+import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
+import 'package:flutter/material.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
 
-class MyAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
-  final AudioPlayer _audioPlayer = AudioPlayer();
+class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
+  final AudioPlayer _player = AudioPlayer();
+  final MusicListModule music;
+  String audioUrl =
+      "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
 
-  MyAudioHandler() {
-    _audioPlayer.playerStateStream.listen((playerState) {
-      playbackState.add(
-        PlaybackState(
-          controls: [
-            MediaControl.play,
-            MediaControl.pause,
-            MediaControl.stop,
-            MediaControl.skipToNext,
-            MediaControl.skipToPrevious,
-          ],
-          processingState: _mapProcessingState(playerState.processingState),
-          playing: playerState.playing,
-          updatePosition: _audioPlayer.position,
-          bufferedPosition: _audioPlayer.bufferedPosition,
-          speed: _audioPlayer.speed,
-          updateTime: DateTime.now(),
-        ),
-      );
-    });
+  AudioPlayerHandler(this.music) {
+    _init(music.audio.toString());
+    _player.playbackEventStream.map(_transformEvent).pipe(playbackState);
+    _notifyAudioHandler();
+  }
+
+  Future<void> _init(String url) async {
+    try {
+      await _player.setUrl(url);
+      _notifyAudioHandler();
+    } catch (e) {
+      print("Error loading audio: $e");
+    }
+  }
+
+  void _notifyAudioHandler() {
+    mediaItem.add(
+      MediaItem(
+        id: audioUrl,
+        album: "Lofi",
+        title: "${music.title}",
+        artist: "${music.subtitle}",
+        duration: _player.duration,
+        artUri: Uri.parse(
+          "https://via.placeholder.com/150",
+        ), // Placeholder album art
+      ),
+    );
+  }
+
+  PlaybackState _transformEvent(PlaybackEvent event) {
+    return PlaybackState(
+      controls: [
+        MediaControl.rewind,
+        if (_player.playing) MediaControl.pause else MediaControl.play,
+        MediaControl.stop,
+        MediaControl.fastForward,
+      ],
+      androidCompactActionIndices: [0, 1, 2],
+      playing: _player.playing,
+      processingState: _player.processingState.toAudioProcessingState(),
+      updatePosition: _player.position,
+      updateTime: DateTime.now(),
+    );
   }
 
   @override
-  Future<void> play() => _audioPlayer.play();
-
-  @override
-  Future<void> pause() => _audioPlayer.pause();
-
-  @override
-  Future<void> stop() => _audioPlayer.stop();
-
-  @override
-  Future<void> seek(Duration position) => _audioPlayer.seek(position);
-
-  @override
-  Future<void> addQueueItem(MediaItem mediaItem) async {
-    await _audioPlayer.setUrl(mediaItem.id); // Set the audio URL
+  Future<void> play() async {
+    if (_player.processingState == ProcessingState.idle) {
+      await _player.setUrl(audioUrl);
+    }
+    await _player.play();
+    _notifyAudioHandler();
   }
 
-  AudioProcessingState _mapProcessingState(ProcessingState state) {
-    switch (state) {
+  @override
+  Future<void> pause() async {
+    await _player.pause();
+    _notifyAudioHandler();
+  }
+
+  @override
+  Future<void> stop() async {
+    await _player.stop();
+    return super.stop();
+  }
+
+  @override
+  Future<void> seek(Duration position) async {
+    await _player.seek(position);
+  }
+
+  @override
+  Future<void> onSkipToNext() async {
+    await seek(
+      _player.position + Duration(seconds: 10),
+    ); // Skip 10 seconds ahead
+  }
+
+  @override
+  Future<void> onSkipToPrevious() async {
+    await seek(_player.position - Duration(seconds: 10)); // Rewind 10 seconds
+  }
+
+  Future<void> nextPlay(String nextUrl) async {
+    try {
+      await _player.stop();
+      await _player.setUrl(nextUrl);
+      await _player.play();
+      audioUrl = nextUrl;
+      _notifyAudioHandler();
+    } catch (e) {
+      print("Error playing next track: $e");
+    }
+  }
+}
+
+extension on ProcessingState {
+  AudioProcessingState toAudioProcessingState() {
+    switch (this) {
       case ProcessingState.idle:
         return AudioProcessingState.idle;
       case ProcessingState.loading:
@@ -56,7 +120,7 @@ class MyAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
       case ProcessingState.completed:
         return AudioProcessingState.completed;
       default:
-        throw ArgumentError('Invalid state: $state');
+        throw Exception("Invalid ProcessingState");
     }
   }
 }
