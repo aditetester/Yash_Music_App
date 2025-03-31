@@ -1,6 +1,8 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
+import 'package:boilerplate_new_version/presentation/lyricsPlayer/lyricsPlayer_screen.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/widgets/musicPlayer_handler.dart';
+import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:boilerplate_new_version/di/service_locator.dart';
@@ -143,6 +145,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                       );
                     },
                   ),
+                  IconButton(onPressed: ()=> Navigator.of(context).pushNamed(Routes.lyricsPlayer, arguments: _musicControllerStore.getAudioPlayer) , icon: Icon( Icons.lyrics)),
                 ],
               ),
             ),

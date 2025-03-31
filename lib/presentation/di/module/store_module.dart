@@ -46,7 +46,6 @@ class StoreModule {
 
       getIt.registerSingleton<MusicControllerStore>(
       MusicControllerStore(
-        getIt<GetMusiclistUsecase>(),
         getIt<SettingRepository>(),
         getIt<ErrorStore>(),
       ));

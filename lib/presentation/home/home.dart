@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
               MainAxisSize.min, // Ensure the column takes only required height
           children: [
             BottomMusicPlayerBar(musicControllerStore: _musicControllerStore),
-            // AdsScreen(),
+            AdsScreen(),
           ],
         ),
       ),

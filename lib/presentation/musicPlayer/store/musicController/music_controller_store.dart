@@ -16,7 +16,6 @@ class MusicControllerStore = _MusicControllerStore with _$MusicControllerStore;
 abstract class _MusicControllerStore with Store {
   final String TAG = "_MusicControllerStore";
 
-  final GetMusiclistUsecase _getMusicListUseCase;
   final SettingRepository _repository;
   final ErrorStore errorStore;
 
@@ -87,7 +86,6 @@ abstract class _MusicControllerStore with Store {
   // Constructor
 
   _MusicControllerStore(
-    this._getMusicListUseCase,
     this._repository,
     this.errorStore,
   ) {
