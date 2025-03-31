@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:boilerplate_new_version/presentation/musicPlayer/widgets/audioPlayer_initialiser.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'di/service_locator.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/services.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await AudioPlayerInit();
   await setPreferredOrientations();
   await ServiceLocator.configureDependencies();
   MobileAds.instance.initialize();

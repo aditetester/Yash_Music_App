@@ -9,6 +9,42 @@ part of 'music_controller_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$MusicControllerStore on _MusicControllerStore, Store {
+  Computed<bool>? _$isPlayingComputed;
+
+  @override
+  bool get isPlaying =>
+      (_$isPlayingComputed ??= Computed<bool>(() => super.isPlaying,
+              name: '_MusicControllerStore.isPlaying'))
+          .value;
+  Computed<String>? _$recentPlayComputed;
+
+  @override
+  String get recentPlay =>
+      (_$recentPlayComputed ??= Computed<String>(() => super.recentPlay,
+              name: '_MusicControllerStore.recentPlay'))
+          .value;
+  Computed<MusicListModule>? _$recentMusicComputed;
+
+  @override
+  MusicListModule get recentMusic => (_$recentMusicComputed ??=
+          Computed<MusicListModule>(() => super.recentMusic,
+              name: '_MusicControllerStore.recentMusic'))
+      .value;
+  Computed<AudioHandler?>? _$getAudioHandlerComputed;
+
+  @override
+  AudioHandler? get getAudioHandler => (_$getAudioHandlerComputed ??=
+          Computed<AudioHandler?>(() => super.getAudioHandler,
+              name: '_MusicControllerStore.getAudioHandler'))
+      .value;
+  Computed<AudioPlayer>? _$getAudioPlayerComputed;
+
+  @override
+  AudioPlayer get getAudioPlayer => (_$getAudioPlayerComputed ??=
+          Computed<AudioPlayer>(() => super.getAudioPlayer,
+              name: '_MusicControllerStore.getAudioPlayer'))
+      .value;
+
   late final _$fetchPostsFutureAtom =
       Atom(name: '_MusicControllerStore.fetchPostsFuture', context: context);
 
@@ -105,6 +141,22 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
     });
   }
 
+  late final _$_audioHandlerAtom =
+      Atom(name: '_MusicControllerStore._audioHandler', context: context);
+
+  @override
+  AudioHandler? get _audioHandler {
+    _$_audioHandlerAtom.reportRead();
+    return super._audioHandler;
+  }
+
+  @override
+  set _audioHandler(AudioHandler? value) {
+    _$_audioHandlerAtom.reportWrite(value, super._audioHandler, () {
+      super._audioHandler = value;
+    });
+  }
+
   late final _$currentPositionAtom =
       Atom(name: '_MusicControllerStore.currentPosition', context: context);
 
@@ -135,6 +187,30 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
     _$totalDurationAtom.reportWrite(value, super.totalDuration, () {
       super.totalDuration = value;
     });
+  }
+
+  late final _$isInitializedAtom =
+      Atom(name: '_MusicControllerStore.isInitialized', context: context);
+
+  @override
+  bool get isInitialized {
+    _$isInitializedAtom.reportRead();
+    return super.isInitialized;
+  }
+
+  @override
+  set isInitialized(bool value) {
+    _$isInitializedAtom.reportWrite(value, super.isInitialized, () {
+      super.isInitialized = value;
+    });
+  }
+
+  late final _$initAudioServiceAsyncAction =
+      AsyncAction('_MusicControllerStore.initAudioService', context: context);
+
+  @override
+  Future<void> initAudioService() {
+    return _$initAudioServiceAsyncAction.run(() => super.initAudioService());
   }
 
   late final _$changeIsplayingAsyncAction =
@@ -191,7 +267,13 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
 fetchPostsFuture: ${fetchPostsFuture},
 AllMusic: ${AllMusic},
 currentPosition: ${currentPosition},
-totalDuration: ${totalDuration}
+totalDuration: ${totalDuration},
+isInitialized: ${isInitialized},
+isPlaying: ${isPlaying},
+recentPlay: ${recentPlay},
+recentMusic: ${recentMusic},
+getAudioHandler: ${getAudioHandler},
+getAudioPlayer: ${getAudioPlayer}
     ''';
   }
 }

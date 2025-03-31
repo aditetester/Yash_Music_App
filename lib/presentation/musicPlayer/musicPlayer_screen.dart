@@ -1,6 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
-import 'package:boilerplate_new_version/presentation/musicPlayer/widgets/audioPlayer_initialiser.dart';
+import 'package:boilerplate_new_version/presentation/musicPlayer/widgets/musicPlayer_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:boilerplate_new_version/di/service_locator.dart';
@@ -17,7 +17,6 @@ class MusicPlayerScreen extends StatefulWidget {
 class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   final MusicControllerStore _musicControllerStore =
       getIt<MusicControllerStore>();
-  final AudioPlayerInit _initil = getIt<AudioPlayerInit>();
 
   Future<void> _playPause(String musicUrl) async {
     if (_musicControllerStore.isPlaying) {
@@ -31,7 +30,6 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   Widget build(BuildContext context) {
     final MusicListModule music =
         ModalRoute.of(context)!.settings.arguments as MusicListModule;
-    final audioHandler = _initil.audioHandler;
 
     return Scaffold(
       appBar: AppBar(
@@ -81,32 +79,15 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                         child: Observer(
                           builder:
                               (_) => IconButton(
-                                icon: StreamBuilder<PlaybackState>(
-                                  stream: audioHandler!.playbackState,
-                                  builder: (context, snapshot) {
-                                    final playbackState = snapshot.data;
-                                    final isPlaying =
-                                        playbackState?.playing ?? false;
-                                    return Icon(
-                                      isPlaying
-                                          ? Icons.pause
-                                          : Icons.play_arrow,
-                                    );
-                                  },
+                                icon: Icon(
+                                  _musicControllerStore.isPlaying
+                                      ? Icons.pause
+                                      : Icons.play_arrow,
                                 ),
                                 color: Colors.white,
                                 iconSize: 40,
-
-                                onPressed: () async {
-                                  final playbackState =
-                                      audioHandler.playbackState.value;
-
-                                  if (playbackState.playing) {
-                                    await audioHandler.pause();
-                                  } else {
-                                    await audioHandler.play();
-                                  }
-                                },
+                                onPressed:
+                                    () => _playPause(music.audio.toString()),
                               ),
                         ),
                       ),

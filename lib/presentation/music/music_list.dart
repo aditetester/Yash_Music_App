@@ -23,7 +23,6 @@ class _MusicListState extends State<MusicList> {
   final MusicControllerStore _musicControllerStore =
       getIt<MusicControllerStore>();
   TextEditingController _searchController = TextEditingController();
-
   List<MusicListModule>? allMusicList = [];
   List<MusicListModule> filteredMusicList = [];
 
@@ -33,6 +32,7 @@ class _MusicListState extends State<MusicList> {
     _MusicListStore.fetchMusicList();
     // Add a listener to the search controller
     _searchController.addListener(_filterMusicList);
+    
   }
 
   @override
@@ -116,7 +116,7 @@ class _MusicListState extends State<MusicList> {
                 _MusicListStore.SelectedMusicList(subcategoryId);
 
                 if (_MusicListStore.fetchPostsFuture.status ==
-                    FutureStatus.pending) {
+                    FutureStatus.pending && _musicControllerStore.isInitialized) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (_MusicListStore.fetchPostsFuture.status ==
                     FutureStatus.fulfilled) {
@@ -137,7 +137,7 @@ class _MusicListState extends State<MusicList> {
                       return GestureDetector(
                         onTap:
                             ()  {
-                              
+                         
                              _musicControllerStore.playNext(filteredMusicList[index]);
                             
                              Navigator.of(context).pushNamed(Routes.musicPlayer, arguments: filteredMusicList[index]);

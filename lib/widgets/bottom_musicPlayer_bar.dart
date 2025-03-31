@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
-import 'package:mobx/mobx.dart';
 
 class BottomMusicPlayerBar extends StatelessWidget {
   final MusicControllerStore musicControllerStore;
@@ -41,28 +40,32 @@ class BottomMusicPlayerBar extends StatelessWidget {
                     },
                   ),
                 ),
-                Container(
-                  width: 230,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        musicControllerStore.recentMusic.title.toString(), // You can use dynamic title if available
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          overflow: TextOverflow.ellipsis,     
+                Observer(
+                  builder: (context) {
+                    return Container(
+                    width: 230,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          musicControllerStore.recentMusic.title.toString(), // You can use dynamic title if available
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            overflow: TextOverflow.ellipsis,     
+                          ),
+                         maxLines: 1,
                         ),
-                       maxLines: 1,
-                      ),
-                      Text(
-                        musicControllerStore.recentMusic.subtitle.toString(), // Replace with dynamic artist name if available
-                        style: TextStyle(color: Colors.white70, fontSize: 12),
-                      ),
-                    ],
-                  ),
+                        Text(
+                          musicControllerStore.recentMusic.subtitle.toString(), // Replace with dynamic artist name if available
+                          style: TextStyle(color: Colors.white70, fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  );
+                  },
                 ),
               ],
             ),

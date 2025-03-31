@@ -3,6 +3,7 @@ import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart'
 import 'package:boilerplate_new_version/domain/entity/music_list/musicModule_list.dart';
 import 'package:boilerplate_new_version/domain/usecase/music_list/get_musicList_usecase.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/widgets/musicPlayer_handler.dart';
+import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:mobx/mobx.dart';
 import '../../../../core/stores/error/error_store.dart';
@@ -40,14 +41,9 @@ abstract class _MusicControllerStore with Store {
   @observable
   bool _isPlaying = false;
 
-  // Getters
-  bool get isPlaying => _isPlaying;
   // recent play
   @observable
   String _recentPlay = '';
-
-  // Getters
-  String get recentPlay => _recentPlay;
 
   // recent play
   @observable
@@ -57,8 +53,8 @@ abstract class _MusicControllerStore with Store {
     title: 'Not Played Recently',
   );
 
-  // Getters
-  MusicListModule get recentMusic => _recentMusic;
+  @observable
+  AudioHandler? _audioHandler;
 
   @observable
   Duration currentPosition = Duration.zero;
@@ -66,12 +62,30 @@ abstract class _MusicControllerStore with Store {
   @observable
   Duration totalDuration = Duration.zero;
 
+  @observable
+  bool isInitialized = false;
+
+  // Getters
+  @computed
+  bool get isPlaying => _isPlaying;
+  // Getters
+  @computed
+  String get recentPlay => _recentPlay;
+  // Getters
+  @computed
+  MusicListModule get recentMusic => _recentMusic;
+  @computed
+  AudioHandler? get getAudioHandler => _audioHandler;
+  @computed
+  AudioPlayer get getAudioPlayer => _audioPlayer;
+
   // String? get currentSongUrl =>
   //     _playlist.isNotEmpty ? _playlist[_currentTrackIndex]['url'] : null;
   // String? get currentSongTitle =>
   //     _playlist.isNotEmpty ? _playlist[_currentTrackIndex]['title'] : null;
 
   // Constructor
+
   _MusicControllerStore(
     this._getMusicListUseCase,
     this._repository,
@@ -79,6 +93,7 @@ abstract class _MusicControllerStore with Store {
   ) {
     init();
     _initialize();
+    initAudioService();
   }
 
   Future<void> _initialize() async {
@@ -104,10 +119,23 @@ abstract class _MusicControllerStore with Store {
         changeIsplaying(state.playing);
       });
     });
-   
   }
 
   // actions:-------------------------------------------------------------------
+
+  @action
+  Future<void> initAudioService() async {
+    _audioHandler = await AudioService.init(
+      builder: () => AudioPlayerHandler(getAudioPlayer),
+      config: const AudioServiceConfig(
+        androidNotificationChannelId: 'com.example.musicplayer.channel.audio',
+        androidNotificationChannelName: 'Music Playback',
+        androidNotificationOngoing: true,
+      ),
+    );
+    isInitialized = true;
+  }
+
   @action
   Future changeIsplaying(bool value) async {
     _isPlaying = value;
@@ -118,16 +146,19 @@ abstract class _MusicControllerStore with Store {
   Future<void> play(String musicUrl) async {
     try {
       if (musicUrl.isNotEmpty) {
-        if (_recentPlay == musicUrl && _audioPlayer.playing == false) {
+        if (_recentPlay == musicUrl) {
           // Resume playback if the same track is already loaded
+
           await _audioPlayer.play();
-        }
-         else {
+        } else {
+          
+          
           // Load new track and play
           _recentPlay = musicUrl;
           print('Playing: $musicUrl');
-          await _audioPlayer.setUrl(musicUrl); // Set the audio URL
-          await _audioPlayer.play(); // Start playback
+          _audioPlayer.setUrl(musicUrl);
+          await _audioPlayer.play();
+         
         }
       } else {
         print('No song URL available to play');
@@ -140,7 +171,7 @@ abstract class _MusicControllerStore with Store {
   @action
   Future<void> pause() async {
     try {
-      await _audioPlayer.pause();
+      await getAudioHandler!.pause();
     } catch (e) {
       print('Error during pause: $e');
     }
@@ -148,8 +179,8 @@ abstract class _MusicControllerStore with Store {
 
   @action
   Future<void> playNext(MusicListModule nextplay) async {
-    // _recentMusic = nextplay;
-    // await play(nextplay.audio.toString());
+    _recentMusic = nextplay;
+    await play(nextplay.audio.toString());
   }
 
   @action
@@ -163,7 +194,7 @@ abstract class _MusicControllerStore with Store {
   @action
   Future<void> seek(Duration position) async {
     try {
-      await _audioPlayer.seek(position);
+      await getAudioHandler!.seek(position);
     } catch (e) {
       print('Error during seek: $e');
     }

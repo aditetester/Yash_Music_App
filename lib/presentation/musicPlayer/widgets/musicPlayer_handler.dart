@@ -1,21 +1,27 @@
+import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
+import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
 import 'package:flutter/material.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:just_audio/just_audio.dart';
 
 class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
-  final AudioPlayer _player = AudioPlayer();
+ final MusicControllerStore _musicControllerStore =
+      getIt<MusicControllerStore>();
+  AudioPlayer _player;
   MusicListModule? music;
   String audioUrl =
       "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
 
-  AudioPlayerHandler() {
-    _init();
+  AudioPlayerHandler(this._player) {
+    
+    init();
     _player.playbackEventStream.map(_transformEvent).pipe(playbackState);
     _notifyAudioHandler();
   }
 
-  Future<void> _init() async {
+  Future<void> init() async {
     try {
       await _player.setUrl(audioUrl);
       _notifyAudioHandler();
@@ -25,21 +31,26 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   }
 
   void _notifyAudioHandler() {
-    mediaItem.add(
-      MediaItem(
-        id: audioUrl,
-        album: "Lofi",
-        title: "sdds",
-        artist: "ef",
-        duration: _player.duration,
-        artUri: Uri.parse(
-          "https://via.placeholder.com/150",
-        ), // Placeholder album art
-      ),
-    );
+    
+    final recentPlay = _musicControllerStore.recentMusic;
+   
+      mediaItem.add(
+        MediaItem(
+          id: recentPlay.id.toString(),
+          album: recentPlay.subCategoryName.toString(),
+          title: recentPlay.title.toString(),
+          artist: recentPlay.subtitle.toString(),
+          
+          duration: _player.duration,
+          artUri: Uri.parse(
+            recentPlay.image.toString(),
+          ), // Placeholder album art
+        ),
+      );
   }
 
   PlaybackState _transformEvent(PlaybackEvent event) {
+    _notifyAudioHandler();
     return PlaybackState(
       controls: [
         MediaControl.rewind,
@@ -92,6 +103,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   Future<void> onSkipToPrevious() async {
     await seek(_player.position - Duration(seconds: 10)); // Rewind 10 seconds
   }
+  
 
   Future<void> nextPlay(String nextUrl) async {
     try {
