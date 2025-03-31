@@ -20,4 +20,12 @@ class SharedPreferenceHelper {
     return _sharedPreference.setBool(Preferences.is_dark_mode, value);
   }
 
+   bool get isPlaying {
+    return _sharedPreference.getBool(Preferences.is_playing) ?? false;
+  }
+
+  Future<void> changeIsPlaying(bool value) {
+    return _sharedPreference.setBool(Preferences.is_playing, value);
+  }
+
 }

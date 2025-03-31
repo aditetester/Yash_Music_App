@@ -6,4 +6,7 @@ abstract class SettingRepository {
 
   bool get isDarkMode;
 
+ Future<void> changeIsPlaying(bool value);
+
+  bool get isPlaying;
 }

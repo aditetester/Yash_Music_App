@@ -1,7 +1,10 @@
 import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/domain/entity/subCategories/subCategory.dart';
+import 'package:boilerplate_new_version/presentation/ads/ads_screen.dart';
+import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
 import 'package:boilerplate_new_version/presentation/subCategories/store/sub_categories_store.dart';
 import 'package:boilerplate_new_version/presentation/subCategories/widgets/subCategory_item.dart';
+import 'package:boilerplate_new_version/widgets/bottom_musicPlayer_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
@@ -14,23 +17,26 @@ class SubCategoryList extends StatefulWidget {
 }
 
 class _SubCategoryListState extends State<SubCategoryList> {
+  final MusicControllerStore _musicControllerStore =
+      getIt<MusicControllerStore>();
   SubCategoriesStore _subCategoryStore = getIt<SubCategoriesStore>();
   List<SubCategoryModule>? subcategoryList = [];
-  
+
   @override
   void initState() {
     super.initState();
-     _subCategoryStore.fetchSubCategories();
+    _subCategoryStore.fetchSubCategories();
   }
 
   @override
   Widget build(BuildContext context) {
-    final String categoryId = ModalRoute.of(context)!.settings.arguments as String;
+    final String categoryId =
+        ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
       appBar: AppBar(title: Text("Music Section")),
       body: Observer(
         builder: (_) {
-           _subCategoryStore.SelectSubCategories(categoryId);
+          _subCategoryStore.SelectSubCategories(categoryId);
           if (_subCategoryStore.fetchPostsFuture.status ==
               FutureStatus.pending) {
             return Center(child: CircularProgressIndicator());
@@ -62,6 +68,16 @@ class _SubCategoryListState extends State<SubCategoryList> {
             ),
           );
         },
+      ),
+      bottomNavigationBar: IntrinsicHeight(
+        child: Column(
+          mainAxisSize:
+              MainAxisSize.min, // Ensure the column takes only required height
+          children: [
+            BottomMusicPlayerBar(musicControllerStore: _musicControllerStore),
+            // AdsScreen(),
+          ],
+        ),
       ),
     );
   }

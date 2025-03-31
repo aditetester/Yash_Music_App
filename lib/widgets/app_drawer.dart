@@ -1,4 +1,5 @@
 import 'package:boilerplate_new_version/di/service_locator.dart';
+import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../presentation/home/store/theme/theme_store.dart';
@@ -27,7 +28,7 @@ class _AppDrawerState extends State<AppDrawer> {
               leading: Icon(Icons.home),
               title: Text('HOME'),
               onTap: () {
-                Navigator.of(context).pushReplacementNamed('/');
+                Navigator.of(context).pushReplacementNamed(Routes.home);
               },
             ),
             Divider(color: Colors.white),

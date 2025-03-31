@@ -73,7 +73,8 @@ class _CategoryViewScreenState extends State<CategoryViewScreen> {
                     final item = categories![index];
                     return GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pushNamed(Routes.categoryList);
+                        Navigator.of(context).pushNamed(Routes.subCategoryList, arguments: categories![index].id);
+                        
                       },
                       child: Container(
                         width: 120,

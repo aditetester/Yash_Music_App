@@ -1,7 +1,10 @@
 import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/domain/entity/categories/category.dart';
+import 'package:boilerplate_new_version/presentation/ads/ads_screen.dart';
 import 'package:boilerplate_new_version/presentation/categories/store/categories_store.dart';
 import 'package:boilerplate_new_version/presentation/categories/widgets/category_items.dart';
+import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
+import 'package:boilerplate_new_version/widgets/bottom_musicPlayer_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
@@ -15,12 +18,14 @@ class CategoryList extends StatefulWidget {
 
 class _CategoryListState extends State<CategoryList> {
   CategoryStore _categoryStore = getIt<CategoryStore>();
+  final MusicControllerStore _musicControllerStore = getIt<MusicControllerStore>();
   List<CategoryModule>? categoryList = [];
 
   @override
   void initState() {
     super.initState();
     _categoryStore.fetchCategories();
+
   }
 
   @override
@@ -41,7 +46,7 @@ class _CategoryListState extends State<CategoryList> {
             }
           }
           return Container(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(2),
             child: GridView(
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 400,
@@ -61,6 +66,17 @@ class _CategoryListState extends State<CategoryList> {
           );
         },
       ),
+      
+         bottomNavigationBar: 
+         IntrinsicHeight(
+    child: Column(
+      mainAxisSize: MainAxisSize.min, // Ensure the column takes only required height
+      children: [
+        BottomMusicPlayerBar(musicControllerStore: _musicControllerStore),
+        // AdsScreen(),
+      ],
+    ),
+         ),
     );
   }
 }

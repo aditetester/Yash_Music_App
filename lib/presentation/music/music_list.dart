@@ -1,7 +1,12 @@
 import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
+import 'package:boilerplate_new_version/presentation/ads/ads_screen.dart';
 import 'package:boilerplate_new_version/presentation/music/store/music_list_store.dart';
 import 'package:boilerplate_new_version/presentation/music/widgets/music_items.dart';
+import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
+import 'package:boilerplate_new_version/presentation/musicPlayer/widgets/musicPlayer_handler.dart';
+import 'package:boilerplate_new_version/utils/routes/routes.dart';
+import 'package:boilerplate_new_version/widgets/bottom_musicPlayer_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
@@ -15,8 +20,9 @@ class MusicList extends StatefulWidget {
 
 class _MusicListState extends State<MusicList> {
   MusicListStore _MusicListStore = getIt<MusicListStore>();
+  final MusicControllerStore _musicControllerStore =
+      getIt<MusicControllerStore>();
   TextEditingController _searchController = TextEditingController();
-
   List<MusicListModule>? allMusicList = [];
   List<MusicListModule> filteredMusicList = [];
 
@@ -26,6 +32,7 @@ class _MusicListState extends State<MusicList> {
     _MusicListStore.fetchMusicList();
     // Add a listener to the search controller
     _searchController.addListener(_filterMusicList);
+    
   }
 
   @override
@@ -54,8 +61,8 @@ class _MusicListState extends State<MusicList> {
 
   @override
   Widget build(BuildContext context) {
-    final String subcategoryId =
-        ModalRoute.of(context)!.settings.arguments as String;
+    final String subcategoryId = ModalRoute.of(context)!.settings.arguments as String;
+        //  "6715f190725b819f0474bbd9";
     return Scaffold(
       appBar: AppBar(title: Text('Music List'), centerTitle: true),
       body: Column(
@@ -109,7 +116,7 @@ class _MusicListState extends State<MusicList> {
                 _MusicListStore.SelectedMusicList(subcategoryId);
 
                 if (_MusicListStore.fetchPostsFuture.status ==
-                    FutureStatus.pending) {
+                    FutureStatus.pending && _musicControllerStore.isInitialized) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (_MusicListStore.fetchPostsFuture.status ==
                     FutureStatus.fulfilled) {
@@ -127,11 +134,17 @@ class _MusicListState extends State<MusicList> {
                   return ListView.builder(
                     itemCount: filteredMusicList.length,
                     itemBuilder: (context, index) {
-                      return MusicItems(
-                        id: filteredMusicList[index].id.toString(),
-                        title: filteredMusicList[index].title.toString(),
-                        subTitle: filteredMusicList[index].subtitle.toString(),
-                        image: filteredMusicList[index].image.toString(),
+                      return GestureDetector(
+                        onTap:
+                            ()  {
+                         
+                             _musicControllerStore.playNext(filteredMusicList[index]);
+                            
+                             Navigator.of(context).pushNamed(Routes.musicPlayer, arguments: filteredMusicList[index]);
+                            } , 
+                        child: MusicItems(
+                         music:  filteredMusicList[index],
+                        ),
                       );
                     },
                   );
@@ -142,6 +155,16 @@ class _MusicListState extends State<MusicList> {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: IntrinsicHeight(
+        child: Column(
+          mainAxisSize:
+              MainAxisSize.min, // Ensure the column takes only required height
+          children: [
+            BottomMusicPlayerBar(musicControllerStore: _musicControllerStore),
+            // AdsScreen(),
+          ],
+        ),
       ),
     );
   }

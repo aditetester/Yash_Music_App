@@ -1,5 +1,4 @@
 import 'dart:async';
-import '/utils/routes/routes.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +11,6 @@ class CheckConnectivity {
     print('Internet Connection Function Called');
 
     final Connectivity _connectivity = Connectivity();
-    late StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
     late ConnectivityResult result;
     // Platform messages may fail, so we use a try/catch PlatformException.
