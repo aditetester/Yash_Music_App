@@ -1,4 +1,5 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:boilerplate_new_version/data/network/apis/lyricsPlayer/lyricsPlayer_api.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicModule_list.dart';
 import 'package:boilerplate_new_version/domain/usecase/music_list/get_musicList_usecase.dart';
@@ -18,6 +19,7 @@ abstract class _MusicControllerStore with Store {
 
   final SettingRepository _repository;
   final ErrorStore errorStore;
+  final LyricsApi lyricsApi;
 
   // AudioPlayer instance
   final AudioPlayer _audioPlayer = AudioPlayer();
@@ -43,6 +45,11 @@ abstract class _MusicControllerStore with Store {
   // recent play
   @observable
   String _recentPlay = '';
+
+  @observable
+  String _recentLyrics = '';
+
+  
 
   // recent play
   @observable
@@ -78,6 +85,9 @@ abstract class _MusicControllerStore with Store {
   @computed
   AudioPlayer get getAudioPlayer => _audioPlayer;
 
+  @computed
+  String get getrecentLyrics => _recentLyrics;
+
   // String? get currentSongUrl =>
   //     _playlist.isNotEmpty ? _playlist[_currentTrackIndex]['url'] : null;
   // String? get currentSongTitle =>
@@ -86,6 +96,7 @@ abstract class _MusicControllerStore with Store {
   // Constructor
 
   _MusicControllerStore(
+    this.lyricsApi,
     this._repository,
     this.errorStore,
   ) {
@@ -134,6 +145,16 @@ abstract class _MusicControllerStore with Store {
     isInitialized = true;
   }
 
+
+  @action
+  Future<void> lyricsdata() async {
+    
+    _recentLyrics = await lyricsApi.getLyrics(_recentMusic.lyrics.toString());
+
+  }
+
+
+
   @action
   Future changeIsplaying(bool value) async {
     _isPlaying = value;
@@ -178,6 +199,7 @@ abstract class _MusicControllerStore with Store {
   @action
   Future<void> playNext(MusicListModule nextplay) async {
     _recentMusic = nextplay;
+    lyricsdata();
     await play(nextplay.audio.toString());
   }
 

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:boilerplate_new_version/data/network/apis/categories/categories_api.dart';
 import 'package:boilerplate_new_version/data/network/apis/musicList/musicList_api.dart';
 import 'package:boilerplate_new_version/data/network/apis/subCategories/subCategories_api.dart';
@@ -29,5 +28,6 @@ class RepositoryModule {
      getIt.registerSingleton<MusicListRepositoryImp> (MusicListRepositoryImp(
       getIt<MusicListApi>(),
     ));
+   
   }
 }

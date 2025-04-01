@@ -14,4 +14,5 @@ class GetMusiclistUsecase extends UseCase<AllMusicList, void> {
   Future<AllMusicList> call({required params}) {
     return _musicListRepository.getMusicList();
   }
+  
 }

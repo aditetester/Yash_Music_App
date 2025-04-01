@@ -23,5 +23,16 @@ class MusicListApi {
       throw e;
     }
   }
+   Future<void> getLyrics(String Url) async {
+    try {
+      final res = await _dioClient.dio.get(Url);
+  
+      return res.data;
+
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
 }
 

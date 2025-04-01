@@ -1,11 +1,15 @@
+
+import 'package:boilerplate_new_version/data/network/apis/lyricsPlayer/LyricsPlayer_api.dart';
+import 'package:boilerplate_new_version/data/network/apis/lyricsPlayer/lyricsPlayer_api.dart';
 import 'package:boilerplate_new_version/di/service_locator.dart';
-import 'package:boilerplate_new_version/domain/entity/music_list/lyricsModule.dart';
+import 'package:boilerplate_new_version/domain/entity/lyricsPlayer/lyricsModule.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:just_audio/just_audio.dart';
 
 class LyricsPlayerScreen extends StatefulWidget {
+
   const LyricsPlayerScreen({super.key});
 
   @override
@@ -17,69 +21,23 @@ class _LyricsPlayerScreenState extends State<LyricsPlayerScreen> {
   final MusicControllerStore _musicControllerStore =
       getIt<MusicControllerStore>();
 
-  List<Lyric> lyrics = [];
+  List<LyricsPlayerModule> lyrics = [];
   int currentIndex = 0;
   String lrcData = "";
-
   @override
   void initState() {
     super.initState();
-    lrcData = """[id: dqsxdkbu]
-[ar: Lady Gaga]
-[al: Lady Gaga]
-[ti: Die With A Smile]
-[length: 04:12]
-[00:03.30]Ooh, ooh
-[00:06.75]
-[00:09.16]I, I just woke up from a dream
-[00:15.97]But you and I had to say goodbye
-[00:20.41]And I don't know what it all means
-[00:24.78]But since I survived, I realized
-[00:29.35]Wherever you go, that's where I'll follow
-[00:34.11]Nobody's promised tomorrow
-[00:38.64]So I'ma love you every night like it's the last night
-[00:42.61]Like it's the last night
-[00:44.87]If the world was ending, I'd wanna be next to you
-[00:53.99]If the party was over and our time on Earth was through
-[01:03.09]I'd wanna hold you just for a while
-[01:07.69]And die with a smile
-[01:12.33]If the world was ending, I'd wanna be next to you
-[01:20.83](Ooh, ooh)
-[01:25.08]Oh-ooh, lost, lost in the words that we scream
-[01:33.15]I don't even wanna do this anymore
-[01:37.84]'Cause you already know what you mean to me
-[01:41.30]And our love's the only one worth fighting for
-[01:46.99]Wherever you go, that's where I'll follow
-[01:51.52]Nobody's promised tomorrow
-[01:56.18]So I'ma love you every night like it's the last night
-[02:00.05]Like it's the last night
-[02:02.32]If the world was ending, I'd wanna be next to you
-[02:11.42]If the party was over and our time on Earth was through
-[02:20.32]I'd wanna hold you just for a while
-[02:25.19]And die with a smile
-[02:29.67]If the world was ending, I'd wanna be next to you
-[02:38.35]Right next to you
-[02:43.15]Next to you
-[02:47.61]Right next to you
-[02:51.35]Oh-oh, oh
-[02:54.92]
-[03:10.90]If the world was ending, I'd wanna be next to you
-[03:19.78]If the party was over and our time on Earth was through
-[03:29.26]I'd wanna hold you just for a while
-[03:33.68]And die with a smile
-[03:38.24]If the world was ending, I'd wanna be next to you
-[03:47.28]If the world was ending, I'd wanna be next to you
-[03:55.82]Ooh, ooh
-[03:58.95]I'd wanna be next to you
-[04:02.63] """;
-    print(_musicControllerStore.recentMusic.lyrics.toString());
+    
+    lrcData =  _musicControllerStore.getrecentLyrics;
+    print(lrcData);
+
     lyrics = parseLRC(lrcData);
   
   }
 
-  List<Lyric> parseLRC(String lrc) {
+  List<LyricsPlayerModule> parseLRC(String lrc) {
     final regex = RegExp(r"\[(\d+):(\d+\.\d+)\](.*)");
-    List<Lyric> lyrics = [];
+    List<LyricsPlayerModule> lyrics = [];
 
     for (var line in lrc.split("\n")) {
       final match = regex.firstMatch(line);
@@ -93,7 +51,7 @@ class _LyricsPlayerScreenState extends State<LyricsPlayerScreen> {
           seconds: seconds.toInt(),
           milliseconds: ((seconds % 1) * 1000).toInt(),
         );
-        lyrics.add(Lyric(time, text));
+        lyrics.add(LyricsPlayerModule(time, text));
       }
     }
 
@@ -108,7 +66,7 @@ class _LyricsPlayerScreenState extends State<LyricsPlayerScreen> {
     void _scrollToCurrentLyric() {
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
-          currentIndex * 50.0,
+          currentIndex * 20.0,
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
@@ -140,6 +98,7 @@ class _LyricsPlayerScreenState extends State<LyricsPlayerScreen> {
                     ),
                     child: Observer(
                       builder: (context) {
+                        _scrollToCurrentLyric();
                         final currentPosition =
                             _musicControllerStore.currentPosition;
                         int newIndex = lyrics.lastIndexWhere(
