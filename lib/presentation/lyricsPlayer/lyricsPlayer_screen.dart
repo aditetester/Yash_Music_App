@@ -64,14 +64,22 @@ class _LyricsPlayerScreenState extends State<LyricsPlayerScreen> {
         ModalRoute.of(context)!.settings.arguments as AudioPlayer;
 
     void _scrollToCurrentLyric() {
-      if (_scrollController.hasClients) {
-        _scrollController.animateTo(
-          currentIndex * 20.0,
-          duration: Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-      }
-    }
+  if (currentIndex == -1 || _scrollController.hasClients == false) return;
+
+  // Define how many lines before stopping auto-scroll
+  int stopScrollingThreshold = 6;
+  
+  if (currentIndex >= lyrics.length - stopScrollingThreshold) {
+    return; // Stop auto-scrolling if near the end
+  }
+
+  // Scroll to the selected lyric
+  _scrollController.animateTo(
+    currentIndex * 30.0, // Adjust 40.0 based on text size
+    duration: Duration(milliseconds: 300),
+    curve: Curves.easeInOut,
+  );
+}
     void _seekToLyric(int index) {
       if (index >= 0 && index < lyrics.length) {
         _audioPlayer.seek(lyrics[index].time);
