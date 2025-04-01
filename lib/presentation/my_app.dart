@@ -1,4 +1,3 @@
-import 'package:boilerplate_new_version/presentation/categories/category_list.dart';
 import 'package:boilerplate_new_version/presentation/music/music_list.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/musicPlayer_screen.dart';
 import '../constants/app_theme.dart';

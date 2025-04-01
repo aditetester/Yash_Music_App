@@ -5,7 +5,6 @@ import 'package:boilerplate_new_version/domain/usecase/categories/get_category_u
 import 'package:boilerplate_new_version/domain/usecase/music_list/get_musicList_usecase.dart';
 import 'package:boilerplate_new_version/domain/usecase/sub_categories/get_subcategories_usecase.dart';
 import 'package:boilerplate_new_version/presentation/categories/store/categories_store.dart';
-import 'package:boilerplate_new_version/presentation/lyricsPlayer/lyricsPlayer_screen.dart';
 import 'package:boilerplate_new_version/presentation/music/store/music_list_store.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
 import 'package:boilerplate_new_version/presentation/subCategories/store/sub_categories_store.dart';

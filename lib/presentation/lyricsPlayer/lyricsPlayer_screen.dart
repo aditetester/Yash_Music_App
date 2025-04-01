@@ -1,6 +1,3 @@
-
-import 'package:boilerplate_new_version/data/network/apis/lyricsPlayer/LyricsPlayer_api.dart';
-import 'package:boilerplate_new_version/data/network/apis/lyricsPlayer/lyricsPlayer_api.dart';
 import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/domain/entity/lyricsPlayer/lyricsModule.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';

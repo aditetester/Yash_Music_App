@@ -44,6 +44,13 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
           Computed<AudioPlayer>(() => super.getAudioPlayer,
               name: '_MusicControllerStore.getAudioPlayer'))
       .value;
+  Computed<String>? _$getrecentLyricsComputed;
+
+  @override
+  String get getrecentLyrics => (_$getrecentLyricsComputed ??= Computed<String>(
+          () => super.getrecentLyrics,
+          name: '_MusicControllerStore.getrecentLyrics'))
+      .value;
 
   late final _$fetchPostsFutureAtom =
       Atom(name: '_MusicControllerStore.fetchPostsFuture', context: context);
@@ -122,6 +129,22 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
   set _recentPlay(String value) {
     _$_recentPlayAtom.reportWrite(value, super._recentPlay, () {
       super._recentPlay = value;
+    });
+  }
+
+  late final _$_recentLyricsAtom =
+      Atom(name: '_MusicControllerStore._recentLyrics', context: context);
+
+  @override
+  String get _recentLyrics {
+    _$_recentLyricsAtom.reportRead();
+    return super._recentLyrics;
+  }
+
+  @override
+  set _recentLyrics(String value) {
+    _$_recentLyricsAtom.reportWrite(value, super._recentLyrics, () {
+      super._recentLyrics = value;
     });
   }
 
@@ -213,6 +236,14 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
     return _$initAudioServiceAsyncAction.run(() => super.initAudioService());
   }
 
+  late final _$lyricsdataAsyncAction =
+      AsyncAction('_MusicControllerStore.lyricsdata', context: context);
+
+  @override
+  Future<void> lyricsdata() {
+    return _$lyricsdataAsyncAction.run(() => super.lyricsdata());
+  }
+
   late final _$changeIsplayingAsyncAction =
       AsyncAction('_MusicControllerStore.changeIsplaying', context: context);
 
@@ -273,7 +304,8 @@ isPlaying: ${isPlaying},
 recentPlay: ${recentPlay},
 recentMusic: ${recentMusic},
 getAudioHandler: ${getAudioHandler},
-getAudioPlayer: ${getAudioPlayer}
+getAudioPlayer: ${getAudioPlayer},
+getrecentLyrics: ${getrecentLyrics}
     ''';
   }
 }

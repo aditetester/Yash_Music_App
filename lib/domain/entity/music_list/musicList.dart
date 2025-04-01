@@ -1,6 +1,5 @@
 import 'package:boilerplate_new_version/core/data/network/constants/network_constants.dart';
-import 'package:boilerplate_new_version/core/data/network/dio/dio_client.dart';
-import 'package:boilerplate_new_version/di/service_locator.dart';
+
 class MusicListModule {
   String? id;
   String? title;
@@ -10,7 +9,6 @@ class MusicListModule {
   String? subCategoryId;
   String? subCategoryName;
   String? lyrics;
-  final DioClient _dioClient = getIt<DioClient>();
   MusicListModule({this.id, this.title, this.image, this.subCategoryId, this.subtitle, this.audio, this.subCategoryName, this.lyrics});
 
   factory MusicListModule.fromMap(Map<String, dynamic> json) => MusicListModule(

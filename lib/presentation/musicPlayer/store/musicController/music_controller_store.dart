@@ -2,9 +2,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:boilerplate_new_version/data/network/apis/lyricsPlayer/lyricsPlayer_api.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicModule_list.dart';
-import 'package:boilerplate_new_version/domain/usecase/music_list/get_musicList_usecase.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/widgets/musicPlayer_handler.dart';
-import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:mobx/mobx.dart';
 import '../../../../core/stores/error/error_store.dart';
@@ -49,14 +47,12 @@ abstract class _MusicControllerStore with Store {
   @observable
   String _recentLyrics = '';
 
-  
-
   // recent play
   @observable
   MusicListModule _recentMusic = MusicListModule(
     image: '',
     audio: '',
-    title: 'Not Played Recently',
+    title: 'No Play List Available',
   );
 
   @observable
@@ -95,11 +91,7 @@ abstract class _MusicControllerStore with Store {
 
   // Constructor
 
-  _MusicControllerStore(
-    this.lyricsApi,
-    this._repository,
-    this.errorStore,
-  ) {
+  _MusicControllerStore(this.lyricsApi, this._repository, this.errorStore) {
     init();
     _initialize();
     initAudioService();
@@ -124,7 +116,6 @@ abstract class _MusicControllerStore with Store {
 
     _audioPlayer.playerStateStream.listen((state) {
       runInAction(() {
-        // _isPlaying = state.playing;
         changeIsplaying(state.playing);
       });
     });
@@ -145,15 +136,10 @@ abstract class _MusicControllerStore with Store {
     isInitialized = true;
   }
 
-
   @action
   Future<void> lyricsdata() async {
-    
     _recentLyrics = await lyricsApi.getLyrics(_recentMusic.lyrics.toString());
-
   }
-
-
 
   @action
   Future changeIsplaying(bool value) async {
@@ -166,18 +152,12 @@ abstract class _MusicControllerStore with Store {
     try {
       if (musicUrl.isNotEmpty) {
         if (_recentPlay == musicUrl) {
-          // Resume playback if the same track is already loaded
-
           await _audioPlayer.play();
         } else {
-          
-          
-          // Load new track and play
           _recentPlay = musicUrl;
           print('Playing: $musicUrl');
           _audioPlayer.setUrl(musicUrl);
           await _audioPlayer.play();
-         
         }
       } else {
         print('No song URL available to play');
@@ -190,7 +170,7 @@ abstract class _MusicControllerStore with Store {
   @action
   Future<void> pause() async {
     try {
-      await getAudioHandler!.pause();
+      await _audioPlayer.pause();
     } catch (e) {
       print('Error during pause: $e');
     }
@@ -205,16 +185,13 @@ abstract class _MusicControllerStore with Store {
 
   @action
   Future<void> playPrevious() async {
-    // if (_currentTrackIndex > 0) {
-    //   _currentTrackIndex--;
-    await play('');
-    // }
+    await seek(Duration(seconds: 0));
   }
 
   @action
   Future<void> seek(Duration position) async {
     try {
-      await getAudioHandler!.seek(position);
+      await _audioPlayer.seek(position);
     } catch (e) {
       print('Error during seek: $e');
     }

@@ -1,7 +1,4 @@
-import 'package:audio_service/audio_service.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
-import 'package:boilerplate_new_version/presentation/lyricsPlayer/lyricsPlayer_screen.dart';
-import 'package:boilerplate_new_version/presentation/musicPlayer/widgets/musicPlayer_handler.dart';
 import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -69,7 +66,9 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                         icon: Icon(Icons.skip_previous),
                         color: Colors.white,
                         iconSize: 40,
-                        onPressed: () {}, //_musicControllerStore.playPrevious,
+                        onPressed: () async {
+                          _musicControllerStore.seek(Duration.zero);
+                        },
                       ),
                       Container(
                         height: 80,
@@ -97,10 +96,18 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                         icon: Icon(Icons.skip_next),
                         color: Colors.white,
                         iconSize: 40,
-                        onPressed:
-                            () => _musicControllerStore.playNext(
-                              MusicListModule(),
+                        onPressed: () {
+                          _musicControllerStore.playNext(
+                            MusicListModule(
+                              image: '',
+                              audio: '',
+                              title: 'No Play List Available',
                             ),
+                          );
+                          _musicControllerStore.seek(
+                            _musicControllerStore.totalDuration,
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -111,6 +118,10 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                           _musicControllerStore.currentPosition;
                       final totalDuration = _musicControllerStore.totalDuration;
 
+                      if (currentPosition ==
+                         totalDuration) {
+                      _musicControllerStore.pause();
+                      }
                       return Container(
                         padding: EdgeInsets.all(5),
                         child: Row(
@@ -145,7 +156,14 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                       );
                     },
                   ),
-                  IconButton(onPressed: ()=> Navigator.of(context).pushNamed(Routes.lyricsPlayer, arguments: _musicControllerStore.getAudioPlayer) , icon: Icon( Icons.lyrics)),
+                  IconButton(
+                    onPressed:
+                        () => Navigator.of(context).pushNamed(
+                          Routes.lyricsPlayer,
+                          arguments: _musicControllerStore.getAudioPlayer,
+                        ),
+                    icon: Icon(Icons.lyrics),
+                  ),
                 ],
               ),
             ),

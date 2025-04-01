@@ -1,9 +1,7 @@
 import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
-import 'package:flutter/material.dart';
 import 'package:audio_service/audio_service.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:just_audio/just_audio.dart';
 
 class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
@@ -92,32 +90,16 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     await _player.seek(position);
   }
 
-  @override
   Future<void> onSkipToNext() async {
     await seek(
       _player.position + Duration(seconds: 10),
     ); // Skip 10 seconds ahead
   }
 
-  @override
   Future<void> onSkipToPrevious() async {
     await seek(_player.position - Duration(seconds: 10)); // Rewind 10 seconds
-  }
-  
-
-  Future<void> nextPlay(String nextUrl) async {
-    try {
-      await _player.stop();
-      await _player.setUrl(nextUrl);
-      await _player.play();
-      audioUrl = nextUrl;
-      _notifyAudioHandler();
-    } catch (e) {
-      print("Error playing next track: $e");
-    }
-  }
+  } 
 }
-
 extension on ProcessingState {
   AudioProcessingState toAudioProcessingState() {
     switch (this) {
@@ -131,8 +113,6 @@ extension on ProcessingState {
         return AudioProcessingState.ready;
       case ProcessingState.completed:
         return AudioProcessingState.completed;
-      default:
-        throw Exception("Invalid ProcessingState");
-    }
+      }
   }
 }
