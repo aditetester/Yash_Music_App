@@ -1,6 +1,6 @@
 import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
-import 'package:boilerplate_new_version/presentation/music/store/download_list_store.dart';
+import 'package:boilerplate_new_version/presentation/downloadedMusicList/store/download_list_store.dart';
 import 'package:boilerplate_new_version/presentation/music/store/music_list_store.dart';
 import 'package:boilerplate_new_version/presentation/music/widgets/music_items.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
@@ -34,7 +34,6 @@ class _MusicListState extends State<MusicList> {
     // _downloadListStore.insertDownloadedMusicList();
     // Add a listener to the search controller
     _searchController.addListener(_filterMusicList);
-    
   }
 
   @override
@@ -63,12 +62,13 @@ class _MusicListState extends State<MusicList> {
 
   @override
   Widget build(BuildContext context) {
-    final String subcategoryId = ModalRoute.of(context)!.settings.arguments as String;
-        //  "6715f190725b819f0474bbd9";
+    final String subcategoryId =
+        ModalRoute.of(context)!.settings.arguments as String;
+    //  "6715f190725b819f0474bbd9";
     return Scaffold(
       appBar: AppBar(title: Text('Music List'), centerTitle: true),
       body: GestureDetector(
-        onTap: () =>  FocusScope.of(context).unfocus(),
+        onTap: () => FocusScope.of(context).unfocus(),
         child: Column(
           children: [
             // Search Bar
@@ -118,37 +118,40 @@ class _MusicListState extends State<MusicList> {
               child: Observer(
                 builder: (_) {
                   _MusicListStore.SelectedMusicList(subcategoryId);
-        
+
                   if (_MusicListStore.fetchPostsFuture.status ==
-                      FutureStatus.pending && _musicControllerStore.isInitialized) {
+                          FutureStatus.pending &&
+                      _musicControllerStore.isInitialized) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (_MusicListStore.fetchPostsFuture.status ==
                       FutureStatus.fulfilled) {
                     allMusicList = _MusicListStore.AllMusic;
-        
+
                     if (allMusicList == null || allMusicList!.isEmpty) {
-                      return const Center(child: Text("No Music List available"));
+                      return const Center(
+                        child: Text("No Music List available"),
+                      );
                     }
-        
+
                     // Update filtered list on initial load
                     if (_searchController.text.isEmpty) {
                       filteredMusicList = allMusicList!;
                     }
-        
+
                     return ListView.builder(
                       itemCount: filteredMusicList.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
-                          onTap:
-                              ()  {
-                           
-                               _musicControllerStore.playNext(filteredMusicList[index]);
-                              
-                               Navigator.of(context).pushNamed(Routes.musicPlayer, arguments: filteredMusicList[index]);
-                              } , 
-                          child: MusicItems(
-                           music:  filteredMusicList[index],
-                          ),
+                          onTap: () {
+                            _musicControllerStore.playNext(
+                              filteredMusicList[index],
+                            );
+                            Navigator.of(context).pushNamed(
+                              Routes.musicPlayer,
+                              arguments: filteredMusicList[index],
+                            );
+                          },
+                          child: MusicItems(music: filteredMusicList[index]),
                         );
                       },
                     );
@@ -163,8 +166,7 @@ class _MusicListState extends State<MusicList> {
       ),
       bottomNavigationBar: IntrinsicHeight(
         child: Column(
-          mainAxisSize:
-              MainAxisSize.min,
+          mainAxisSize: MainAxisSize.min,
           children: [
             BottomMusicPlayerBar(musicControllerStore: _musicControllerStore),
             // AdsScreen(),

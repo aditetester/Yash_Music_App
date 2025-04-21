@@ -8,7 +8,7 @@ import 'package:boilerplate_new_version/domain/usecase/music_list/get_musicList_
 import 'package:boilerplate_new_version/domain/usecase/sub_categories/get_subcategories_usecase.dart';
 import 'package:boilerplate_new_version/presentation/categories/store/categories_store.dart';
 import 'package:boilerplate_new_version/presentation/home/store/homeController/home_store.dart';
-import 'package:boilerplate_new_version/presentation/music/store/download_list_store.dart';
+import 'package:boilerplate_new_version/presentation/downloadedMusicList/store/download_list_store.dart';
 import 'package:boilerplate_new_version/presentation/music/store/music_list_store.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
 import 'package:boilerplate_new_version/presentation/subCategories/store/sub_categories_store.dart';

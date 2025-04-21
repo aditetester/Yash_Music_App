@@ -15,7 +15,7 @@ class DownloadedListModule {
   factory DownloadedListModule.fromMap(Map<String, dynamic> json) => DownloadedListModule(
     id: json['id'].toString(),
     title: json['title'].toString(),
-    subtitle: json['title'].toString(),
+    subtitle: json['subTitle'].toString(),
     audio: json['audio'].toString(),
     image: json['image'].toString(),
     subCategoryId: json['subCategoryId'].toString(),
@@ -28,7 +28,7 @@ class DownloadedListModule {
     
     return {
       'title': data.title.toString(),
-      'subtitle': data.subtitle.toString(),
+      'subTitle': data.subtitle.toString(),
       'audio': data.audio.toString(),
       'image': data.image.toString(),
       'subCategoryId': data.subCategoryId.toString(),
