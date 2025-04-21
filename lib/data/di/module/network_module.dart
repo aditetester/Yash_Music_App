@@ -1,6 +1,6 @@
+import 'package:boilerplate_new_version/data/network/apis/lyricsPlayer/lyricsPlayer_api.dart';
 import 'package:boilerplate_new_version/data/network/apis/musicList/musicList_api.dart';
 import 'package:boilerplate_new_version/data/network/apis/subCategories/subCategories_api.dart';
-
 import '../../../core/data/network/dio/configs/dio_configs.dart';
 import '../../../core/data/network/dio/dio_client.dart';
 import '../../network/apis/categories/categories_api.dart';
@@ -21,8 +21,11 @@ class NetworkModule {
 
     // api's:-------------------------------------------------------------------
     getIt.registerSingleton<CategoriesApi>(CategoriesApi(getIt<DioClient>()));
-    getIt.registerSingleton<SubCategoriesApi>(SubCategoriesApi(getIt<DioClient>()));
+    getIt.registerSingleton<SubCategoriesApi>(
+      SubCategoriesApi(getIt<DioClient>()),
+    );
     getIt.registerSingleton<MusicListApi>(MusicListApi(getIt<DioClient>()));
-    
+    getIt.registerSingleton<LyricsApi>(LyricsApi(getIt<DioClient>()));
+
   }
 }

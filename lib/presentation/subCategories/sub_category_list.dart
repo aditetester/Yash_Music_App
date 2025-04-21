@@ -1,6 +1,5 @@
 import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/domain/entity/subCategories/subCategory.dart';
-import 'package:boilerplate_new_version/presentation/ads/ads_screen.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
 import 'package:boilerplate_new_version/presentation/subCategories/store/sub_categories_store.dart';
 import 'package:boilerplate_new_version/presentation/subCategories/widgets/subCategory_item.dart';

@@ -1,5 +1,6 @@
 import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/presentation/ads/ads_screen.dart';
+import 'package:boilerplate_new_version/presentation/home/store/homeController/home_store.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
 import 'package:boilerplate_new_version/widgets/app_drawer.dart';
 import 'package:boilerplate_new_version/presentation/home/widgets/category_view.dart';
@@ -12,32 +13,26 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final HomeControllerStore _homeControllerStore =
+      getIt<HomeControllerStore>();
   final MusicControllerStore _musicControllerStore =
       getIt<MusicControllerStore>();
   TextEditingController _searchController = TextEditingController();
-  bool _isSearching = false;
-  List<String> _recentlyPlayedSongs = [
-    "Song A",
-    "Song B",
-    "Song C",
-    "Song D",
-    "Song E",
-  ];
-  List<String> _filteredSongs = [];
 
+  List<String> _filteredSongs = [];
   @override
   void initState() {
     super.initState();
-    _filteredSongs = _recentlyPlayedSongs;
+    _filteredSongs = _homeControllerStore.recentlyPlayedSongs;
   }
 
   void _filterSongs(String query) {
     setState(() {
       if (query.isEmpty) {
-        _filteredSongs = _recentlyPlayedSongs;
+        _filteredSongs = _homeControllerStore.recentlyPlayedSongs;
       } else {
         _filteredSongs =
-            _recentlyPlayedSongs
+            _homeControllerStore.recentlyPlayedSongs
                 .where(
                   (song) => song.toLowerCase().contains(query.toLowerCase()),
                 )
@@ -84,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       title:
-          _isSearching
+          _homeControllerStore.isSearching
               ? TextField(
                 controller: _searchController,
                 autofocus: true,
@@ -98,12 +93,12 @@ class _HomeScreenState extends State<HomeScreen> {
               )
               : Text("Music App"),
       actions: [
-        if (!_isSearching)
+        if (!_homeControllerStore.isSearching)
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
               setState(() {
-                _isSearching = true;
+                _homeControllerStore.changeIsSearch(true);
               });
             },
           )
@@ -112,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.close),
             onPressed: () {
               setState(() {
-                _isSearching = false;
+                 _homeControllerStore.changeIsSearch(false);
                 _searchController.clear();
                 _filterSongs('');
               });

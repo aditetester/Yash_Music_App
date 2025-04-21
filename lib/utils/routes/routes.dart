@@ -1,3 +1,4 @@
+import 'package:boilerplate_new_version/presentation/lyricsPlayer/lyricsPlayer_screen.dart';
 import 'package:boilerplate_new_version/presentation/music/music_list.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/musicPlayer_screen.dart';
 import 'package:boilerplate_new_version/presentation/subCategories/sub_category_list.dart';
@@ -14,6 +15,7 @@ class Routes {
   static const String subCategoryList = '/subCategroiesList';
   static const String musicList = '/musciList';
   static const String musicPlayer = '/musciPlayer';
+  static const String lyricsPlayer = '/lyricsPlayer';
   
   
 
@@ -23,6 +25,8 @@ class Routes {
     subCategoryList: (BuildContext context) => SubCategoryList(),
     musicList: (BuildContext context) => MusicList(),
     musicPlayer : (BuildContext context) => MusicPlayerScreen(),
+    lyricsPlayer : (BuildContext context) => LyricsPlayerScreen(),
+    
     
   };
 }

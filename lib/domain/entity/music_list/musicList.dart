@@ -8,8 +8,8 @@ class MusicListModule {
   String? image;
   String? subCategoryId;
   String? subCategoryName;
-
-  MusicListModule({this.id, this.title, this.image, this.subCategoryId, this.subtitle, this.audio, this.subCategoryName});
+  String? lyrics;
+  MusicListModule({this.id, this.title, this.image, this.subCategoryId, this.subtitle, this.audio, this.subCategoryName, this.lyrics});
 
   factory MusicListModule.fromMap(Map<String, dynamic> json) => MusicListModule(
     id: json['_id'],
@@ -19,8 +19,8 @@ class MusicListModule {
     audio: "${NetworkConstants.baseUrl}${json['audio']['file']}",
     subCategoryId: json['subcategory']['_id'],
     subCategoryName: json['subcategory']['subcategory_name'],
-    
-
+    lyrics :  "${NetworkConstants.baseUrl}${json['lyrics']['file']}",
+  
   );
   
   Map<String, dynamic> toJson() {
@@ -29,8 +29,10 @@ class MusicListModule {
       'image': image,
       'title': title,
       'subtitle': subtitle,
+      'audio': audio,
       'subcategory_id': subCategoryId,
       'subCategoryName': subCategoryName,
+      'lyrics' : lyrics,
   };
  }
 }

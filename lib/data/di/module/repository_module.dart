@@ -1,9 +1,10 @@
 import 'dart:async';
-
 import 'package:boilerplate_new_version/data/network/apis/categories/categories_api.dart';
 import 'package:boilerplate_new_version/data/network/apis/musicList/musicList_api.dart';
 import 'package:boilerplate_new_version/data/network/apis/subCategories/subCategories_api.dart';
+import 'package:boilerplate_new_version/data/network/local/downloaded_list.dart';
 import 'package:boilerplate_new_version/data/repository/categories/categories_respository_imp.dart';
+import 'package:boilerplate_new_version/data/repository/downloadedList/downloaded_respository_imp.dart';
 import 'package:boilerplate_new_version/data/repository/musicList/musicList_respository_imp.dart';
 import 'package:boilerplate_new_version/data/repository/subcategories/subCategories_respository_imp.dart';
 import '../../../di/service_locator.dart';
@@ -29,5 +30,10 @@ class RepositoryModule {
      getIt.registerSingleton<MusicListRepositoryImp> (MusicListRepositoryImp(
       getIt<MusicListApi>(),
     ));
+
+   getIt.registerSingleton<DownloadedRespositoryImp> (DownloadedRespositoryImp(
+      getIt<DownloadedMusicListApi>(),
+    ));
+   
   }
 }
