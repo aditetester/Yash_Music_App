@@ -11,6 +11,7 @@ import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:dio/dio.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MusicItems extends StatefulWidget {
@@ -214,29 +215,31 @@ class _MusicItemsState extends State<MusicItems> {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (_downloading) Text("${(_progress * 100).toStringAsFixed(0)}%"),
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              if (_downloading) CircularProgressIndicator(value: _progress),
-              _downloadListStore.getDownloadedList?.contains(widget.music.title.toString()) ?? false ?  IconButton(
-                icon: Icon(Icons.offline_pin_outlined) , onPressed: () {},):
-              IconButton(
-                icon:
-                    _downloading
-                        ? (_paused ? Icon(Icons.play_arrow) : Icon(Icons.pause))
-                        : Icon(Icons.download),
-                onPressed: () {
-                  _handleDownload();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        "'Downloading ${widget.music.subtitle.toString()}",
+          Observer(
+            builder: (context) =>  Stack(
+              alignment: Alignment.center,
+              children: [
+                if (_downloading) CircularProgressIndicator(value: _progress),
+                _downloadListStore.getDownloadedList?.contains(widget.music.title.toString()) ?? false ?  IconButton(
+                  icon: Icon(Icons.offline_pin_outlined) , onPressed: () {},):
+                IconButton(
+                  icon:
+                      _downloading
+                          ? (_paused ? Icon(Icons.play_arrow) : Icon(Icons.pause))
+                          : Icon(Icons.download),
+                  onPressed: () {
+                    _handleDownload();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          "'Downloading ${widget.music.subtitle.toString()}",
+                        ),
                       ),
-                    ),
-                  );
-                },
-              ),
-            ],
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
           PopupMenuButton<String>(
             onSelected: (value) {

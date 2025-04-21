@@ -31,8 +31,7 @@ class _MusicListState extends State<MusicList> {
     super.initState();
     _MusicListStore.fetchMusicList();
     _downloadListStore.fetchDownloadedMusicList();
-    // _downloadListStore.insertDownloadedMusicList();
-    // Add a listener to the search controller
+   
     _searchController.addListener(_filterMusicList);
   }
 

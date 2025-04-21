@@ -36,7 +36,9 @@ class _AppDrawerState extends State<AppDrawer> {
               
               leading: Icon(Icons.download),
               title: Text('DOWNLOAD'),
-              onTap: () {},
+              onTap: () {
+                 Navigator.of(context).pushNamed(Routes.downloadedMusicPlayList);
+              },
             ),
             Divider(color: Colors.white),
             ListTile(
