@@ -20,9 +20,7 @@ class MusicListModule {
     subCategoryId: json['subcategory']['_id'],
     subCategoryName: json['subcategory']['subcategory_name'],
     lyrics :  "${NetworkConstants.baseUrl}${json['lyrics']['file']}",
-    
-    
-
+  
   );
   
   Map<String, dynamic> toJson() {
@@ -31,6 +29,7 @@ class MusicListModule {
       'image': image,
       'title': title,
       'subtitle': subtitle,
+      'audio': audio,
       'subcategory_id': subCategoryId,
       'subCategoryName': subCategoryName,
       'lyrics' : lyrics,

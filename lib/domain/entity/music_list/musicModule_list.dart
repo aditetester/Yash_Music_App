@@ -10,7 +10,6 @@ class AllMusicList {
     
     List<MusicListModule> MusicListData = <MusicListModule>[];
     
-     // Parse JSON string into a List of Map
     MusicListData =  json.map((music) => MusicListModule.fromMap(music)).toList();
   
     return AllMusicList(MusicListData: MusicListData);

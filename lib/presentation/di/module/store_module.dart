@@ -2,9 +2,13 @@ import 'dart:async';
 
 import 'package:boilerplate_new_version/data/network/apis/lyricsPlayer/lyricsPlayer_api.dart';
 import 'package:boilerplate_new_version/domain/usecase/categories/get_category_usecase.dart';
+import 'package:boilerplate_new_version/domain/usecase/downloaded_list/get_downloadedList_usecase.dart';
+import 'package:boilerplate_new_version/domain/usecase/downloaded_list/insert_DownloadedList_usecase.dart';
 import 'package:boilerplate_new_version/domain/usecase/music_list/get_musicList_usecase.dart';
 import 'package:boilerplate_new_version/domain/usecase/sub_categories/get_subcategories_usecase.dart';
 import 'package:boilerplate_new_version/presentation/categories/store/categories_store.dart';
+import 'package:boilerplate_new_version/presentation/home/store/homeController/home_store.dart';
+import 'package:boilerplate_new_version/presentation/music/store/download_list_store.dart';
 import 'package:boilerplate_new_version/presentation/music/store/music_list_store.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
 import 'package:boilerplate_new_version/presentation/subCategories/store/sub_categories_store.dart';
@@ -31,9 +35,11 @@ class StoreModule {
         getIt<ErrorStore>(),
       ),
     );
-    
+    getIt.registerSingleton<HomeControllerStore>(
+      HomeControllerStore(),
+    );
      getIt.registerSingleton<CategoryStore>(
-      CategoryStore(  getIt<GetCategoryUseCase>(),
+      CategoryStore(getIt<GetCategoryUseCase>(),
         getIt<ErrorStore>(),),
     );
      getIt.registerSingleton<SubCategoriesStore>(
@@ -44,6 +50,11 @@ class StoreModule {
       MusicListStore(getIt<GetMusiclistUsecase>(),
         getIt<ErrorStore>(),));
 
+      getIt.registerSingleton<DownloadListStore>(
+      DownloadListStore(getIt<GetDownloadedMusiclistUsecase>(),
+      getIt<InsertMusicsUseCase>(),
+        getIt<ErrorStore>(),));
+
 
       getIt.registerSingleton<MusicControllerStore>(
       MusicControllerStore(
@@ -51,6 +62,8 @@ class StoreModule {
         getIt<SettingRepository>(),
         getIt<ErrorStore>(),
       ));
+
+
 
   }
 }

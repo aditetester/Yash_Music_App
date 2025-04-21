@@ -5,10 +5,15 @@ import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicCont
 import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
 
-class MusicItems extends StatelessWidget {
+class MusicItems extends StatefulWidget {
   final MusicListModule music;
   MusicItems({super.key, required this.music});
 
+  @override
+  State<MusicItems> createState() => _MusicItemsState();
+}
+
+class _MusicItemsState extends State<MusicItems> {
   @override
   Widget build(BuildContext context) {
     final MusicControllerStore _musicControllerStore =
@@ -19,12 +24,12 @@ class MusicItems extends StatelessWidget {
       leading: CircleAvatar(
         backgroundColor: Colors.teal.shade200,
         backgroundImage: NetworkImage(
-          music.image.toString(),
+          widget.music.image.toString(),
         ), // Replace with actual image asset if available
         child: Icon(Icons.music_note),
       ),
       title: Text(
-        music.title.toString(),
+        widget.music.title.toString(),
         maxLines: 1,
         style: TextStyle(
           fontSize: 19, // Restrict to a single line
@@ -32,7 +37,7 @@ class MusicItems extends StatelessWidget {
         ),
       ),
       subtitle: Text(
-        '${music.subtitle.toString()}',
+        '${widget.music.subtitle.toString()}',
         style: TextStyle(fontSize: 10),
       ),
       trailing: Row(
@@ -41,9 +46,10 @@ class MusicItems extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.download),
             onPressed: () {
+              
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text("'Downloading ${music.subtitle.toString()}"),
+                  content: Text("'Downloading ${widget.music.subtitle.toString()}"),
                 ),
               );
             },
@@ -51,10 +57,10 @@ class MusicItems extends StatelessWidget {
           PopupMenuButton<String>(
             onSelected: (value) {
               if (value == 'Play') {
-                _musicControllerStore.playNext(music);
+                _musicControllerStore.playNext(widget.music);
                 Navigator.of(
                   context,
-                ).pushNamed(Routes.musicPlayer, arguments: music);
+                ).pushNamed(Routes.musicPlayer, arguments: widget.music);
                 // ScaffoldMessenger.of(
                 //   context,
                 // ).showSnackBar(SnackBar(content: Text("'Playing $title")));

@@ -1,0 +1,37 @@
+import 'dart:async';
+import 'package:boilerplate_new_version/core/data/Local/dataBase_Helper.dart';
+import 'package:boilerplate_new_version/domain/entity/downloaded_list/downloaded.dart';
+import 'package:boilerplate_new_version/domain/entity/downloaded_list/downloaded_list.dart';
+import 'package:sqflite/sqflite.dart';
+
+class DownloadedMusicListApi {
+  // dio instance
+  final MusicDatabaseHelper _dioClient;
+  DownloadedListModule module = DownloadedListModule();
+
+  // injecting dio instance
+  DownloadedMusicListApi(this._dioClient);
+
+  /// Returns list of post in response
+  Future<AllDownloadedList> getMusicList() async {
+    try {
+      await _dioClient.initializeDatabase();
+      final res = await _dioClient.getMusicMapList();
+
+      return AllDownloadedList.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  Future<int> insertDownloadedMusic(DownloadedListModule data) async {
+
+    Database db = await _dioClient.database;
+    var value =  module.toJson(data);
+    print("objectData: ${_dioClient.gettablename} , ${value}");
+   
+    var result = await db.insert(_dioClient.gettablename.toString(), value);
+    return result;
+  }
+}
