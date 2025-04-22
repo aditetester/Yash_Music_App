@@ -53,7 +53,7 @@ class StoreModule {
       getIt.registerSingleton<DownloadListStore>(
       DownloadListStore(getIt<GetDownloadedMusiclistUsecase>(),
       getIt<InsertMusicsUseCase>(),
-        getIt<ErrorStore>(),));
+        getIt<ErrorStore>(),getIt<LyricsApi>()));
 
 
       getIt.registerSingleton<MusicControllerStore>(

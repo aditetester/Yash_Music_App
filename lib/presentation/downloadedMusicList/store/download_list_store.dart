@@ -1,4 +1,5 @@
 import 'package:boilerplate_new_version/core/stores/error/error_store.dart';
+import 'package:boilerplate_new_version/data/network/apis/lyricsPlayer/lyricsPlayer_api.dart';
 import 'package:boilerplate_new_version/domain/entity/downloaded_list/downloaded.dart';
 import 'package:boilerplate_new_version/domain/entity/downloaded_list/downloaded_list.dart';
 import 'package:boilerplate_new_version/domain/usecase/downloaded_list/get_downloadedList_usecase.dart';
@@ -11,7 +12,7 @@ class DownloadListStore = _downloadListStore with _$DownloadListStore;
 
 abstract class _downloadListStore with Store {
   DownloadedListModule? _currentdownloadedSong;
-
+ final LyricsApi lyricsApi;
   @observable
   List<String>? _downloadedSongList = [];
 
@@ -38,6 +39,7 @@ abstract class _downloadListStore with Store {
     this._getDownloadMusicListUseCase,
     this._insertMusicsUseCase,
     this.errorStore,
+    this.lyricsApi,
   );
 
   @computed
@@ -59,7 +61,6 @@ abstract class _downloadListStore with Store {
                   return songs.title.toString();
                 }).toList();
           }
-          print("objectdownload: $_downloadedSongList");
         })
         .catchError((error) {
           errorStore.errorMessage = error;
@@ -92,5 +93,9 @@ abstract class _downloadListStore with Store {
       params: _currentdownloadedSong!,
     );
     fetchDownloadedMusicList();
+  }
+
+  Future<String> getLyricsData(String url) async {
+    return await lyricsApi.getLyrics(url);
   }
 }

@@ -173,6 +173,7 @@ abstract class _MusicControllerStore with Store {
   @action
   Future<void> lyricsdata() async {
     _recentLyrics = await lyricsApi.getLyrics(_recentMusic.lyrics.toString());
+  
   }
 
   @action
@@ -247,7 +248,9 @@ abstract class _MusicControllerStore with Store {
 
   @action
   Future<void> lyricsDownloadeddata() async {
-    _recentLyrics = await lyricsApi.getLyrics(_recentDownloadedMusicPlay.lyrics.toString());
+    _recentLyrics = _recentDownloadedMusicPlay.lyrics.toString();
+   
+  
   }
 
 
@@ -276,9 +279,6 @@ abstract class _MusicControllerStore with Store {
     _isDownloadedPlaying = true;
     _currentMusicIndex = currentIndex;
     _recentDownloadedMusicPlay = nextplay;
-
-    print("objectIndex: $_currentMusicIndex");
-
     lyricsDownloadeddata();
     await playDownloaded(nextplay.audio.toString());
   }
@@ -288,7 +288,7 @@ abstract class _MusicControllerStore with Store {
      _isDownloadedPlaying = true;
     _currentMusicIndex = currentIndex;
     _recentDownloadedMusicPlay = previoudPlay;
-    lyricsdata();
+     lyricsDownloadeddata();
     await playDownloaded(previoudPlay.audio.toString());
   }
 

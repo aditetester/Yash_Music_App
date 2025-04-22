@@ -2,6 +2,7 @@ import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/presentation/ads/ads_screen.dart';
 import 'package:boilerplate_new_version/presentation/home/store/homeController/home_store.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
+import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:boilerplate_new_version/widgets/app_drawer.dart';
 import 'package:boilerplate_new_version/presentation/home/widgets/category_view.dart';
 import 'package:boilerplate_new_version/widgets/bottom_downloadedMusicPlayer_bar.dart';
@@ -41,46 +42,54 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
   }
-
+ Future<void> _refresh() async {
+    // Call your data fetching logic here
+    Navigator.of(context).pushReplacementNamed(Routes.home);
+    setState(() {});
+  }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(),
-      drawer: AppDrawer(),
-      drawerScrimColor: Theme.of(context).scaffoldBackgroundColor,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              // Categories Section
-              CategoryViewScreen(),
-              const SizedBox(height: 20),
-              // Recently Played Section
-              _builderRecentPlay(context),
-            ],
+    return  Scaffold(
+        appBar: _buildAppBar(),
+        drawer: AppDrawer(),
+        drawerScrimColor: Theme.of(context).scaffoldBackgroundColor,
+        body: RefreshIndicator(
+      onRefresh: _refresh,
+      child:SingleChildScrollView(
+         physics: AlwaysScrollableScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                // Categories Section
+                CategoryViewScreen(),
+                const SizedBox(height: 20),
+                // Recently Played Section
+                _builderRecentPlay(context),
+              ],
+            ),
           ),
         ),
-      ),
-
-      bottomNavigationBar: Observer(
-        builder: (context) => IntrinsicHeight(
-          child: Column(
-            mainAxisSize:
-                MainAxisSize.min, // Ensure the column takes only required height
-            children: [
-              _musicControllerStore.isDownloadedPlaying
-                  ? BottomDownloadedMusicPlayerBar(
-                    musicControllerStore: _musicControllerStore,
-                  )
-                  : BottomMusicPlayerBar(
-                    musicControllerStore: _musicControllerStore,
-                  ),
-              // AdsScreen(),
-            ],
+       ),
+        bottomNavigationBar: Observer(
+          builder: (context) => IntrinsicHeight(
+            child: Column(
+              mainAxisSize:
+                  MainAxisSize.min, // Ensure the column takes only required height
+              children: [
+                _musicControllerStore.isDownloadedPlaying
+                    ? BottomDownloadedMusicPlayerBar(
+                      musicControllerStore: _musicControllerStore,
+                    )
+                    : BottomMusicPlayerBar(
+                      musicControllerStore: _musicControllerStore,
+                    ),
+                // AdsScreen(),
+              ],
+            ),
           ),
         ),
-      ),
+     
     );
   }
 

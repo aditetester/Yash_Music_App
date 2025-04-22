@@ -138,7 +138,7 @@ class _MusicItemsState extends State<MusicItems> {
               subTitle: widget.music.subtitle.toString(),
               audio: savedPath,
               image: widget.music.image.toString(),
-              lyrics: widget.music.lyrics.toString(),
+              lyrics: await _downloadListStore.getLyricsData(widget.music.lyrics.toString()),
               subCategoryId:  widget.music.subCategoryId.toString(),
               subCategoryName: widget.music.subCategoryName.toString(),
             );
