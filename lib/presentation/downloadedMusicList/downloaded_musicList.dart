@@ -5,6 +5,7 @@ import 'package:boilerplate_new_version/presentation/downloadedMusicList/widgets
 import 'package:boilerplate_new_version/presentation/music/widgets/music_items.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
 import 'package:boilerplate_new_version/utils/routes/routes.dart';
+import 'package:boilerplate_new_version/widgets/bottom_downloadedMusicPlayer_bar.dart';
 import 'package:boilerplate_new_version/widgets/bottom_musicPlayer_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -113,8 +114,7 @@ class _DownloadedMusicPlayListState extends State<DownloadedMusicPlayList> {
             Expanded(
               child: Observer(
                 builder: (_) {
-                  _downloadListStore.fetchDownloadedMusicList();
-
+                 
                   if (_downloadListStore.fetchFuture.status ==
                           FutureStatus.pending) {
                     return const Center(child: CircularProgressIndicator());
@@ -131,6 +131,7 @@ class _DownloadedMusicPlayListState extends State<DownloadedMusicPlayList> {
                     // Update filtered list on initial load
                     if (_searchController.text.isEmpty) {
                       filteredMusicList = allMusicList!;
+                        _musicControllerStore.AllDownloadedMusic = allMusicList!;
                     }
 
                     return ListView.builder(
@@ -138,15 +139,16 @@ class _DownloadedMusicPlayListState extends State<DownloadedMusicPlayList> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
-                            // _musicControllerStore.playNext(
-                            //   filteredMusicList[index],
-                            // );
-                            // Navigator.of(context).pushNamed(
-                            //   Routes.musicPlayer,
-                            //   arguments: filteredMusicList[index],
-                            // );
+                            _musicControllerStore.playDownloadNext(
+                             currentIndex:  index,
+                             nextplay:  filteredMusicList[index],
+                            );
+                            Navigator.of(context).pushNamed(
+                              Routes.musicPlayerDownloadedScreen,
+                              arguments: filteredMusicList[index],
+                            );
                           },
-                          child: DownloadedMusicItems(music: filteredMusicList[index]),
+                          child: DownloadedMusicItems(index: index, music: filteredMusicList[index]),
                         );
                       },
                     );
@@ -159,13 +161,22 @@ class _DownloadedMusicPlayListState extends State<DownloadedMusicPlayList> {
           ],
         ),
       ),
-      bottomNavigationBar: IntrinsicHeight(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            BottomMusicPlayerBar(musicControllerStore: _musicControllerStore),
-            // AdsScreen(),
-          ],
+       bottomNavigationBar: Observer(
+        builder: (context) => IntrinsicHeight(
+          child: Column(
+            mainAxisSize:
+                MainAxisSize.min, // Ensure the column takes only required height
+            children: [
+              _musicControllerStore.isDownloadedPlaying
+                  ? BottomDownloadedMusicPlayerBar(
+                    musicControllerStore: _musicControllerStore,
+                  )
+                  : BottomMusicPlayerBar(
+                    musicControllerStore: _musicControllerStore,
+                  ),
+              // AdsScreen(),
+            ],
+          ),
         ),
       ),
     );

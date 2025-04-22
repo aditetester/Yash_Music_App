@@ -4,11 +4,10 @@ import 'package:boilerplate_new_version/domain/entity/downloaded_list/downloaded
 import 'package:boilerplate_new_version/domain/usecase/downloaded_list/get_downloadedList_usecase.dart';
 import 'package:boilerplate_new_version/domain/usecase/downloaded_list/insert_DownloadedList_usecase.dart';
 import 'package:boilerplate_new_version/utils/dio/dio_error_util.dart';
-import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
 part 'download_list_store.g.dart';
 
-class DownloadListStore = _downloadListStore with _$downloadListStore;
+class DownloadListStore = _downloadListStore with _$DownloadListStore;
 
 abstract class _downloadListStore with Store {
   DownloadedListModule? _currentdownloadedSong;
@@ -43,7 +42,6 @@ abstract class _downloadListStore with Store {
 
   @computed
   List<String>? get getDownloadedList => _downloadedSongList;
-  
 
   // actions:-------------------------------------------------------------------
   @action
@@ -56,33 +54,38 @@ abstract class _downloadListStore with Store {
           AllDownloadedMusic = MusicList.DownloadedListData;
 
           if (AllDownloadedMusic!.isNotEmpty) {
-           _downloadedSongList = AllDownloadedMusic!.map((songs) {
-              return songs.title.toString();
-            }).toList();
+            _downloadedSongList =
+                AllDownloadedMusic!.map((songs) {
+                  return songs.title.toString();
+                }).toList();
           }
           print("objectdownload: $_downloadedSongList");
-
         })
         .catchError((error) {
-          errorStore.errorMessage = DioExceptionUtil.handleError(error);
+          errorStore.errorMessage = error;
         });
   }
 
   @action
-  Future<void> insertDownloadedMusicList(
-    String id,
-    String title,
-    String subTitle,
-    String audio,
-  ) async {
+  Future<void> insertDownloadedMusicList({
+    required String id,
+    required String title,
+    required String subTitle,
+    required String audio,
+    required String image,
+    required String lyrics,
+    required String subCategoryId,
+     required String subCategoryName,
+  }) async {
     _currentdownloadedSong = DownloadedListModule(
       id: id,
       title: title,
       subtitle: subTitle,
-      subCategoryId: "12",
-      subCategoryName: "lofi",
       audio: audio,
-      lyrics: "ddf",
+      image: image,
+      lyrics: lyrics,
+      subCategoryId: subCategoryId,
+      subCategoryName: subCategoryName,
     );
 
     final future = await _insertMusicsUseCase.call(

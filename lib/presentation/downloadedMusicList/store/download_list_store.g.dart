@@ -8,7 +8,31 @@ part of 'download_list_store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$downloadListStore on _downloadListStore, Store {
+mixin _$DownloadListStore on _downloadListStore, Store {
+  Computed<List<String>?>? _$getDownloadedListComputed;
+
+  @override
+  List<String>? get getDownloadedList => (_$getDownloadedListComputed ??=
+          Computed<List<String>?>(() => super.getDownloadedList,
+              name: '_downloadListStore.getDownloadedList'))
+      .value;
+
+  late final _$_downloadedSongListAtom =
+      Atom(name: '_downloadListStore._downloadedSongList', context: context);
+
+  @override
+  List<String>? get _downloadedSongList {
+    _$_downloadedSongListAtom.reportRead();
+    return super._downloadedSongList;
+  }
+
+  @override
+  set _downloadedSongList(List<String>? value) {
+    _$_downloadedSongListAtom.reportWrite(value, super._downloadedSongList, () {
+      super._downloadedSongList = value;
+    });
+  }
+
   late final _$fetchFutureAtom =
       Atom(name: '_downloadListStore.fetchFuture', context: context);
 
@@ -51,11 +75,38 @@ mixin _$downloadListStore on _downloadListStore, Store {
         .run(() => super.fetchDownloadedMusicList());
   }
 
+  late final _$insertDownloadedMusicListAsyncAction = AsyncAction(
+      '_downloadListStore.insertDownloadedMusicList',
+      context: context);
+
+  @override
+  Future<void> insertDownloadedMusicList(
+      {required String id,
+      required String title,
+      required String subTitle,
+      required String audio,
+      required String image,
+      required String lyrics,
+      required String subCategoryId,
+      required String subCategoryName}) {
+    return _$insertDownloadedMusicListAsyncAction.run(() => super
+        .insertDownloadedMusicList(
+            id: id,
+            title: title,
+            subTitle: subTitle,
+            audio: audio,
+            image: image,
+            lyrics: lyrics,
+            subCategoryId: subCategoryId,
+            subCategoryName: subCategoryName));
+  }
+
   @override
   String toString() {
     return '''
 fetchFuture: ${fetchFuture},
-AllDownloadedMusic: ${AllDownloadedMusic}
+AllDownloadedMusic: ${AllDownloadedMusic},
+getDownloadedList: ${getDownloadedList}
     ''';
   }
 }

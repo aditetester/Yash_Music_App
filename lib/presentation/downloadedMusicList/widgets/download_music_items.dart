@@ -17,18 +17,16 @@ import 'package:permission_handler/permission_handler.dart';
 
 class DownloadedMusicItems extends StatefulWidget {
   final DownloadedListModule music;
-
-  DownloadedMusicItems({super.key, required this.music});
+  final int index;
+  DownloadedMusicItems({super.key, required this.index, required this.music});
 
   @override
   State<DownloadedMusicItems> createState() => _DownloadedMusicItemsState();
 }
 
 class _DownloadedMusicItemsState extends State<DownloadedMusicItems> {
-
   @override
   Widget build(BuildContext context) {
-
     final MusicControllerStore _musicControllerStore =
         getIt<MusicControllerStore>();
 
@@ -56,25 +54,29 @@ class _DownloadedMusicItemsState extends State<DownloadedMusicItems> {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-       
           Observer(
-            builder: (context) =>  Stack(
-              alignment: Alignment.center,
-              children: [
-              
-             IconButton(
-                  icon: Icon(Icons.offline_pin_outlined) , onPressed: () {},)
-                
-              ],
-            ),
+            builder:
+                (context) => Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.offline_pin_outlined),
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
           ),
           PopupMenuButton<String>(
             onSelected: (value) {
               if (value == 'Play') {
-                // _musicControllerStore.playNext(widget.music);
-                // Navigator.of(
-                //   context,
-                // ).pushNamed(Routes.musicPlayer, arguments: widget.music);
+                _musicControllerStore.playDownloadNext(
+                  currentIndex: widget.index,
+                  nextplay: widget.music,
+                );
+                Navigator.of(context).pushNamed(
+                  Routes.musicPlayerDownloadedScreen,
+                  arguments: widget.music,
+                );
                 // ScaffoldMessenger.of(
                 //   context,
                 // ).showSnackBar(SnackBar(content: Text("'Playing $title")));

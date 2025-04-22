@@ -16,6 +16,20 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
       (_$isPlayingComputed ??= Computed<bool>(() => super.isPlaying,
               name: '_MusicControllerStore.isPlaying'))
           .value;
+  Computed<bool>? _$isDownloadedPlayingComputed;
+
+  @override
+  bool get isDownloadedPlaying => (_$isDownloadedPlayingComputed ??=
+          Computed<bool>(() => super.isDownloadedPlaying,
+              name: '_MusicControllerStore.isDownloadedPlaying'))
+      .value;
+  Computed<int>? _$getCurrentMusicIndexComputed;
+
+  @override
+  int get getCurrentMusicIndex => (_$getCurrentMusicIndexComputed ??=
+          Computed<int>(() => super.getCurrentMusicIndex,
+              name: '_MusicControllerStore.getCurrentMusicIndex'))
+      .value;
   Computed<String>? _$recentPlayComputed;
 
   @override
@@ -30,6 +44,14 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
           Computed<MusicListModule>(() => super.recentMusic,
               name: '_MusicControllerStore.recentMusic'))
       .value;
+  Computed<DownloadedListModule>? _$recentDownloadedMusicPlayComputed;
+
+  @override
+  DownloadedListModule get recentDownloadedMusicPlay =>
+      (_$recentDownloadedMusicPlayComputed ??= Computed<DownloadedListModule>(
+              () => super.recentDownloadedMusicPlay,
+              name: '_MusicControllerStore.recentDownloadedMusicPlay'))
+          .value;
   Computed<AudioHandler?>? _$getAudioHandlerComputed;
 
   @override
@@ -84,6 +106,38 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
     });
   }
 
+  late final _$AllDownloadedMusicAtom =
+      Atom(name: '_MusicControllerStore.AllDownloadedMusic', context: context);
+
+  @override
+  List<DownloadedListModule>? get AllDownloadedMusic {
+    _$AllDownloadedMusicAtom.reportRead();
+    return super.AllDownloadedMusic;
+  }
+
+  @override
+  set AllDownloadedMusic(List<DownloadedListModule>? value) {
+    _$AllDownloadedMusicAtom.reportWrite(value, super.AllDownloadedMusic, () {
+      super.AllDownloadedMusic = value;
+    });
+  }
+
+  late final _$_currentMusicIndexAtom =
+      Atom(name: '_MusicControllerStore._currentMusicIndex', context: context);
+
+  @override
+  int get _currentMusicIndex {
+    _$_currentMusicIndexAtom.reportRead();
+    return super._currentMusicIndex;
+  }
+
+  @override
+  set _currentMusicIndex(int value) {
+    _$_currentMusicIndexAtom.reportWrite(value, super._currentMusicIndex, () {
+      super._currentMusicIndex = value;
+    });
+  }
+
   late final _$_currentTrackIndexAtom =
       Atom(name: '_MusicControllerStore._currentTrackIndex', context: context);
 
@@ -113,6 +167,23 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
   set _isPlaying(bool value) {
     _$_isPlayingAtom.reportWrite(value, super._isPlaying, () {
       super._isPlaying = value;
+    });
+  }
+
+  late final _$_isDownloadedPlayingAtom = Atom(
+      name: '_MusicControllerStore._isDownloadedPlaying', context: context);
+
+  @override
+  bool get _isDownloadedPlaying {
+    _$_isDownloadedPlayingAtom.reportRead();
+    return super._isDownloadedPlaying;
+  }
+
+  @override
+  set _isDownloadedPlaying(bool value) {
+    _$_isDownloadedPlayingAtom.reportWrite(value, super._isDownloadedPlaying,
+        () {
+      super._isDownloadedPlaying = value;
     });
   }
 
@@ -161,6 +232,24 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
   set _recentMusic(MusicListModule value) {
     _$_recentMusicAtom.reportWrite(value, super._recentMusic, () {
       super._recentMusic = value;
+    });
+  }
+
+  late final _$_recentDownloadedMusicPlayAtom = Atom(
+      name: '_MusicControllerStore._recentDownloadedMusicPlay',
+      context: context);
+
+  @override
+  DownloadedListModule get _recentDownloadedMusicPlay {
+    _$_recentDownloadedMusicPlayAtom.reportRead();
+    return super._recentDownloadedMusicPlay;
+  }
+
+  @override
+  set _recentDownloadedMusicPlay(DownloadedListModule value) {
+    _$_recentDownloadedMusicPlayAtom
+        .reportWrite(value, super._recentDownloadedMusicPlay, () {
+      super._recentDownloadedMusicPlay = value;
     });
   }
 
@@ -272,16 +361,20 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
       AsyncAction('_MusicControllerStore.playNext', context: context);
 
   @override
-  Future<void> playNext(MusicListModule nextplay) {
-    return _$playNextAsyncAction.run(() => super.playNext(nextplay));
+  Future<void> playNext(
+      {required int currentIndex, required MusicListModule nextplay}) {
+    return _$playNextAsyncAction.run(
+        () => super.playNext(currentIndex: currentIndex, nextplay: nextplay));
   }
 
   late final _$playPreviousAsyncAction =
       AsyncAction('_MusicControllerStore.playPrevious', context: context);
 
   @override
-  Future<void> playPrevious() {
-    return _$playPreviousAsyncAction.run(() => super.playPrevious());
+  Future<void> playPrevious(
+      {required int currentIndex, required MusicListModule previoudPlay}) {
+    return _$playPreviousAsyncAction.run(() => super
+        .playPrevious(currentIndex: currentIndex, previoudPlay: previoudPlay));
   }
 
   late final _$seekAsyncAction =
@@ -292,17 +385,62 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
     return _$seekAsyncAction.run(() => super.seek(position));
   }
 
+  late final _$lyricsDownloadeddataAsyncAction = AsyncAction(
+      '_MusicControllerStore.lyricsDownloadeddata',
+      context: context);
+
+  @override
+  Future<void> lyricsDownloadeddata() {
+    return _$lyricsDownloadeddataAsyncAction
+        .run(() => super.lyricsDownloadeddata());
+  }
+
+  late final _$playDownloadedAsyncAction =
+      AsyncAction('_MusicControllerStore.playDownloaded', context: context);
+
+  @override
+  Future<void> playDownloaded(String musicUrl) {
+    return _$playDownloadedAsyncAction
+        .run(() => super.playDownloaded(musicUrl));
+  }
+
+  late final _$playDownloadNextAsyncAction =
+      AsyncAction('_MusicControllerStore.playDownloadNext', context: context);
+
+  @override
+  Future<void> playDownloadNext(
+      {required int currentIndex, required DownloadedListModule nextplay}) {
+    return _$playDownloadNextAsyncAction.run(() =>
+        super.playDownloadNext(currentIndex: currentIndex, nextplay: nextplay));
+  }
+
+  late final _$playDownloadPreviousAsyncAction = AsyncAction(
+      '_MusicControllerStore.playDownloadPrevious',
+      context: context);
+
+  @override
+  Future<void> playDownloadPrevious(
+      {required int currentIndex, required DownloadedListModule previoudPlay}) {
+    return _$playDownloadPreviousAsyncAction.run(() => super
+        .playDownloadPrevious(
+            currentIndex: currentIndex, previoudPlay: previoudPlay));
+  }
+
   @override
   String toString() {
     return '''
 fetchPostsFuture: ${fetchPostsFuture},
 AllMusic: ${AllMusic},
+AllDownloadedMusic: ${AllDownloadedMusic},
 currentPosition: ${currentPosition},
 totalDuration: ${totalDuration},
 isInitialized: ${isInitialized},
 isPlaying: ${isPlaying},
+isDownloadedPlaying: ${isDownloadedPlaying},
+getCurrentMusicIndex: ${getCurrentMusicIndex},
 recentPlay: ${recentPlay},
 recentMusic: ${recentMusic},
+recentDownloadedMusicPlay: ${recentDownloadedMusicPlay},
 getAudioHandler: ${getAudioHandler},
 getAudioPlayer: ${getAudioPlayer},
 getrecentLyrics: ${getrecentLyrics}

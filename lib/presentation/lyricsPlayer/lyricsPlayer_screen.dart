@@ -61,7 +61,8 @@ class _LyricsPlayerScreenState extends State<LyricsPlayerScreen> {
         ModalRoute.of(context)!.settings.arguments as AudioPlayer;
 
     void _scrollToCurrentLyric() {
-  if (currentIndex == -1 || _scrollController.hasClients == false) return;
+    
+    if (currentIndex == -1  || _scrollController.hasClients == false) return;
 
   // Define how many lines before stopping auto-scroll
   int stopScrollingThreshold = 6;
@@ -91,9 +92,10 @@ class _LyricsPlayerScreenState extends State<LyricsPlayerScreen> {
         children: [
           Expanded(
             child: ListView.builder(
-              controller: _scrollController,
+              // controller: _scrollController,
               itemCount: lyrics.length,
               itemBuilder: (context, index) {
+                 _scrollToCurrentLyric();
                 return GestureDetector(
                   onTap: () => _seekToLyric(index),
                   child: Padding(
@@ -103,7 +105,7 @@ class _LyricsPlayerScreenState extends State<LyricsPlayerScreen> {
                     ),
                     child: Observer(
                       builder: (context) {
-                        _scrollToCurrentLyric();
+                        // _scrollToCurrentLyric();
                         final currentPosition =
                             _musicControllerStore.currentPosition;
                         int newIndex = lyrics.lastIndexWhere(

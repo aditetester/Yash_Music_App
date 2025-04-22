@@ -15,9 +15,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MusicItems extends StatefulWidget {
+  final int index;
   final MusicListModule music;
 
-  MusicItems({super.key, required this.music});
+  MusicItems({super.key, required this.index, required this.music});
 
   @override
   State<MusicItems> createState() => _MusicItemsState();
@@ -132,15 +133,19 @@ class _MusicItemsState extends State<MusicItems> {
 
           if (savedPath.isNotEmpty && savedPath.isNotEmpty) {
             await _downloadListStore.insertDownloadedMusicList(
-              widget.music.id.toString(),
-              widget.music.title.toString(),
-              widget.music.subtitle.toString(),
-              savedPath,
+              id: widget.music.id.toString(),
+              title: widget.music.title.toString(),
+              subTitle: widget.music.subtitle.toString(),
+              audio: savedPath,
+              image: widget.music.image.toString(),
+              lyrics: widget.music.lyrics.toString(),
+              subCategoryId:  widget.music.subCategoryId.toString(),
+              subCategoryName: widget.music.subCategoryName.toString(),
             );
             ScaffoldMessenger.of(context).clearSnackBars();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text("Download complete!\nSaved to:\n$savedPath"),
+                content: Text("Download complete!"),//"\nSaved to:\n$savedPath"
               ),
             );
           }
@@ -185,7 +190,6 @@ class _MusicItemsState extends State<MusicItems> {
 
   @override
   Widget build(BuildContext context) {
-
     musicUrl = widget.music.audio.toString();
     final MusicControllerStore _musicControllerStore =
         getIt<MusicControllerStore>();
@@ -216,35 +220,45 @@ class _MusicItemsState extends State<MusicItems> {
         children: [
           if (_downloading) Text("${(_progress * 100).toStringAsFixed(0)}%"),
           Observer(
-            builder: (context) =>  Stack(
-              alignment: Alignment.center,
-              children: [
-                if (_downloading) CircularProgressIndicator(value: _progress),
-                _downloadListStore.getDownloadedList?.contains(widget.music.title.toString()) ?? false ?  IconButton(
-                  icon: Icon(Icons.offline_pin_outlined) , onPressed: () {},):
-                IconButton(
-                  icon:
-                      _downloading
-                          ? (_paused ? Icon(Icons.play_arrow) : Icon(Icons.pause))
-                          : Icon(Icons.download),
-                  onPressed: () {
-                    _handleDownload();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          "'Downloading ${widget.music.subtitle.toString()}",
+            builder:
+                (context) => Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    if (_downloading)
+                      CircularProgressIndicator(value: _progress),
+                    _downloadListStore.getDownloadedList?.contains(
+                              widget.music.title.toString(),
+                            ) ??
+                            false
+                        ? IconButton(
+                          icon: Icon(Icons.offline_pin_outlined),
+                          onPressed: () {},
+                        )
+                        : IconButton(
+                          icon:
+                              _downloading
+                                  ? (_paused
+                                      ? Icon(Icons.play_arrow)
+                                      : Icon(Icons.pause))
+                                  : Icon(Icons.download),
+                          onPressed: () {
+                            _handleDownload();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  "'Downloading ${widget.music.subtitle.toString()}",
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                      ),
-                    );
-                  },
+                  ],
                 ),
-              ],
-            ),
           ),
           PopupMenuButton<String>(
             onSelected: (value) {
               if (value == 'Play') {
-                _musicControllerStore.playNext(widget.music);
+                _musicControllerStore.playNext(currentIndex:  widget.index,nextplay:  widget.music);
                 Navigator.of(
                   context,
                 ).pushNamed(Routes.musicPlayer, arguments: widget.music);

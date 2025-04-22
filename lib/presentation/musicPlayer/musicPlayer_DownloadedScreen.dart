@@ -1,4 +1,4 @@
-import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
+import 'package:boilerplate_new_version/domain/entity/downloaded_list/downloaded.dart';
 import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:boilerplate_new_version/widgets/bottom_downloadedMusicPlayer_bar.dart';
 import 'package:flutter/material.dart';
@@ -7,14 +7,14 @@ import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
 import 'package:boilerplate_new_version/widgets/bottom_musicPlayer_bar.dart';
 
-class MusicPlayerScreen extends StatefulWidget {
-  MusicPlayerScreen({Key? key}) : super(key: key);
+class MusicPlayerDownloadedScreen extends StatefulWidget {
+  MusicPlayerDownloadedScreen({Key? key}) : super(key: key);
 
   @override
-  State<MusicPlayerScreen> createState() => _MusicPlayerScreenState();
+  State<MusicPlayerDownloadedScreen> createState() => _MusicPlayerDownloadedScreenState();
 }
 
-class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
+class _MusicPlayerDownloadedScreenState extends State<MusicPlayerDownloadedScreen> {
   final MusicControllerStore _musicControllerStore =
       getIt<MusicControllerStore>();
 
@@ -28,13 +28,13 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-     MusicListModule music =
-        ModalRoute.of(context)!.settings.arguments as MusicListModule;
+     DownloadedListModule music =
+        ModalRoute.of(context)!.settings.arguments as DownloadedListModule;
 
     return Observer(
       builder: (context) 
       {
-      music = _musicControllerStore.recentMusic;
+      music = _musicControllerStore.recentDownloadedMusicPlay;
       return Scaffold(
         appBar: AppBar(
           title: Observer(
@@ -73,9 +73,9 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                           iconSize: 40,
                           onPressed: () async {
                             _musicControllerStore.seek(Duration.zero);
-                              _musicControllerStore.playPrevious(
-                              currentIndex:  (_musicControllerStore.getCurrentMusicIndex == 0) ? (_musicControllerStore.AllMusic!.length - 1) : _musicControllerStore.getCurrentMusicIndex-1,
-                              previoudPlay:  _musicControllerStore.AllMusic![(_musicControllerStore.getCurrentMusicIndex == 0) ? (_musicControllerStore.AllMusic!.length - 1) : _musicControllerStore.getCurrentMusicIndex-1],
+                              _musicControllerStore.playDownloadPrevious(
+                              currentIndex:  (_musicControllerStore.getCurrentMusicIndex == 0) ? (_musicControllerStore.AllDownloadedMusic!.length - 1) : _musicControllerStore.getCurrentMusicIndex-1,
+                              previoudPlay:  _musicControllerStore.AllDownloadedMusic![(_musicControllerStore.getCurrentMusicIndex == 0) ? (_musicControllerStore.AllDownloadedMusic!.length - 1) : _musicControllerStore.getCurrentMusicIndex-1],
                               );
                           },
                         ),
@@ -110,9 +110,9 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                               // _musicControllerStore.seek(
                               //   _musicControllerStore.totalDuration,
                               // );
-                              _musicControllerStore.playNext(
-                              currentIndex:  (_musicControllerStore.AllMusic!.length-1 == _musicControllerStore.getCurrentMusicIndex) ? 0 : _musicControllerStore.getCurrentMusicIndex+1,
-                              nextplay:  _musicControllerStore.AllMusic![(_musicControllerStore.AllMusic!.length-1 == _musicControllerStore.getCurrentMusicIndex) ? 0 :_musicControllerStore.getCurrentMusicIndex+1],
+                              _musicControllerStore.playDownloadNext(
+                              currentIndex:  (_musicControllerStore.AllDownloadedMusic!.length-1 == _musicControllerStore.getCurrentMusicIndex) ? 0 : _musicControllerStore.getCurrentMusicIndex+1,
+                              nextplay:  _musicControllerStore.AllDownloadedMusic![(_musicControllerStore.AllDownloadedMusic!.length-1 == _musicControllerStore.getCurrentMusicIndex) ? 0 :_musicControllerStore.getCurrentMusicIndex+1],
                               );
                             },
                           ),
@@ -178,7 +178,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
             ),
           ],
         ),
-        bottomNavigationBar: Observer(
+         bottomNavigationBar: Observer(
         builder: (context) => IntrinsicHeight(
           child: Column(
             mainAxisSize:

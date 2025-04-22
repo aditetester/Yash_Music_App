@@ -4,8 +4,10 @@ import 'package:boilerplate_new_version/presentation/home/store/homeController/h
 import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
 import 'package:boilerplate_new_version/widgets/app_drawer.dart';
 import 'package:boilerplate_new_version/presentation/home/widgets/category_view.dart';
+import 'package:boilerplate_new_version/widgets/bottom_downloadedMusicPlayer_bar.dart';
 import 'package:boilerplate_new_version/widgets/bottom_musicPlayer_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -13,8 +15,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final HomeControllerStore _homeControllerStore =
-      getIt<HomeControllerStore>();
+  final HomeControllerStore _homeControllerStore = getIt<HomeControllerStore>();
   final MusicControllerStore _musicControllerStore =
       getIt<MusicControllerStore>();
   TextEditingController _searchController = TextEditingController();
@@ -62,14 +63,22 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
 
-      bottomNavigationBar: IntrinsicHeight(
-        child: Column(
-          mainAxisSize:
-              MainAxisSize.min, // Ensure the column takes only required height
-          children: [
-            BottomMusicPlayerBar(musicControllerStore: _musicControllerStore),
-            // AdsScreen(),
-          ],
+      bottomNavigationBar: Observer(
+        builder: (context) => IntrinsicHeight(
+          child: Column(
+            mainAxisSize:
+                MainAxisSize.min, // Ensure the column takes only required height
+            children: [
+              _musicControllerStore.isDownloadedPlaying
+                  ? BottomDownloadedMusicPlayerBar(
+                    musicControllerStore: _musicControllerStore,
+                  )
+                  : BottomMusicPlayerBar(
+                    musicControllerStore: _musicControllerStore,
+                  ),
+              // AdsScreen(),
+            ],
+          ),
         ),
       ),
     );
@@ -107,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.close),
             onPressed: () {
               setState(() {
-                 _homeControllerStore.changeIsSearch(false);
+                _homeControllerStore.changeIsSearch(false);
                 _searchController.clear();
                 _filterSongs('');
               });

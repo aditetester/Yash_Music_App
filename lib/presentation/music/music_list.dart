@@ -5,6 +5,7 @@ import 'package:boilerplate_new_version/presentation/music/store/music_list_stor
 import 'package:boilerplate_new_version/presentation/music/widgets/music_items.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
 import 'package:boilerplate_new_version/utils/routes/routes.dart';
+import 'package:boilerplate_new_version/widgets/bottom_downloadedMusicPlayer_bar.dart';
 import 'package:boilerplate_new_version/widgets/bottom_musicPlayer_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -31,7 +32,7 @@ class _MusicListState extends State<MusicList> {
     super.initState();
     _MusicListStore.fetchMusicList();
     _downloadListStore.fetchDownloadedMusicList();
-   
+
     _searchController.addListener(_filterMusicList);
   }
 
@@ -135,6 +136,7 @@ class _MusicListState extends State<MusicList> {
                     // Update filtered list on initial load
                     if (_searchController.text.isEmpty) {
                       filteredMusicList = allMusicList!;
+                      _musicControllerStore.AllMusic = allMusicList!;
                     }
 
                     return ListView.builder(
@@ -143,14 +145,15 @@ class _MusicListState extends State<MusicList> {
                         return GestureDetector(
                           onTap: () {
                             _musicControllerStore.playNext(
-                              filteredMusicList[index],
+                             currentIndex: index,
+                             nextplay: filteredMusicList[index],
                             );
                             Navigator.of(context).pushNamed(
                               Routes.musicPlayer,
                               arguments: filteredMusicList[index],
                             );
                           },
-                          child: MusicItems(music: filteredMusicList[index]),
+                          child: MusicItems(index: index, music: filteredMusicList[index]),
                         );
                       },
                     );
@@ -163,13 +166,22 @@ class _MusicListState extends State<MusicList> {
           ],
         ),
       ),
-      bottomNavigationBar: IntrinsicHeight(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            BottomMusicPlayerBar(musicControllerStore: _musicControllerStore),
-            // AdsScreen(),
-          ],
+       bottomNavigationBar: Observer(
+        builder: (context) => IntrinsicHeight(
+          child: Column(
+            mainAxisSize:
+                MainAxisSize.min, // Ensure the column takes only required height
+            children: [
+              _musicControllerStore.isDownloadedPlaying
+                  ? BottomDownloadedMusicPlayerBar(
+                    musicControllerStore: _musicControllerStore,
+                  )
+                  : BottomMusicPlayerBar(
+                    musicControllerStore: _musicControllerStore,
+                  ),
+              // AdsScreen(),
+            ],
+          ),
         ),
       ),
     );

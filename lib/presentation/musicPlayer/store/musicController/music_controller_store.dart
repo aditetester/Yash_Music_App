@@ -1,5 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:boilerplate_new_version/data/network/apis/lyricsPlayer/lyricsPlayer_api.dart';
+import 'package:boilerplate_new_version/domain/entity/downloaded_list/downloaded.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicModule_list.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/widgets/musicPlayer_handler.dart';
@@ -31,15 +32,29 @@ abstract class _MusicControllerStore with Store {
 
   @observable
   List<MusicListModule>? AllMusic;
+  
+  @observable
+  List<DownloadedListModule>? AllDownloadedMusic;
+  
+
+  // Current Music index
+  @observable
+  int _currentMusicIndex = 0;
+  
 
   // Current track index
   @observable
   int _currentTrackIndex = 0;
 
+
   // Playback state
   @observable
   bool _isPlaying = false;
-
+  
+// Playback state
+  @observable
+  bool _isDownloadedPlaying = false;
+  
   // recent play
   @observable
   String _recentPlay = '';
@@ -54,6 +69,11 @@ abstract class _MusicControllerStore with Store {
     audio: '',
     title: 'No Play List Available',
   );
+
+   // recent play
+  @observable
+  DownloadedListModule _recentDownloadedMusicPlay = DownloadedListModule();
+   
 
   @observable
   AudioHandler? _audioHandler;
@@ -70,12 +90,26 @@ abstract class _MusicControllerStore with Store {
   // Getters
   @computed
   bool get isPlaying => _isPlaying;
+  
+  // Getters
+  @computed
+  bool get isDownloadedPlaying => _isDownloadedPlaying;
+  
+
+  // Getters
+  @computed
+  int get getCurrentMusicIndex => _currentMusicIndex;
+  
   // Getters
   @computed
   String get recentPlay => _recentPlay;
   // Getters
   @computed
   MusicListModule get recentMusic => _recentMusic;
+
+  @computed
+  DownloadedListModule get recentDownloadedMusicPlay => _recentDownloadedMusicPlay;
+
   @computed
   AudioHandler? get getAudioHandler => _audioHandler;
   @computed
@@ -177,15 +211,24 @@ abstract class _MusicControllerStore with Store {
   }
 
   @action
-  Future<void> playNext(MusicListModule nextplay) async {
+  Future<void> playNext({ required int currentIndex, required MusicListModule nextplay}) async {
+    _isDownloadedPlaying = false;
+    _currentMusicIndex = currentIndex;
     _recentMusic = nextplay;
+
+    print("objectIndex: $_currentMusicIndex");
+
     lyricsdata();
     await play(nextplay.audio.toString());
   }
 
   @action
-  Future<void> playPrevious() async {
-    await seek(Duration(seconds: 0));
+  Future<void> playPrevious({ required int currentIndex, required MusicListModule previoudPlay}) async {
+    
+    _currentMusicIndex = currentIndex;
+    _recentMusic = previoudPlay;
+    lyricsdata();
+    await play(previoudPlay.audio.toString());
   }
 
   @action
@@ -200,6 +243,55 @@ abstract class _MusicControllerStore with Store {
   void dispose() async {
     await _audioPlayer.dispose();
   }
+
+
+  @action
+  Future<void> lyricsDownloadeddata() async {
+    _recentLyrics = await lyricsApi.getLyrics(_recentDownloadedMusicPlay.lyrics.toString());
+  }
+
+
+  @action
+  Future<void> playDownloaded(String musicUrl) async {
+    try {
+      if (musicUrl.isNotEmpty) {
+        if (_recentPlay == musicUrl) {
+          await _audioPlayer.play();
+        } else {
+          _recentPlay = musicUrl;
+          print('Playing: $musicUrl');
+          _audioPlayer.setFilePath(musicUrl);
+          await _audioPlayer.play();
+        }
+      } else {
+        print('No song URL available to play');
+      }
+    } catch (e) {
+      print('Error during play: $e');
+    }
+  }
+
+  @action
+  Future<void> playDownloadNext({ required int currentIndex, required DownloadedListModule nextplay}) async {
+    _isDownloadedPlaying = true;
+    _currentMusicIndex = currentIndex;
+    _recentDownloadedMusicPlay = nextplay;
+
+    print("objectIndex: $_currentMusicIndex");
+
+    lyricsDownloadeddata();
+    await playDownloaded(nextplay.audio.toString());
+  }
+
+  @action
+  Future<void> playDownloadPrevious({ required int currentIndex, required DownloadedListModule previoudPlay}) async {
+     _isDownloadedPlaying = true;
+    _currentMusicIndex = currentIndex;
+    _recentDownloadedMusicPlay = previoudPlay;
+    lyricsdata();
+    await playDownloaded(previoudPlay.audio.toString());
+  }
+
 
   // general methods:-----------------------------------------------------------
   Future init() async {
