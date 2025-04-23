@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/domain/entity/downloaded_list/downloaded.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';

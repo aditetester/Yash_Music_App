@@ -2,7 +2,6 @@ import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/domain/entity/downloaded_list/downloaded.dart';
 import 'package:boilerplate_new_version/presentation/downloadedMusicList/store/download_list_store.dart';
 import 'package:boilerplate_new_version/presentation/downloadedMusicList/widgets/download_music_items.dart';
-import 'package:boilerplate_new_version/presentation/music/widgets/music_items.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
 import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:boilerplate_new_version/widgets/bottom_downloadedMusicPlayer_bar.dart';
