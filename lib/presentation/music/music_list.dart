@@ -28,6 +28,7 @@ class _MusicListState extends State<MusicList> {
   List<MusicListModule>? allMusicList = [];
   List<MusicListModule> filteredMusicList = [];
 
+
   @override
   void initState() {
     super.initState();
@@ -76,22 +77,25 @@ class _MusicListState extends State<MusicList> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0, top: 15, right: 8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      //App Bar Section
-                      _builderTopArea(context, subcategory['name'].toString()),
-                     Expanded(child: _builderBodyArea(context, subcategory['id'].toString())),
 
-                      // Categories Section
-                      // CategoryViewScreen(),
-                      // SizedBox(height: 15),
-                    ],
-                  ),
-                ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            //App Bar Section
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, top: 15, right: 8.0),
+              child: _builderTopArea(context, subcategory['name'].toString()),
+            ),
+            Expanded(
+              child: _builderBodyArea(context, subcategory['id'].toString()),
+            ),
+
+            // Categories Section
+            // CategoryViewScreen(),
+            // SizedBox(height: 15),
+          ],
+        ),
       ),
       bottomNavigationBar: Observer(
         builder:
@@ -144,7 +148,7 @@ class _MusicListState extends State<MusicList> {
 
               alignment: Alignment.centerLeft,
               child: Text(
-                heading,
+                "$heading Songs",
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 18,
@@ -175,7 +179,6 @@ class _MusicListState extends State<MusicList> {
           }
           filteredMusicList = allMusicList!;
           _musicControllerStore.AllMusic = allMusicList!;
-
           return ListView.builder(
             padding: EdgeInsets.zero,
             itemCount: filteredMusicList.length,
@@ -192,6 +195,8 @@ class _MusicListState extends State<MusicList> {
                   );
                 },
                 child: MusicItems(
+                  
+                  totalDuration: "00:00",
                   index: index,
                   music: filteredMusicList[index],
                 ),

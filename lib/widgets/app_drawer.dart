@@ -27,7 +27,7 @@ class _AppDrawerState extends State<AppDrawer> {
       child: Container(
         decoration: BoxDecoration(
           
-          color: const Color.fromARGB(181, 195, 194, 194),
+          color: const Color.fromARGB(181, 239, 237, 237),
           // gradient: LinearGradient(
           //   colors: [Colors.white.withOpacity(0.3), Colors.white.withOpacity(0.3)],
           //   begin: Alignment.topLeft,
@@ -113,7 +113,7 @@ class _AppDrawerState extends State<AppDrawer> {
   }) {
     return ListTile(
       selected: selected,
-      selectedTileColor: Colors.blue.shade100,
+      selectedTileColor: const Color.fromARGB(255, 150, 196, 233),
       leading: Icon(icon, color: Colors.black),
       title: Text(
         title,

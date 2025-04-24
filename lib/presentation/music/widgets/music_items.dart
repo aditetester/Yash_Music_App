@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:boilerplate_new_version/constants/app_theme.dart';
 import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
 import 'package:boilerplate_new_version/presentation/downloadedMusicList/store/download_list_store.dart';
@@ -12,19 +13,29 @@ import 'package:dio/dio.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sizer/sizer.dart';
 
 class MusicItems extends StatefulWidget {
   final int index;
+  final String totalDuration;
   final MusicListModule music;
 
-  MusicItems({super.key, required this.index, required this.music});
+  MusicItems({
+    super.key,
+    required this.totalDuration,
+    required this.index,
+    required this.music,
+  });
 
   @override
   State<MusicItems> createState() => _MusicItemsState();
 }
 
 class _MusicItemsState extends State<MusicItems> {
+  final MusicControllerStore _musicControllerStore =
+      getIt<MusicControllerStore>();
   final DownloadListStore _downloadListStore = getIt<DownloadListStore>();
   String musicUrl = "";
   CancelToken? _cancelToken;
@@ -138,14 +149,16 @@ class _MusicItemsState extends State<MusicItems> {
               subTitle: widget.music.subtitle.toString(),
               audio: savedPath,
               image: widget.music.image.toString(),
-              lyrics: await _downloadListStore.getLyricsData(widget.music.lyrics.toString()),
-              subCategoryId:  widget.music.subCategoryId.toString(),
+              lyrics: await _downloadListStore.getLyricsData(
+                widget.music.lyrics.toString(),
+              ),
+              subCategoryId: widget.music.subCategoryId.toString(),
               subCategoryName: widget.music.subCategoryName.toString(),
             );
             ScaffoldMessenger.of(context).clearSnackBars();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text("Download complete!"),//"\nSaved to:\n$savedPath"
+                content: Text("Download complete!"), //"\nSaved to:\n$savedPath"
               ),
             );
           }
@@ -191,87 +204,132 @@ class _MusicItemsState extends State<MusicItems> {
   @override
   Widget build(BuildContext context) {
     musicUrl = widget.music.audio.toString();
-    final MusicControllerStore _musicControllerStore =
-        getIt<MusicControllerStore>();
 
-    return  Container(
-    margin: const EdgeInsets.symmetric(vertical: 6),
-    padding: const EdgeInsets.symmetric(horizontal: 12,),
-   
-    child: Row(
-      children: [
-        // Music Cover
-        ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Image.network(
-            widget.music.image.toString(),
-            width: 48,
-            height: 48,
-            fit: BoxFit.cover,
-          ),
-        ),
-
-        const SizedBox(width: 12),
-
-        // Title & Subtitle
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color:
+            (_musicControllerStore.isPlaying &&
+                    _musicControllerStore.recentMusic.id == widget.music.id &&
+                    _musicControllerStore.getCurrentMusicIndex == widget.index)
+                ? Color.fromARGB(28, 29, 162, 244)
+                : Colors.transparent,
+      ),
+      child: Row(
+        children: [
+          Stack(
+            clipBehavior:
+                Clip.none, // allows the icon to overflow the image bounds
             children: [
-              Text(
-                widget.music.title ?? '',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
+              // Music Cover
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(
+                  widget.music.image.toString(),
+                  width: 6.h,
+                  height: 6.h,
+                  fit: BoxFit.cover,
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
               ),
-              Text(
-                widget.music.subtitle ?? '',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey[800],
+
+              // Play Icon
+              Positioned(
+                right: -5, // adjust as needed to slightly go outside
+                bottom: -5, // adjust as needed
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color.fromARGB(255, 29, 162, 244),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(4.0),
+                    child: Icon(
+                      (_musicControllerStore.isPlaying &&
+                              _musicControllerStore.recentMusic.id ==
+                                  widget.music.id &&
+                              _musicControllerStore.getCurrentMusicIndex ==
+                                  widget.index)
+                          ? Icons.pause
+                          : Icons.play_arrow,
+
+                      size: 10,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
             ],
           ),
-        ),
 
-        // Duration
-        Text(
-          "00:00",
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
+          const SizedBox(width: 12),
+          // Title & Subtitle
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.music.title ?? '',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  widget.music.subtitle ?? '',
+                  style: TextStyle(fontSize: 12, color: Colors.grey[800]),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
           ),
-        ),
 
-        const SizedBox(width: 10),
+          // Duration
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Text(
+              widget.totalDuration,
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            ),
+          ),
 
-        // Download / Tick / Progress
-        Observer(
+          const SizedBox(width: 10),
+
+          // Download / Tick / Progress
+          Observer(
             builder:
                 (context) => Stack(
                   alignment: Alignment.center,
                   children: [
-                    if (_downloading)
-                      CircularProgressIndicator(value: _progress),
                     _downloadListStore.getDownloadedList?.contains(
                               widget.music.title.toString(),
                             ) ??
                             false
                         ? IconButton(
-                          icon: Icon(Icons.offline_pin_outlined),
+                          icon: SvgPicture.asset(
+                            "assets/svg/downloaded_icon.svg",
+                            height: 2.h,
+                            width: 2.w,
+                          ),
                           onPressed: () {},
                         )
                         : IconButton(
                           icon:
                               _downloading
-                                  ? (_paused
-                                      ? Icon(Icons.play_arrow)
-                                      : Icon(Icons.pause))
-                                  : Icon(Icons.download),
+                                  ? SvgPicture.asset(
+                                    "assets/svg/download_icon.svg",
+                                    height: 2.h,
+                                    width: 2.w,
+                                    color: Color.fromARGB(255, 29, 162, 244),
+                                  )
+                                  : SvgPicture.asset(
+                                    "assets/svg/download_icon.svg",
+                                    height: 2.h,
+                                    width: 2.w,
+                                  ),
                           onPressed: () {
                             _handleDownload();
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -286,31 +344,52 @@ class _MusicItemsState extends State<MusicItems> {
                   ],
                 ),
           ),
-        // More Options
-        PopupMenuButton<String>(
-          icon: Icon(Icons.more_vert),
-          onSelected: (value) {
-            if (value == 'Play') {
-              _musicControllerStore.playNext(
-                currentIndex: widget.index,
-                nextplay: widget.music,
-              );
-              Navigator.of(context).pushNamed(
-                Routes.musicPlayer,
-                arguments: widget.music,
-              );
-            } else if (value == 'Add to Playlist') {
-              showAddToPlaylistDialog(context);
-            }
-          },
-          itemBuilder: (context) => [
-            const PopupMenuItem(value: 'Play', child: Text('Play')),
-            const PopupMenuItem(value: 'Add to Playlist', child: Text('Add to Playlist')),
-          ],
-        ),
-      ],
-    ),
-  );
+          // More Options
+          PopupMenuButton<String>(
+            menuPadding: EdgeInsets.zero,
+            position: PopupMenuPosition.under,
+
+            icon: Icon(Icons.more_vert, size: 5.w),
+            onSelected: (value) {
+              if (value == 'Play') {
+                _musicControllerStore.playNext(
+                  currentIndex: widget.index,
+                  nextplay: widget.music,
+                );
+                Navigator.of(
+                  context,
+                ).pushNamed(Routes.musicPlayer, arguments: widget.music);
+              } else if (value == 'Add to Playlist') {
+                showAddToPlaylistDialog(context);
+              }
+            },
+            color: Color.fromARGB(255, 242, 242, 242), // background color
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              // rounded corners
+            ),
+            elevation: 2,
+            itemBuilder:
+                (context) => [
+                  PopupMenuItem(
+                    value: 'Add to Playlist',
+                    child: Text(
+                      'Add to Playlists',
+                      style: AppThemeData.textThemeMedium,
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: 'Play',
+                    child: Text(
+                      'Play Next',
+                      style: AppThemeData.textThemeMedium,
+                    ),
+                  ),
+                ],
+          ),
+        ],
+      ),
+    );
   }
 
   void showAddToPlaylistDialog(BuildContext context) {

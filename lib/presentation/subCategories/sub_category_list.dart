@@ -169,7 +169,7 @@ class _SubCategoryListState extends State<SubCategoryList> {
               children: [
                 GridView.builder(
                   padding: EdgeInsets.zero,
-                
+
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: subcategoryList!.length,
@@ -199,30 +199,46 @@ class _SubCategoryListState extends State<SubCategoryList> {
                               Color.fromARGB(255, 29, 162, 244),
                               Color.fromARGB(255, 156, 213, 251),
                             ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
                           ),
                         ),
                         padding: EdgeInsets.symmetric(horizontal: 12),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Container(
-                              width: 90,
-                              child: Text(
-                                item.name.toString(),
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 15.0,
+                                left: 10,
+                                bottom: 15,
+                              ),
+                              child: Container(
+                                child: Text(
+                                  item.name.toString(),
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            //   Image.network(
+
+                            Expanded(
+                              child: Image.asset(
+                                "assets/images/demo_subcategory.png",
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            // Expanded(
+                            //   child: Image.network(
                             //   item.image.toString(),
-                            //   fit: BoxFit.cover,
+                            //   fit: BoxFit.fill,
+                            //                               ),
                             // ),
                           ],
                         ),

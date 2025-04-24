@@ -46,6 +46,13 @@ class StoreModule {
       SubCategoriesStore(getIt<GetSubCategoryUseCase>(),
         getIt<ErrorStore>(),));
 
+      getIt.registerSingleton<MusicControllerStore>(
+      MusicControllerStore(
+        getIt<LyricsApi>(),
+        getIt<SettingRepository>(),
+        getIt<ErrorStore>(),
+      ));
+
       getIt.registerSingleton<MusicListStore>(
       MusicListStore(getIt<GetMusiclistUsecase>(),
         getIt<ErrorStore>(),));
@@ -55,13 +62,6 @@ class StoreModule {
       getIt<InsertMusicsUseCase>(),
         getIt<ErrorStore>(),getIt<LyricsApi>()));
 
-
-      getIt.registerSingleton<MusicControllerStore>(
-      MusicControllerStore(
-        getIt<LyricsApi>(),
-        getIt<SettingRepository>(),
-        getIt<ErrorStore>(),
-      ));
 
 
 

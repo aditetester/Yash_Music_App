@@ -5,7 +5,9 @@ import 'package:boilerplate_new_version/presentation/categories/store/categories
 import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobx/mobx.dart';
+import 'package:sizer/sizer.dart';
 
 class CategoryViewScreen extends StatefulWidget {
   const CategoryViewScreen({super.key});
@@ -107,10 +109,10 @@ class _CategoryViewScreenState extends State<CategoryViewScreen> {
                             ),
                             padding: EdgeInsets.symmetric(horizontal: 12),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Container(
-                                  width: 90,
+                                  width: 9.h,
                                   child: Text(
                                     item.name.toString(),
                                     style: TextStyle(
@@ -122,6 +124,11 @@ class _CategoryViewScreenState extends State<CategoryViewScreen> {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
+                               
+                               Padding(
+                                 padding: const EdgeInsets.only(top:  5.0, left: 15, right: 5),
+                                 child: Expanded(child: Image.asset("assets/images/demo_category_icon.png" , height: 7.h, width: 10.w, fit: BoxFit.fitHeight, )),
+                               ),
                                 //   Image.network(
                                 //   item.image.toString(),
                                 //   fit: BoxFit.cover,

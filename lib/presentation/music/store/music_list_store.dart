@@ -1,4 +1,3 @@
-
 import 'package:boilerplate_new_version/core/stores/error/error_store.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicModule_list.dart';
@@ -11,9 +10,9 @@ part 'music_list_store.g.dart';
 class MusicListStore = _MusicListStore with _$MusicListStore;
 
 abstract class _MusicListStore with Store {
- 
   // use cases:-----------------------------------------------------------------
   final GetMusiclistUsecase _getMusicListUseCase;
+
 
   // stores:--------------------------------------------------------------------
   // store for handling errors
@@ -38,17 +37,21 @@ abstract class _MusicListStore with Store {
   Future<void> fetchMusicList() async {
     final future = _getMusicListUseCase.call(params: null);
     fetchPostsFuture = ObservableFuture(future);
-      
-    await future.then((MusicList) {
-      AllMusic = MusicList.MusicListData;
-    }).catchError((error) {
-      errorStore.errorMessage = DioExceptionUtil.handleError(error);
-    });
+
+    await future
+        .then((MusicList) {
+          AllMusic = MusicList.MusicListData;
+        })
+        .catchError((error) {
+          errorStore.errorMessage = DioExceptionUtil.handleError(error);
+        });
   }
 
   @action
   Future<void> SelectedMusicList(String subCategoryId) async {
-    AllMusic = AllMusic!.where((element) => element.subCategoryId == subCategoryId).toList();
-  }
+    AllMusic =  AllMusic!
+            .where((element) => element.subCategoryId == subCategoryId)
+            .toList();
 
+  }
 }

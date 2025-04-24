@@ -297,4 +297,13 @@ abstract class _MusicControllerStore with Store {
   Future init() async {
     _isPlaying = _repository.isPlaying;
   }
+
+  Future<Duration> getTotatDuration(String musicUrl)async{
+
+    await _audioPlayer.setUrl(musicUrl);
+
+    return totalDuration;
+
+  }
+
 }

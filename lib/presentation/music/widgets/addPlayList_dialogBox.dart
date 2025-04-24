@@ -1,120 +1,164 @@
 import 'package:flutter/material.dart';
 
 class AddToPlaylistDialog extends StatelessWidget {
+  final List<Map<String, dynamic>> playlists = [
+    {
+      "title": "Power of Attitude",
+      "subtitle": "42 Songs",
+      "image":
+          "https://example.com/image1.jpg", // Replace with real image or leave invalid to test fallback
+    },
+    {
+      "title": "Dark Love",
+      "subtitle": "22 Songs",
+      "image":
+          "https://example.com/image2.jpg", // Replace with real image or leave invalid
+    },
+    {
+      "title": "New Playlist",
+      "subtitle": "0 Songs",
+      "image": null, // This will trigger the fallback icon
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10), // Rounded corners for the dialog box
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      backgroundColor: Colors.grey.shade100,
       child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.teal[700], // Background color for the dialog
-          borderRadius: BorderRadius.circular(10),
-        ),
+        padding: const EdgeInsets.all(15),
+        width: 290,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Title
-            const Text(
-              'Add to Playlist',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 16),
-            // New Playlist Button
-            ElevatedButton.icon(
-              onPressed: () {
-                // Handle New Playlist action
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.teal[900],
-                minimumSize: const Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+            // Title Row
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Add to Playlist',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-              ),
-              icon: const Icon(Icons.add, color: Colors.white),
-              label: const Text(
-                'New Playlist',
-                style: TextStyle(color: Colors.white),
-              ),
+                GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: const Icon(Icons.close),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            // Existing Playlist Item
-            GestureDetector(
-                onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("added to playlist'")),
-                );
-                Navigator.of(context).pop();
-
-                },
-                child:Container(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-              decoration: BoxDecoration(
-                color: Colors.teal[800],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child:  Row(
+            Divider(color: Colors.white, thickness: 2),
+            // Create new playlist
+            InkWell(
+              onTap: () {
+                // handle new playlist creation
+              },
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
                   children: [
-                    const Icon(Icons.queue_music, color: Colors.white),
-                    const SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          'Zoom',
-                          style: TextStyle(color: Colors.white),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        Text(
-                          '1 Song',
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
+                        child: const Icon(Icons.add, color: Colors.white),
+                      ),
                     ),
+                    SizedBox(width: 12),
+                    Text("Create new playlist", style: TextStyle(fontSize: 16)),
                   ],
                 ),
               ),
             ),
             const SizedBox(height: 16),
-            // Cancel Button
-            OutlinedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              style: OutlinedButton.styleFrom(
-                side: BorderSide(color: Colors.white),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+
+            // Playlist items
+            ...playlists.map((playlist) {
+              return InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Added to '${playlist["title"]}'")),
+                  );
+                },
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.grey.shade100,
+                  ),
+                  child: Row(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child:
+                            playlist["image"] != null
+                                ? Image.network(
+                                  playlist["image"],
+                                  width: 40,
+                                  height: 40,
+                                  fit: BoxFit.cover,
+                                  errorBuilder:
+                                      (context, error, stackTrace) =>
+                                          _fallbackIcon(),
+                                )
+                                : _fallbackIcon(),
+                      ),
+                      const SizedBox(width: 12),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            playlist["title"],
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                            ),
+                          ),
+                          Text(
+                            playlist["subtitle"],
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                minimumSize: const Size(double.infinity, 50),
-              ),
-              child: const Text(
-                'Cancel',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
+              );
+            }).toList(),
           ],
         ),
       ),
     );
   }
+
+  Widget _fallbackIcon() {
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        color: Colors.blue.shade50,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: const Icon(Icons.music_note, color: Colors.blue),
+    );
+  }
 }
 
-// To show the dialog
+// Usage:
 void showAddToPlaylistDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AddToPlaylistDialog();
-    },
-  );
+  showDialog(context: context, builder: (context) => AddToPlaylistDialog());
 }
