@@ -194,32 +194,63 @@ class _MusicItemsState extends State<MusicItems> {
     final MusicControllerStore _musicControllerStore =
         getIt<MusicControllerStore>();
 
-    return ListTile(
-      tileColor: Color.fromRGBO(32, 60, 60, 1),
-      leading: CircleAvatar(
-        backgroundColor: Colors.teal.shade200,
-        backgroundImage: NetworkImage(
-          widget.music.image.toString(),
-        ), // Replace with actual image asset if available
-        child: Icon(Icons.music_note),
-      ),
-      title: Text(
-        widget.music.title.toString(),
-        maxLines: 1,
-        style: TextStyle(
-          fontSize: 19, // Restrict to a single line
-          overflow: TextOverflow.ellipsis,
+    return  Container(
+    margin: const EdgeInsets.symmetric(vertical: 6),
+    padding: const EdgeInsets.symmetric(horizontal: 12,),
+   
+    child: Row(
+      children: [
+        // Music Cover
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Image.network(
+            widget.music.image.toString(),
+            width: 48,
+            height: 48,
+            fit: BoxFit.cover,
+          ),
         ),
-      ),
-      subtitle: Text(
-        '${widget.music.subtitle.toString()}',
-        style: TextStyle(fontSize: 10),
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (_downloading) Text("${(_progress * 100).toStringAsFixed(0)}%"),
-          Observer(
+
+        const SizedBox(width: 12),
+
+        // Title & Subtitle
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.music.title ?? '',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              Text(
+                widget.music.subtitle ?? '',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[800],
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        // Duration
+        Text(
+          "00:00",
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+
+        const SizedBox(width: 10),
+
+        // Download / Tick / Progress
+        Observer(
             builder:
                 (context) => Stack(
                   alignment: Alignment.center,
@@ -255,32 +286,31 @@ class _MusicItemsState extends State<MusicItems> {
                   ],
                 ),
           ),
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              if (value == 'Play') {
-                _musicControllerStore.playNext(currentIndex:  widget.index,nextplay:  widget.music);
-                Navigator.of(
-                  context,
-                ).pushNamed(Routes.musicPlayer, arguments: widget.music);
-                // ScaffoldMessenger.of(
-                //   context,
-                // ).showSnackBar(SnackBar(content: Text("'Playing $title")));
-              } else if (value == 'Add to Playlist') {
-                showAddToPlaylistDialog(context);
-              }
-            },
-            itemBuilder:
-                (context) => [
-                  PopupMenuItem(value: 'Play', child: Text('Play')),
-                  PopupMenuItem(
-                    value: 'Add to Playlist',
-                    child: Text('Add to Playlist'),
-                  ),
-                ],
-          ),
-        ],
-      ),
-    );
+        // More Options
+        PopupMenuButton<String>(
+          icon: Icon(Icons.more_vert),
+          onSelected: (value) {
+            if (value == 'Play') {
+              _musicControllerStore.playNext(
+                currentIndex: widget.index,
+                nextplay: widget.music,
+              );
+              Navigator.of(context).pushNamed(
+                Routes.musicPlayer,
+                arguments: widget.music,
+              );
+            } else if (value == 'Add to Playlist') {
+              showAddToPlaylistDialog(context);
+            }
+          },
+          itemBuilder: (context) => [
+            const PopupMenuItem(value: 'Play', child: Text('Play')),
+            const PopupMenuItem(value: 'Add to Playlist', child: Text('Add to Playlist')),
+          ],
+        ),
+      ],
+    ),
+  );
   }
 
   void showAddToPlaylistDialog(BuildContext context) {
@@ -292,3 +322,92 @@ class _MusicItemsState extends State<MusicItems> {
     );
   }
 }
+
+// old ui----------------------------------------------------
+    // return ListTile(
+    //   tileColor: Color.fromRGBO(32, 60, 60, 1),
+    //   leading: CircleAvatar(
+    //     backgroundColor: Colors.teal.shade200,
+    //     backgroundImage: NetworkImage(
+    //       widget.music.image.toString(),
+    //     ), // Replace with actual image asset if available
+    //     child: Icon(Icons.music_note),
+    //   ),
+    //   title: Text(
+    //     widget.music.title.toString(),
+    //     maxLines: 1,
+    //     style: TextStyle(
+    //       fontSize: 19, // Restrict to a single line
+    //       overflow: TextOverflow.ellipsis,
+    //     ),
+    //   ),
+    //   subtitle: Text(
+    //     '${widget.music.subtitle.toString()}',
+    //     style: TextStyle(fontSize: 10),
+    //   ),
+    //   trailing: Row(
+    //     mainAxisSize: MainAxisSize.min,
+    //     children: [
+    //       if (_downloading) Text("${(_progress * 100).toStringAsFixed(0)}%"),
+          // Observer(
+          //   builder:
+          //       (context) => Stack(
+          //         alignment: Alignment.center,
+          //         children: [
+          //           if (_downloading)
+          //             CircularProgressIndicator(value: _progress),
+          //           _downloadListStore.getDownloadedList?.contains(
+          //                     widget.music.title.toString(),
+          //                   ) ??
+          //                   false
+          //               ? IconButton(
+          //                 icon: Icon(Icons.offline_pin_outlined),
+          //                 onPressed: () {},
+          //               )
+          //               : IconButton(
+          //                 icon:
+          //                     _downloading
+          //                         ? (_paused
+          //                             ? Icon(Icons.play_arrow)
+          //                             : Icon(Icons.pause))
+          //                         : Icon(Icons.download),
+          //                 onPressed: () {
+          //                   _handleDownload();
+          //                   ScaffoldMessenger.of(context).showSnackBar(
+          //                     SnackBar(
+          //                       content: Text(
+          //                         "'Downloading ${widget.music.subtitle.toString()}",
+          //                       ),
+          //                     ),
+          //                   );
+          //                 },
+          //               ),
+          //         ],
+          //       ),
+          // ),
+    //       PopupMenuButton<String>(
+    //         onSelected: (value) {
+    //           if (value == 'Play') {
+    //             _musicControllerStore.playNext(currentIndex:  widget.index,nextplay:  widget.music);
+    //             Navigator.of(
+    //               context,
+    //             ).pushNamed(Routes.musicPlayer, arguments: widget.music);
+    //             // ScaffoldMessenger.of(
+    //             //   context,
+    //             // ).showSnackBar(SnackBar(content: Text("'Playing $title")));
+    //           } else if (value == 'Add to Playlist') {
+    //             showAddToPlaylistDialog(context);
+    //           }
+    //         },
+    //         itemBuilder:
+    //             (context) => [
+    //               PopupMenuItem(value: 'Play', child: Text('Play')),
+    //               PopupMenuItem(
+    //                 value: 'Add to Playlist',
+    //                 child: Text('Add to Playlist'),
+    //               ),
+    //             ],
+    //       ),
+    //     ],
+    //   ),
+    // );

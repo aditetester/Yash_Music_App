@@ -65,9 +65,8 @@ class _HomeScreenState extends State<HomeScreen> {
         drawerScrimColor: Colors.black26,
         body: RefreshIndicator(
           onRefresh: _refresh,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 20.0),
-            child: Container(
+          child: Container(
+              height: double.infinity,
               decoration: BoxDecoration(
                 color: Color(0xC7DFDDEA),
                 image: DecorationImage(
@@ -75,7 +74,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   fit: BoxFit.cover,
                 ),
               ),
-              child: SingleChildScrollView(
+              child:Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child:  SingleChildScrollView(
+                
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: [

@@ -16,6 +16,8 @@ class _AppDrawerState extends State<AppDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      
+      backgroundColor: Color.fromARGB(229, 255, 255, 255),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topRight: Radius.circular(24),
@@ -24,7 +26,8 @@ class _AppDrawerState extends State<AppDrawer> {
       ),
       child: Container(
         decoration: BoxDecoration(
-          color: const Color.fromARGB(3, 255, 255, 255),
+          
+          color: const Color.fromARGB(181, 195, 194, 194),
           // gradient: LinearGradient(
           //   colors: [Colors.white.withOpacity(0.3), Colors.white.withOpacity(0.3)],
           //   begin: Alignment.topLeft,
@@ -151,7 +154,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 ),
                 child: Text(
                   '$badgeCount',
-                  style: TextStyle(color: Colors.white, fontSize: 12),
+                  style: TextStyle(color: Colors.white, fontSize: 12, fontFamily: 'Poppins'),
                 ),
               )
               : null,

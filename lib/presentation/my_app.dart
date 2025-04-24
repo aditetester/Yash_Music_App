@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
       builder: (context) {
         return Sizer(
           builder: (context, orientation, deviceType) => MaterialApp(
+            // showSemanticsDebugger: true,
             debugShowCheckedModeBanner: false,
             title: Strings.appName,
             theme:

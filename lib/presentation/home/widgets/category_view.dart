@@ -57,7 +57,7 @@ class _CategoryViewScreenState extends State<CategoryViewScreen> {
                   categories = _CategoryStore.CategoryList;
 
                   if (categories!.isEmpty || categories!.isEmpty) {
-                    return Center(child: Text("No categories available"));
+                    return Center(child: Text("No categories available",  style: AppThemeData.textThemeMedium ,));
                   }
                 }
                 int visibleItemCount =
@@ -66,7 +66,10 @@ class _CategoryViewScreenState extends State<CategoryViewScreen> {
                         : (categories!.length >= 4)
                         ? 4
                         : categories!.length;
-                return Column(
+                return categories!.length == 0 ? Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Text("No categories available", style: AppThemeData.textThemeMedium ,),
+                ) : Column(
                   children: [
                     GridView.builder(
                       shrinkWrap: true,
@@ -84,7 +87,10 @@ class _CategoryViewScreenState extends State<CategoryViewScreen> {
                           onTap: () {
                             Navigator.of(context).pushNamed(
                               Routes.subCategoryList,
-                              arguments: categories![index].id,
+                              arguments: {
+                                'id': categories![index].id,
+                                'name' : categories![index].name
+                              } 
                             );
                           },
                           child: Container(
