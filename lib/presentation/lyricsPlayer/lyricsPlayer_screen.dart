@@ -115,26 +115,27 @@ class _LyricsPlayerScreenState extends State<LyricsPlayerScreen> {
           body: Stack(
             children: [
               Container(
-                height: 90.h,
+                height: 75.h,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: NetworkImage(
                       _musicControllerStore.recentMusic.image.toString(),
                     ),
                     fit: BoxFit.cover,
+
                   ),
                 ),
               ),
 
               Container(
-                height: 90.h,
+                height: 75.h,
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
                       Color.fromARGB(0, 255, 255, 255), // 60% transparent white
-                      Color.fromARGB(255, 215, 194, 210),
+                    Color.fromARGB(255, 215, 194, 210),
                     ],
                   ),
                 ),
@@ -177,10 +178,10 @@ class _LyricsPlayerScreenState extends State<LyricsPlayerScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.end,
-                            children: [ IconButton(icon: Icon(Icons.more_vert), onPressed: null),],),
+                            children: [ IconButton(icon: Icon(Icons.more_vert, color: Colors.black,), onPressed: (){}),],),
                         ),
                         Container(
-                          height: 50.h,
+                          height: 45.h,
                           child: Expanded(
                             child: Observer(
                               builder: (context) {
@@ -242,7 +243,7 @@ class _LyricsPlayerScreenState extends State<LyricsPlayerScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 21),
+                        SizedBox(height: 37),
                         Container(
                           width: 40.h,
                           child: Center(

@@ -16,6 +16,10 @@ class DownloadListStore = _downloadListStore with _$DownloadListStore;
 abstract class _downloadListStore with Store {
   DownloadedListModule? _currentdownloadedSong;
   final LyricsApi lyricsApi;
+
+  @observable
+  int _currentTabIndex = 0;
+
   @observable
   List<String>? _downloadedSongList = [];
 
@@ -52,6 +56,9 @@ abstract class _downloadListStore with Store {
 
   // @computed
   // double get progress => _totalBytes == 0 ? 0 : _downloadedBytes / _totalBytes;
+
+  @computed
+  int get getcurrentTabIndex => _currentTabIndex;
 
   // store variables:-----------------------------------------------------------
   static ObservableFuture<AllDownloadedList?> emptyMusicListResponse =
@@ -169,7 +176,12 @@ abstract class _downloadListStore with Store {
   //   _downloadedBytes = 0;
   //   _totalBytes = 0;
   // }
+  @action
+  Future<void> changeTab(int val) async {
+    _currentTabIndex = val;
+  }
 
+  @action
   Future<String> getLyricsData(String url) async {
     return await lyricsApi.getLyrics(url);
   }

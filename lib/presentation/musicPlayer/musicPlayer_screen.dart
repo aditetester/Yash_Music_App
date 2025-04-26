@@ -103,7 +103,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                           ),
                           IconButton(
                             icon: Icon(Icons.more_vert),
-                            onPressed: null,
+                            onPressed: (){},
                           ),
                         ],
                       ),

@@ -71,8 +71,12 @@ class _AppDrawerState extends State<AppDrawer> {
                   children: [
                     _buildMenuItem(Icons.home, 'Home', () {
                       Navigator.of(context).pushReplacementNamed(Routes.home);
+
                     }, selected: true),
                     _buildMenuItem(Icons.download, 'Downloads', () {
+                      Navigator.of(
+                        context,
+                      ).pop();
                       Navigator.of(
                         context,
                       ).pushNamed(Routes.downloadedMusicPlayList);
