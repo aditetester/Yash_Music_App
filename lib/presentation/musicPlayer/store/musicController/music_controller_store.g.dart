@@ -16,6 +16,13 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
       (_$isPlayingComputed ??= Computed<bool>(() => super.isPlaying,
               name: '_MusicControllerStore.isPlaying'))
           .value;
+  Computed<bool>? _$isLyricsComputed;
+
+  @override
+  bool get isLyrics =>
+      (_$isLyricsComputed ??= Computed<bool>(() => super.isLyrics,
+              name: '_MusicControllerStore.isLyrics'))
+          .value;
   Computed<bool>? _$isDownloadedPlayingComputed;
 
   @override
@@ -167,6 +174,22 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
   set _isPlaying(bool value) {
     _$_isPlayingAtom.reportWrite(value, super._isPlaying, () {
       super._isPlaying = value;
+    });
+  }
+
+  late final _$_isLyricsAtom =
+      Atom(name: '_MusicControllerStore._isLyrics', context: context);
+
+  @override
+  bool get _isLyrics {
+    _$_isLyricsAtom.reportRead();
+    return super._isLyrics;
+  }
+
+  @override
+  set _isLyrics(bool value) {
+    _$_isLyricsAtom.reportWrite(value, super._isLyrics, () {
+      super._isLyrics = value;
     });
   }
 
@@ -426,6 +449,15 @@ mixin _$MusicControllerStore on _MusicControllerStore, Store {
             currentIndex: currentIndex, previoudPlay: previoudPlay));
   }
 
+  late final _$ChangeIsLyricsAsyncAction =
+      AsyncAction('_MusicControllerStore.ChangeIsLyrics', context: context);
+
+  @override
+  Future<void> ChangeIsLyrics({required bool val}) {
+    return _$ChangeIsLyricsAsyncAction
+        .run(() => super.ChangeIsLyrics(val: val));
+  }
+
   @override
   String toString() {
     return '''
@@ -436,6 +468,7 @@ currentPosition: ${currentPosition},
 totalDuration: ${totalDuration},
 isInitialized: ${isInitialized},
 isPlaying: ${isPlaying},
+isLyrics: ${isLyrics},
 isDownloadedPlaying: ${isDownloadedPlaying},
 getCurrentMusicIndex: ${getCurrentMusicIndex},
 recentPlay: ${recentPlay},

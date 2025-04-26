@@ -1,3 +1,4 @@
+
 import 'package:boilerplate_new_version/constants/app_theme.dart';
 import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/presentation/ads/ads_screen.dart';
@@ -66,18 +67,17 @@ class _HomeScreenState extends State<HomeScreen> {
         body: RefreshIndicator(
           onRefresh: _refresh,
           child: Container(
-              height: double.infinity,
-              decoration: BoxDecoration(
-                color: Color(0xC7DFDDEA),
-                image: DecorationImage(
-                  image: AssetImage("assets/images/background.png"),
-                  fit: BoxFit.cover,
-                ),
+            height: double.infinity,
+            decoration: BoxDecoration(
+              color: Color(0xC7DFDDEA),
+              image: DecorationImage(
+                image: AssetImage("assets/images/background.png"),
+                fit: BoxFit.cover,
               ),
-              child:Padding(
-            padding: const EdgeInsets.only(top: 20.0),
-            child:  SingleChildScrollView(
-                
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: [
@@ -262,13 +262,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.teal[800],
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child:
-                        RecentPlayView(
-                          id: "1",
-                          title: "text1",
-                          subTitle: "subTitle",
-                          image: "",
-                        
+                    child: RecentPlayView(
+                      id: "1",
+                      title: "text1",
+                      subTitle: "subTitle",
+                      image: "",
                     ),
                   );
                 },
@@ -280,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-   Widget _builderTopPlay(BuildContext context) {
+  Widget _builderTopPlay(BuildContext context) {
     return Container(
       child: Column(
         children: [
@@ -316,8 +314,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.teal[800],
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child:
-                        TopPlaylistCard(imageUrls: ["assets/icon/icon.png","assets/images/demo_img.jpg","assets/images/demo_img.jpg","assets/icon/icon.png"], songCount: 4 , onPlay: (){})
+                    child: TopPlaylistCard(
+                      imageUrls: [
+                        "assets/icon/icon.png",
+                        "assets/images/demo_img.jpg",
+                        "assets/images/demo_img.jpg",
+                        "assets/icon/icon.png",
+                      ],
+                      songCount: 4,
+                      onPlay: () {},
+                    ),
                   );
                 },
               ),
@@ -328,74 +334,74 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-   Widget _builderPopularArtist(BuildContext context) {
-  return Column(
-    children: [
-      Padding(
-        padding: const EdgeInsets.only(left: 20.0, top: 15, right: 18),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Top Playlists", style: AppThemeData.textThemeBold),
-            GestureDetector(
-              onTap: () {
-                // Handle "See all"
-              },
-              child: Text("See all", style: AppThemeData.textThemeRegular),
-            ),
-          ],
-        ),
-      ),
-      const SizedBox(height: 10),
-      Padding(
-        padding: const EdgeInsets.only(left: 18.0, top: 10),
-        child: SizedBox(
-          height: 140, // Adjust height as needed
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: _filteredSongs.length,
-            itemBuilder: (context, index) {
-              final item = _filteredSongs[index]; // assuming it has image and name
-              return Container(
-                width: 100,
-                margin: const EdgeInsets.only(right: 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Image.asset(
-                        "assets/images/demo_img.jpg", // or use Image.asset if local
-                        height: 90,
-                        width: 90,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      "test1",
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              );
-            },
+  Widget _builderPopularArtist(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 20.0, top: 15, right: 18),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("Top Playlists", style: AppThemeData.textThemeBold),
+              GestureDetector(
+                onTap: () {
+                  // Handle "See all"
+                },
+                child: Text("See all", style: AppThemeData.textThemeRegular),
+              ),
+            ],
           ),
         ),
-      ),
-    ],
-  );
+        const SizedBox(height: 10),
+        Padding(
+          padding: const EdgeInsets.only(left: 18.0, top: 10),
+          child: SizedBox(
+            height: 140, // Adjust height as needed
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: _filteredSongs.length,
+              itemBuilder: (context, index) {
+                final item =
+                    _filteredSongs[index]; // assuming it has image and name
+                return Container(
+                  width: 100,
+                  margin: const EdgeInsets.only(right: 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: Image.asset(
+                          "assets/images/demo_img.jpg", // or use Image.asset if local
+                          height: 90,
+                          width: 90,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "test1",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }
 
-
-}
 //old ui----------------------------------------------------------
 // // RecentPlay
 // Column(

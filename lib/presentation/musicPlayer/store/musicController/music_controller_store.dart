@@ -50,6 +50,10 @@ abstract class _MusicControllerStore with Store {
   // Playback state
   @observable
   bool _isPlaying = false;
+
+  // Playback state
+  @observable
+  bool _isLyrics = false;
   
 // Playback state
   @observable
@@ -90,7 +94,11 @@ abstract class _MusicControllerStore with Store {
   // Getters
   @computed
   bool get isPlaying => _isPlaying;
-  
+
+   // Getters
+  @computed
+  bool get isLyrics => _isLyrics;
+
   // Getters
   @computed
   bool get isDownloadedPlaying => _isDownloadedPlaying;
@@ -292,6 +300,12 @@ abstract class _MusicControllerStore with Store {
     await playDownloaded(previoudPlay.audio.toString());
   }
 
+
+  @action
+  Future<void> ChangeIsLyrics({required bool val}) async {
+ 
+    _isLyrics = val;
+  }
 
   // general methods:-----------------------------------------------------------
   Future init() async {

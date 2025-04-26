@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       builder: (context) {
         return Sizer(
           builder: (context, orientation, deviceType) => MaterialApp(
-            // showSemanticsDebugger: true,
+            showSemanticsDebugger: false,
             debugShowCheckedModeBanner: false,
             title: Strings.appName,
             theme:
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
                     ? AppThemeData.darkThemeData
                     : AppThemeData.lightThemeData,
             routes: Routes.routes,
-            home:  SplashScreen(), //SplashScreen(),
+            home:  SplashScreen(), 
           ),
         );
       },

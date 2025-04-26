@@ -43,7 +43,10 @@ class _CategoryViewScreenState extends State<CategoryViewScreen> {
                     _isExpanded = !_isExpanded;
                   });
                 },
-                child: Text( _isExpanded ? "See less" : "See all", style: AppThemeData.textThemeRegular),
+                child: Text(
+                  _isExpanded ? "See less" : "See all",
+                  style: AppThemeData.textThemeRegular,
+                ),
               ),
             ],
           ),
@@ -59,7 +62,12 @@ class _CategoryViewScreenState extends State<CategoryViewScreen> {
                   categories = _CategoryStore.CategoryList;
 
                   if (categories!.isEmpty || categories!.isEmpty) {
-                    return Center(child: Text("No categories available",  style: AppThemeData.textThemeMedium ,));
+                    return Center(
+                      child: Text(
+                        "No categories available",
+                        style: AppThemeData.textThemeMedium,
+                      ),
+                    );
                   }
                 }
                 int visibleItemCount =
@@ -68,79 +76,96 @@ class _CategoryViewScreenState extends State<CategoryViewScreen> {
                         : (categories!.length >= 4)
                         ? 4
                         : categories!.length;
-                return categories!.length == 0 ? Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: Text("No categories available", style: AppThemeData.textThemeMedium ,),
-                ) : Column(
-                  children: [
-                    GridView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: visibleItemCount,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 14,
-                        mainAxisSpacing: 14,
-                        childAspectRatio: 3,
+                return categories!.length == 0
+                    ? Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: Text(
+                        "No categories available",
+                        style: AppThemeData.textThemeMedium,
                       ),
-                      itemBuilder: (context, index) {
-                        final item = categories![index];
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).pushNamed(
-                              Routes.subCategoryList,
-                              arguments: {
-                                'id': categories![index].id,
-                                'name' : categories![index].name
-                              } 
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
-                              gradient: LinearGradient(
-                                colors: [
-                                  Color.fromARGB(255, 29, 162, 244),
-                                  Color.fromARGB(255, 156, 213, 251),
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
+                    )
+                    : Column(
+                      children: [
+                        GridView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: visibleItemCount,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 14,
+                                mainAxisSpacing: 14,
+                                childAspectRatio: 3,
                               ),
-                            ),
-                            padding: EdgeInsets.symmetric(horizontal: 12),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 9.h,
-                                  child: Text(
-                                    item.name.toString(),
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
+                          itemBuilder: (context, index) {
+                            final item = categories![index];
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).pushNamed(
+                                  Routes.subCategoryList,
+                                  arguments: {
+                                    'id': categories![index].id,
+                                    'name': categories![index].name,
+                                  },
+                                );
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Color.fromARGB(255, 29, 162, 244),
+                                      Color.fromARGB(255, 156, 213, 251),
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
                                   ),
                                 ),
-                               
-                               Padding(
-                                 padding: const EdgeInsets.only(top:  5.0, left: 15, right: 5),
-                                 child: Expanded(child: Image.asset("assets/images/demo_category_icon.png" , height: 7.h, width: 10.w, fit: BoxFit.fitHeight, )),
-                               ),
-                                //   Image.network(
-                                //   item.image.toString(),
-                                //   fit: BoxFit.cover,
-                                // ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                );
+                                padding: EdgeInsets.symmetric(horizontal: 12),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 9.h,
+                                      child: Text(
+                                        item.name.toString(),
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        top: 5.0,
+                                        left: 15,
+                                        right: 5,
+                                      ),
+                                      child: Expanded(
+                                        child: Image.asset(
+                                          "assets/images/demo_category_icon.png",
+                                          height: 7.h,
+                                          width: 10.w,
+                                          fit: BoxFit.fitHeight,
+                                        ),
+                                      ),
+                                    ),
+                                    //   Image.network(
+                                    //   item.image.toString(),
+                                    //   fit: BoxFit.cover,
+                                    // ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    );
               },
             ),
           ),
