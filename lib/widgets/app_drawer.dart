@@ -16,7 +16,6 @@ class _AppDrawerState extends State<AppDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      
       backgroundColor: Color.fromARGB(229, 255, 255, 255),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -26,7 +25,6 @@ class _AppDrawerState extends State<AppDrawer> {
       ),
       child: Container(
         decoration: BoxDecoration(
-          
           color: const Color.fromARGB(181, 239, 237, 237),
           // gradient: LinearGradient(
           //   colors: [Colors.white.withOpacity(0.3), Colors.white.withOpacity(0.3)],
@@ -71,12 +69,9 @@ class _AppDrawerState extends State<AppDrawer> {
                   children: [
                     _buildMenuItem(Icons.home, 'Home', () {
                       Navigator.of(context).pushReplacementNamed(Routes.home);
-
                     }, selected: true),
                     _buildMenuItem(Icons.download, 'Downloads', () {
-                      Navigator.of(
-                        context,
-                      ).pop();
+                      Navigator.of(context).pop();
                       Navigator.of(
                         context,
                       ).pushNamed(Routes.downloadedMusicPlayList);
@@ -86,7 +81,11 @@ class _AppDrawerState extends State<AppDrawer> {
                       'My Music',
                       () {},
                     ),
-                    _buildMenuItem(Icons.playlist_add, 'Playlists', () {}),
+                    _buildMenuItem(Icons.playlist_add, 'Playlists', () {
+                      Navigator.of(
+                        context,
+                      ).pushNamed(Routes.musicPlayListScreen);
+                    }),
                     _buildMenuItemWithBadge(
                       Icons.notifications,
                       'Notifications',
@@ -158,7 +157,11 @@ class _AppDrawerState extends State<AppDrawer> {
                 ),
                 child: Text(
                   '$badgeCount',
-                  style: TextStyle(color: Colors.white, fontSize: 12, fontFamily: 'Poppins'),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontFamily: 'Poppins',
+                  ),
                 ),
               )
               : null,

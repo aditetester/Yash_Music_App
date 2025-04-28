@@ -329,6 +329,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerDownloadedScreen> {
                         _musicControllerStore.isDownloadedPlaying
                             ? BottomDownloadedMusicPlayerBar(
                                 musicControllerStore: _musicControllerStore,
+                                isTapEnable: false,
                               )
                             : BottomMusicPlayerBar(
                                 musicControllerStore: _musicControllerStore,

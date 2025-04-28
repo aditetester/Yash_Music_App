@@ -3,10 +3,13 @@ import 'package:boilerplate_new_version/data/network/apis/categories/categories_
 import 'package:boilerplate_new_version/data/network/apis/musicList/musicList_api.dart';
 import 'package:boilerplate_new_version/data/network/apis/subCategories/subCategories_api.dart';
 import 'package:boilerplate_new_version/data/network/local/downloaded_list.dart';
+import 'package:boilerplate_new_version/data/network/local/music_playlist.dart';
 import 'package:boilerplate_new_version/data/repository/categories/categories_respository_imp.dart';
 import 'package:boilerplate_new_version/data/repository/downloadedList/downloaded_respository_imp.dart';
 import 'package:boilerplate_new_version/data/repository/musicList/musicList_respository_imp.dart';
+import 'package:boilerplate_new_version/data/repository/musicPlayList/playlist_respository_imp.dart';
 import 'package:boilerplate_new_version/data/repository/subcategories/subCategories_respository_imp.dart';
+import 'package:boilerplate_new_version/domain/repository/musicPlayList/playList_repository.dart';
 import '../../../di/service_locator.dart';
 import '../../../domain/repository/setting/setting_repository.dart';
 import '../../repository/setting/setting_repository_impl.dart';
@@ -34,6 +37,8 @@ class RepositoryModule {
    getIt.registerSingleton<DownloadedRespositoryImp> (DownloadedRespositoryImp(
       getIt<DownloadedMusicListApi>(),
     ));
-   
+     getIt.registerSingleton<PlayListRespositoryImp> (PlayListRespositoryImp(
+      getIt<MusicPlaylistApi>(),
+    ));
   }
 }
