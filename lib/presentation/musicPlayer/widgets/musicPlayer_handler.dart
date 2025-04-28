@@ -29,8 +29,10 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   }
 
   void _notifyAudioHandler() {
-    
-    final recentPlay = _musicControllerStore.recentMusic;
+
+    var recentPlay;
+
+    recentPlay = _musicControllerStore.isDownloadedPlaying ? _musicControllerStore.recentDownloadedMusicPlay :  _musicControllerStore.recentMusic;
    
       mediaItem.add(
         MediaItem(

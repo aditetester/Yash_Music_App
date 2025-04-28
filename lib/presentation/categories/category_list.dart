@@ -3,6 +3,7 @@ import 'package:boilerplate_new_version/domain/entity/categories/category.dart';
 import 'package:boilerplate_new_version/presentation/categories/store/categories_store.dart';
 import 'package:boilerplate_new_version/presentation/categories/widgets/category_items.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
+import 'package:boilerplate_new_version/widgets/bottom_downloadedMusicPlayer_bar.dart';
 import 'package:boilerplate_new_version/widgets/bottom_musicPlayer_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -66,16 +67,24 @@ class _CategoryListState extends State<CategoryList> {
         },
       ),
       
-         bottomNavigationBar: 
-         IntrinsicHeight(
-    child: Column(
-      mainAxisSize: MainAxisSize.min, // Ensure the column takes only required height
-      children: [
-        BottomMusicPlayerBar(musicControllerStore: _musicControllerStore),
-        // AdsScreen(),
-      ],
-    ),
-         ),
+          bottomNavigationBar: Observer(
+        builder: (context) => IntrinsicHeight(
+          child: Column(
+            mainAxisSize:
+                MainAxisSize.min, // Ensure the column takes only required height
+            children: [
+              _musicControllerStore.isDownloadedPlaying
+                  ? BottomDownloadedMusicPlayerBar(
+                    musicControllerStore: _musicControllerStore,
+                  )
+                  : BottomMusicPlayerBar(
+                    musicControllerStore: _musicControllerStore,
+                  ),
+              // AdsScreen(),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

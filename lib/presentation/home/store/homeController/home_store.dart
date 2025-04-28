@@ -21,7 +21,9 @@ abstract class _HomeControllerStore with Store {
   List<String> _recentlyPlayedSongs = [
     'Song A',
     'Song B',
-    'Song C'
+    'Song C',
+    'Song D',
+    'Song E',
   ];
 
   // getters:-------------------------------------------------------------------

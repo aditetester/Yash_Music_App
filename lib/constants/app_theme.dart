@@ -33,44 +33,63 @@ class AppThemeData {
   //   _lightFocusColor,
   // );
 
-static ThemeData lightThemeData = themeData(lightColorScheme, _lightFocusColor);
-
-static ThemeData themeData(ColorScheme colorScheme, Color focusColor) {
-  return ThemeData(
-    colorScheme: colorScheme,
-    textTheme: _textTheme,
-    // Matches manifest.json colors and background color.
-    primaryColor: const Color(0xFFF5F5F5),
-    appBarTheme: AppBarTheme(
-      systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarColor: Color.fromRGBO(220, 220, 220, 1),
-        statusBarIconBrightness: Brightness.dark,
-      ),
-      titleTextStyle: TextStyle(
-        color: Colors.black,
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-      ),
-      centerTitle: true,
-      backgroundColor: const Color.fromARGB(255, 240, 240, 240),
-      elevation: 0.0,
-      iconTheme: IconThemeData(color: Colors.black),
-    ),
-    iconTheme: IconThemeData(color: colorScheme.onPrimary),
-    canvasColor: colorScheme.surface,
-    scaffoldBackgroundColor: Color.fromARGB(255, 245, 245, 245),
-    highlightColor: Colors.transparent,
-    focusColor: focusColor,
-    snackBarTheme: SnackBarThemeData(
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Color.alphaBlend(
-        _darkFillColor.withOpacity(0.80),
-        _lightFillColor,
-      ),
-      contentTextStyle: _textTheme.titleMedium!.apply(color: _lightFillColor),
-    ),
+  static ThemeData lightThemeData = themeData(
+    lightColorScheme,
+    _lightFocusColor,
   );
-}
+
+  static TextStyle textThemeBold = TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 16,
+          fontWeight: FontWeight.w700,
+        );
+
+  static TextStyle textThemeMedium = TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 14,
+        );
+ static TextStyle textThemeRegular = TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 12,
+        );
+
+
+  static ThemeData themeData(ColorScheme colorScheme, Color focusColor) {
+    return ThemeData(
+      colorScheme: colorScheme,
+      textTheme: _textTheme,
+      // Matches manifest.json colors and background color.
+      primaryColor: Colors.black,
+      appBarTheme: AppBarTheme(
+        // systemOverlayStyle: SystemUiOverlayStyle(
+        //   statusBarColor: Color.fromRGBO(220, 220, 220, 1),
+        //   statusBarIconBrightness: Brightness.dark,
+        // ),
+        titleTextStyle: TextStyle(
+          color: Colors.black,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 0.0,
+        iconTheme: IconThemeData(color: Colors.black),
+      ),
+      iconTheme: IconThemeData(color: colorScheme.onPrimary),
+      canvasColor: colorScheme.surface,
+      scaffoldBackgroundColor: Colors.white,
+      highlightColor: Colors.transparent,
+      focusColor: focusColor,
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Color.alphaBlend(
+          _darkFillColor.withOpacity(0.80),
+          _lightFillColor,
+        ),
+        contentTextStyle: _textTheme.titleMedium!.apply(color: _lightFillColor),
+      ),
+    );
+  }
 
   static ThemeData darkThemeData = themeData2(darkColorScheme, _darkFocusColor);
   static ThemeData themeData2(ColorScheme colorScheme, Color focusColor) {
@@ -96,7 +115,12 @@ static ThemeData themeData(ColorScheme colorScheme, Color focusColor) {
       ),
       iconTheme: IconThemeData(color: colorScheme.onPrimary),
       canvasColor: colorScheme.surface,
-      scaffoldBackgroundColor: Color.fromARGB(214, 22, 97, 101), //  Colors.teal.shade800
+      scaffoldBackgroundColor: Color.fromARGB(
+        214,
+        22,
+        97,
+        101,
+      ), //  Colors.teal.shade800
       highlightColor: Colors.transparent,
       focusColor: focusColor,
       snackBarTheme: SnackBarThemeData(
@@ -109,7 +133,6 @@ static ThemeData themeData(ColorScheme colorScheme, Color focusColor) {
       ),
     );
   }
-
 
   static const ColorScheme lightColorScheme = ColorScheme(
     primary: Color(0xFFd21e1d),
@@ -151,6 +174,7 @@ static ThemeData themeData(ColorScheme colorScheme, Color focusColor) {
       fontSize: 20.0,
       color: Colors.white,
     ),
+
     bodySmall: GoogleFonts.oswald(fontWeight: _semiBold, fontSize: 16.0),
     headlineSmall: GoogleFonts.oswald(fontWeight: _medium, fontSize: 16.0),
     titleMedium: GoogleFonts.montserrat(fontWeight: _medium, fontSize: 16.0),

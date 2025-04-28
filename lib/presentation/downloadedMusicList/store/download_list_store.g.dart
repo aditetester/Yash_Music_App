@@ -9,6 +9,13 @@ part of 'download_list_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$DownloadListStore on _downloadListStore, Store {
+  Computed<int>? _$getcurrentTabIndexComputed;
+
+  @override
+  int get getcurrentTabIndex => (_$getcurrentTabIndexComputed ??= Computed<int>(
+          () => super.getcurrentTabIndex,
+          name: '_downloadListStore.getcurrentTabIndex'))
+      .value;
   Computed<List<String>?>? _$getDownloadedListComputed;
 
   @override
@@ -16,6 +23,22 @@ mixin _$DownloadListStore on _downloadListStore, Store {
           Computed<List<String>?>(() => super.getDownloadedList,
               name: '_downloadListStore.getDownloadedList'))
       .value;
+
+  late final _$_currentTabIndexAtom =
+      Atom(name: '_downloadListStore._currentTabIndex', context: context);
+
+  @override
+  int get _currentTabIndex {
+    _$_currentTabIndexAtom.reportRead();
+    return super._currentTabIndex;
+  }
+
+  @override
+  set _currentTabIndex(int value) {
+    _$_currentTabIndexAtom.reportWrite(value, super._currentTabIndex, () {
+      super._currentTabIndex = value;
+    });
+  }
 
   late final _$_downloadedSongListAtom =
       Atom(name: '_downloadListStore._downloadedSongList', context: context);
@@ -81,9 +104,40 @@ mixin _$DownloadListStore on _downloadListStore, Store {
 
   @override
   Future<void> insertDownloadedMusicList(
-      String id, String title, String subTitle, String audio) {
-    return _$insertDownloadedMusicListAsyncAction
-        .run(() => super.insertDownloadedMusicList(id, title, subTitle, audio));
+      {required String id,
+      required String title,
+      required String subTitle,
+      required String audio,
+      required String image,
+      required String lyrics,
+      required String subCategoryId,
+      required String subCategoryName}) {
+    return _$insertDownloadedMusicListAsyncAction.run(() => super
+        .insertDownloadedMusicList(
+            id: id,
+            title: title,
+            subTitle: subTitle,
+            audio: audio,
+            image: image,
+            lyrics: lyrics,
+            subCategoryId: subCategoryId,
+            subCategoryName: subCategoryName));
+  }
+
+  late final _$changeTabAsyncAction =
+      AsyncAction('_downloadListStore.changeTab', context: context);
+
+  @override
+  Future<void> changeTab(int val) {
+    return _$changeTabAsyncAction.run(() => super.changeTab(val));
+  }
+
+  late final _$getLyricsDataAsyncAction =
+      AsyncAction('_downloadListStore.getLyricsData', context: context);
+
+  @override
+  Future<String> getLyricsData(String url) {
+    return _$getLyricsDataAsyncAction.run(() => super.getLyricsData(url));
   }
 
   @override
@@ -91,6 +145,7 @@ mixin _$DownloadListStore on _downloadListStore, Store {
     return '''
 fetchFuture: ${fetchFuture},
 AllDownloadedMusic: ${AllDownloadedMusic},
+getcurrentTabIndex: ${getcurrentTabIndex},
 getDownloadedList: ${getDownloadedList}
     ''';
   }

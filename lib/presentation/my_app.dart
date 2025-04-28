@@ -1,6 +1,7 @@
 import 'package:boilerplate_new_version/presentation/home/home.dart';
 import 'package:boilerplate_new_version/presentation/music/music_list.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/musicPlayer_screen.dart';
+import 'package:sizer/sizer.dart';
 import '../constants/app_theme.dart';
 import '../constants/strings.dart';
 import 'home/store/theme/theme_store.dart';
@@ -18,15 +19,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Observer(
       builder: (context) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: Strings.appName,
-          theme:
-              _themeStore.darkMode
-                  ? AppThemeData.darkThemeData
-                  : AppThemeData.lightThemeData,
-          routes: Routes.routes,
-          home:  SplashScreen(), //SplashScreen(),
+        return Sizer(
+          builder: (context, orientation, deviceType) => MaterialApp(
+            showSemanticsDebugger: false,
+            debugShowCheckedModeBanner: false,
+            title: Strings.appName,
+            theme:
+                _themeStore.darkMode
+                    ? AppThemeData.darkThemeData
+                    : AppThemeData.lightThemeData,
+            routes: Routes.routes,
+            home:  SplashScreen(), 
+          ),
         );
       },
     );

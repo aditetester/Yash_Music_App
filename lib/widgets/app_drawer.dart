@@ -1,7 +1,8 @@
-import 'package:boilerplate_new_version/di/service_locator.dart';
-import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:boilerplate_new_version/di/service_locator.dart';
+import 'package:boilerplate_new_version/utils/routes/routes.dart';
+import 'package:flutter_svg/svg.dart';
 import '../presentation/home/store/theme/theme_store.dart';
 
 class AppDrawer extends StatefulWidget {
@@ -11,108 +12,181 @@ class AppDrawer extends StatefulWidget {
 
 class _AppDrawerState extends State<AppDrawer> {
   final ThemeStore _themeStore = getIt<ThemeStore>();
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: const Color.fromARGB(204, 34, 51, 63),
-
-      child: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            AppBar(
-              title: Text('Menu Drawer'),
-              automaticallyImplyLeading: false,
-            ),
-            Divider(color: Colors.white),
-            ListTile(
-              leading: Icon(Icons.home),
-              title: Text('HOME'),
-              onTap: () {
-                Navigator.of(context).pushReplacementNamed(Routes.home);
-              },
-            ),
-            Divider(color: Colors.white),
-            ListTile(
-              
-              leading: Icon(Icons.download),
-              title: Text('DOWNLOAD'),
-              onTap: () {},
-            ),
-            Divider(color: Colors.white),
-            ListTile(
-              
-              leading: Icon(Icons.playlist_add),
-              title: Text('PLAYLISTS'),
-              onTap: () {},
-            ),
-            Divider(color: Colors.white),
-            ListTile(
-              
-              leading: Icon(Icons.queue_music_rounded),
-              title: Text('MY MUSIC'),
-              onTap: () {},
-            ),
-            Divider(color: Colors.white),
-            ListTile(
-              
-              leading: Icon(Icons.notifications_sharp),
-              title: Text('NOTIFICATION'),
-              onTap: () {},
-            ),
-            Divider(color: Colors.white),
-            ListTile(
-              
-              leading: Icon(Icons.share),
-              title: Text('INVITE / SHARE'),
-              onTap: () {},
-            ),
-            Divider(color: Colors.white),
-            ListTile(
-              
-              leading: Icon(Icons.star_rate),
-              title: Text('RATE US'),
-              onTap: () {},
-            ),
-            Divider(color: Colors.white),
-            ListTile(
-              
-              leading: Icon(Icons.text_snippet_rounded),
-              title: Text('FEADBACK'),
-              onTap: () {},
-            ),
-            Divider(color: Colors.white),
-            ListTile(
-              
-              leading: Icon(Icons.thumb_up),
-              title: Text('ABOUT US'),
-              onTap: () {},
-            ),
-            Divider(color: Colors.white),
-            ListTile(
-              
-              leading: Icon(Icons.usb_outlined),
-              title: Text('USB EXPLORER'),
-              onTap: () {},
-            ),
-            Divider(color: Colors.white),
-            _buildThemeButton(),
-          ],
+      backgroundColor: Color.fromARGB(229, 255, 255, 255),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(24),
+          bottomRight: Radius.circular(24),
+        ),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(181, 239, 237, 237),
+          // gradient: LinearGradient(
+          //   colors: [Colors.white.withOpacity(0.3), Colors.white.withOpacity(0.3)],
+          //   begin: Alignment.topLeft,
+          //   end: Alignment.bottomRight,
+          // ),
+        ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              // Custom header with back and title
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    Container(
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        icon: Image.asset(
+                          'assets/images/drawer_back_icon.png',
+                          height: 30,
+                          width: 30,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    Text(
+                      "Menu",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: ListView(
+                  children: [
+                    _buildMenuItem(Icons.home, 'Home', () {
+                      Navigator.of(context).pushReplacementNamed(Routes.home);
+                    }, selected: true),
+                    _buildMenuItem(Icons.download, 'Downloads', () {
+                      Navigator.of(context).pop();
+                      Navigator.of(
+                        context,
+                      ).pushNamed(Routes.downloadedMusicPlayList);
+                    }),
+                    _buildMenuItem(
+                      Icons.queue_music_rounded,
+                      'My Music',
+                      () {},
+                    ),
+                    _buildMenuItem(Icons.playlist_add, 'Playlists', () {
+                      Navigator.of(
+                        context,
+                      ).pushNamed(Routes.musicPlayListScreen);
+                    }),
+                    _buildMenuItemWithBadge(
+                      Icons.notifications,
+                      'Notifications',
+                      5,
+                      () {},
+                    ),
+                    _buildDarkModeToggle(),
+                    _buildMenuItem(Icons.share, 'Invite/Share', () {}),
+                    _buildMenuItem(Icons.star_border, 'Rate Us', () {}),
+                    _buildMenuItem(Icons.feedback_outlined, 'Feedback', () {}),
+                    _buildMenuItem(Icons.info_outline, 'About Us', () {}),
+                    _buildMenuItem(Icons.usb_outlined, 'USB Explorer', () {}),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildThemeButton() {
+  Widget _buildMenuItem(
+    IconData icon,
+    String title,
+    VoidCallback onTap, {
+    bool selected = false,
+  }) {
+    return ListTile(
+      selected: selected,
+      selectedTileColor: const Color.fromARGB(255, 150, 196, 233),
+      leading: Icon(icon, color: Colors.black),
+      title: Text(
+        title,
+        style: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: Colors.black,
+        ),
+      ),
+      onTap: onTap,
+    );
+  }
+
+  Widget _buildMenuItemWithBadge(
+    IconData icon,
+    String title,
+    int badgeCount,
+    VoidCallback onTap,
+  ) {
+    return ListTile(
+      leading: Icon(icon, color: Colors.black),
+      title: Text(
+        title,
+        style: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      trailing:
+          badgeCount > 0
+              ? Container(
+                padding: EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  shape: BoxShape.circle,
+                ),
+                child: Text(
+                  '$badgeCount',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              )
+              : null,
+      onTap: onTap,
+    );
+  }
+
+  Widget _buildDarkModeToggle() {
     return Observer(
       builder: (context) {
-        return ListTile(
-          onTap: () {
-            _themeStore.changeBrightnessToDark(!_themeStore.darkMode);
-          },
-          leading: Icon(
-            _themeStore.darkMode ? Icons.brightness_5 : Icons.brightness_3,
+        return SwitchListTile(
+          activeColor: Colors.blue,
+          title: Text(
+            'Dark Mode',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-          title: _themeStore.darkMode ? Text('CHANGE TO LIGHT MODE') : Text('CHANGE TO DARK MODE'),
+          secondary: Icon(Icons.nightlight_round),
+          value: _themeStore.darkMode,
+          onChanged: (value) {
+            // _themeStore.changeBrightnessToDark(value);
+          },
         );
       },
     );
