@@ -5,8 +5,10 @@ import 'package:boilerplate_new_version/domain/usecase/categories/get_category_u
 import 'package:boilerplate_new_version/domain/usecase/downloaded_list/get_downloadedList_usecase.dart';
 import 'package:boilerplate_new_version/domain/usecase/downloaded_list/insert_DownloadedList_usecase.dart';
 import 'package:boilerplate_new_version/domain/usecase/music_list/get_musicList_usecase.dart';
-import 'package:boilerplate_new_version/domain/usecase/music_playlist/get_downloadedList_usecase.dart';
-import 'package:boilerplate_new_version/domain/usecase/music_playlist/insert_DownloadedList_usecase.dart';
+import 'package:boilerplate_new_version/domain/usecase/music_playlist/get_music_playlist_usecase.dart';
+import 'package:boilerplate_new_version/domain/usecase/music_playlist/insert_music_playlist_usecase.dart';
+import 'package:boilerplate_new_version/domain/usecase/recent_play_list/get_recent_playist_usecase.dart';
+import 'package:boilerplate_new_version/domain/usecase/recent_play_list/insert_recent_playist_usecase.dart';
 import 'package:boilerplate_new_version/domain/usecase/sub_categories/get_subcategories_usecase.dart';
 import 'package:boilerplate_new_version/presentation/categories/store/categories_store.dart';
 import 'package:boilerplate_new_version/presentation/home/store/homeController/home_store.dart';
@@ -14,6 +16,7 @@ import 'package:boilerplate_new_version/presentation/downloadedMusicList/store/d
 import 'package:boilerplate_new_version/presentation/music/store/music_list_store.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayListScreen/store/music_playlist_store.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
+import 'package:boilerplate_new_version/presentation/recent_play_list/store/recent_music_list_store.dart';
 import 'package:boilerplate_new_version/presentation/subCategories/store/sub_categories_store.dart';
 
 import '../../../core/stores/error/error_store.dart';
@@ -71,6 +74,11 @@ class StoreModule {
       getIt<InsertMusicsPlayListUseCase>(),
         getIt<ErrorStore>(),getIt<LyricsApi>()));
 
+
+      getIt.registerSingleton<RecentMusicListStore>(
+      RecentMusicListStore(getIt<GetRecentPlayListUsecase>(),
+      getIt<InsertRecentPlayListUseCase>(),
+        getIt<ErrorStore>(),getIt<LyricsApi>()));
 
 
   }

@@ -5,19 +5,19 @@ import 'package:boilerplate_new_version/domain/repository/musicPlayList/playList
 
 class PlayListRespositoryImp extends PlayListRepository {
   // api objects
-  final MusicPlaylistApi _musicPlaylistApi;
+  final LocalMusicPlayList _LocalMusicPlayList;
 
   // constructor
-  PlayListRespositoryImp(this._musicPlaylistApi);
+  PlayListRespositoryImp(this._LocalMusicPlayList);
 
   @override
   Future<AllMusicList> getMusicPlayList() async {
-    return await _musicPlaylistApi.getMusicPlayList();
+    return await _LocalMusicPlayList.getMusicPlayList();
   }
   
   @override
   Future<int> insert(MusicListModule data) async {
-   return await _musicPlaylistApi.insertMusicPlayList(data);
+   return await _LocalMusicPlayList.insertMusicPlayList(data);
   }
   
 }

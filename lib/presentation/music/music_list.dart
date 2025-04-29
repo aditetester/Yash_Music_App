@@ -4,6 +4,7 @@ import 'package:boilerplate_new_version/presentation/downloadedMusicList/store/d
 import 'package:boilerplate_new_version/presentation/music/store/music_list_store.dart';
 import 'package:boilerplate_new_version/presentation/music/widgets/music_items.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
+import 'package:boilerplate_new_version/presentation/recent_play_list/store/recent_music_list_store.dart';
 import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:boilerplate_new_version/widgets/bottom_downloadedMusicPlayer_bar.dart';
 import 'package:boilerplate_new_version/widgets/bottom_musicPlayer_bar.dart';
@@ -23,8 +24,12 @@ class MusicList extends StatefulWidget {
 
 class _MusicListState extends State<MusicList> {
   final MusicListStore _MusicListStore = getIt<MusicListStore>();
-  final MusicControllerStore _musicControllerStore = getIt<MusicControllerStore>();
+  final MusicControllerStore _musicControllerStore =
+      getIt<MusicControllerStore>();
+  final RecentMusicListStore _recentPlayListStore =
+      getIt<RecentMusicListStore>();
   final DownloadListStore _downloadListStore = getIt<DownloadListStore>();
+
   final TextEditingController _searchController = TextEditingController();
 
   List<MusicListModule>? allMusicList = [];
@@ -36,6 +41,7 @@ class _MusicListState extends State<MusicList> {
   void initState() {
     super.initState();
     _MusicListStore.fetchMusicList();
+    _recentPlayListStore.fetchRecentMusicList();
     _downloadListStore.fetchDownloadedMusicList();
     _searchController.addListener(_filterMusicList);
 
@@ -56,9 +62,10 @@ class _MusicListState extends State<MusicList> {
     final query = _searchController.text.toLowerCase();
     if (allMusicList != null && allMusicList!.isNotEmpty) {
       setState(() {
-        filteredMusicList = allMusicList!
-            .where((music) => music.title!.toLowerCase().contains(query))
-            .toList();
+        filteredMusicList =
+            allMusicList!
+                .where((music) => music.title!.toLowerCase().contains(query))
+                .toList();
       });
     } else {
       setState(() {
@@ -69,7 +76,8 @@ class _MusicListState extends State<MusicList> {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> subcategory = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final Map<String, dynamic> subcategory =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     return Scaffold(
       body: Container(
         height: double.infinity,
@@ -94,16 +102,21 @@ class _MusicListState extends State<MusicList> {
         ),
       ),
       bottomNavigationBar: Observer(
-        builder: (context) => IntrinsicHeight(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _musicControllerStore.isDownloadedPlaying
-                  ? BottomDownloadedMusicPlayerBar(musicControllerStore: _musicControllerStore)
-                  : BottomMusicPlayerBar(musicControllerStore: _musicControllerStore),
-            ],
-          ),
-        ),
+        builder:
+            (context) => IntrinsicHeight(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _musicControllerStore.isDownloadedPlaying
+                      ? BottomDownloadedMusicPlayerBar(
+                        musicControllerStore: _musicControllerStore,
+                      )
+                      : BottomMusicPlayerBar(
+                        musicControllerStore: _musicControllerStore,
+                      ),
+                ],
+              ),
+            ),
       ),
     );
   }
@@ -150,20 +163,24 @@ class _MusicListState extends State<MusicList> {
           return ListView.builder(
             padding: EdgeInsets.zero,
             itemCount: 6,
-            itemBuilder: (context, index) => Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-              child: Shimmer.fromColors(
-                baseColor: Colors.grey[300]!,
-                highlightColor: Colors.grey[100]!,
-                child: Container(
-                  height: 10.h,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
+            itemBuilder:
+                (context, index) => Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0,
+                    vertical: 8.0,
+                  ),
+                  child: Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Container(
+                      height: 10.h,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
           );
         }
 
@@ -180,6 +197,16 @@ class _MusicListState extends State<MusicList> {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
+                _recentPlayListStore.insertRecentPlayList(
+                  id: filteredMusicList[index].id.toString(),
+                  title: filteredMusicList[index].title.toString(),
+                  subTitle: filteredMusicList[index].subtitle.toString(),
+                  audio: filteredMusicList[index].audio.toString(),
+                  image: filteredMusicList[index].image.toString(),
+                  lyrics: filteredMusicList[index].lyrics.toString(),
+                  subCategoryId: '1',
+                  subCategoryName: "Recent Play",
+                );
                 _musicControllerStore.playNext(
                   currentIndex: index,
                   nextplay: filteredMusicList[index],
@@ -201,7 +228,6 @@ class _MusicListState extends State<MusicList> {
     );
   }
 }
-
 
 // old UI---------------------------------------------------------
 // import 'package:boilerplate_new_version/di/service_locator.dart';

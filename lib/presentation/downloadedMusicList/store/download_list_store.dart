@@ -105,6 +105,8 @@ abstract class _downloadListStore with Store {
                   return songs.title.toString();
                 }).toList();
           }
+
+         
         })
         .catchError((error) {
           errorStore.errorMessage = error;

@@ -5,7 +5,7 @@ import 'package:boilerplate_new_version/domain/repository/downloaded_list/downlo
 
 class DownloadedRespositoryImp extends downloadedListRepository {
   // api objects
-  final DownloadedMusicListApi _DownloadedListApi;
+  final LocalDownloadedMusicList _DownloadedListApi;
 
   // constructor
   DownloadedRespositoryImp(this._DownloadedListApi);
