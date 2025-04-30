@@ -14,4 +14,14 @@ class AllMusicList {
   
     return AllMusicList(MusicListData: MusicListData);
   }
+
+
+  factory AllMusicList.fromJson2(List<dynamic> json) {
+    
+    List<MusicListModule> MusicListData = <MusicListModule>[];
+    
+    MusicListData =  json.map((music) => MusicListModule.fromMap2(music)).toList();
+  
+    return AllMusicList(MusicListData: MusicListData);
+  }
 }

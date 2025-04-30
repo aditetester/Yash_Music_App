@@ -1,5 +1,7 @@
 import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:sizer/sizer.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -21,41 +23,33 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      body: Container(
+        height: double.infinity,
+        decoration: BoxDecoration(
+          color: Color.fromARGB(164, 223, 221, 234),
+          image: DecorationImage(
+            image: AssetImage("assets/images/background.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Positioned.fill(
+          top: 0,
+          child: Padding(
+            padding: const EdgeInsets.only( top: 170, right: 10, left: 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SvgPicture.asset("assets/svg/splash_logo.svg"),
+                SizedBox(height: 10.h),
+                SvgPicture.asset("assets/svg/music_player_letter.svg"),
 
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: Image.asset(
-              'assets/images/music_player_logo.jpg',
-              fit: BoxFit.cover,
-
-              // This makes sure the image fills the screen properly
+                SizedBox(height: 25.h),
+                Image.asset("assets/images/adite_tech_logo.png", height: 7.h,)
+              ],
             ),
           ),
-
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Image.network(
-                'https://media.licdn.com/dms/image/v2/D4D0BAQG8PnbuFX8cfA/company-logo_200_200/company-logo_200_200/0/1719550837248/adite_technologies_llp_logo?e=2147483647&v=beta&t=uATlUtOx4iYye3zXutZePmn4Xg98RWXWvo376-NTFrc', // Replace with actual image URL or asset path
-                height: 50,
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'www.aditetech.in',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-        ],
+        ),
       ),
     );
   }

@@ -9,7 +9,16 @@ class MusicListModule {
   String? subCategoryId;
   String? subCategoryName;
   String? lyrics;
-  MusicListModule({this.id, this.title, this.image, this.subCategoryId, this.subtitle, this.audio, this.subCategoryName, this.lyrics});
+  MusicListModule({
+    this.id,
+    this.title,
+    this.image,
+    this.subCategoryId,
+    this.subtitle,
+    this.audio,
+    this.subCategoryName,
+    this.lyrics,
+  });
 
   factory MusicListModule.fromMap(Map<String, dynamic> json) => MusicListModule(
     id: json['_id'],
@@ -19,20 +28,31 @@ class MusicListModule {
     audio: "${NetworkConstants.baseUrl}${json['audio']['file']}",
     subCategoryId: json['subcategory']['_id'],
     subCategoryName: json['subcategory']['subcategory_name'],
-    lyrics :  "${NetworkConstants.baseUrl}${json['lyrics']['file']}",
-  
+    lyrics: "${NetworkConstants.baseUrl}${json['lyrics']['file']}",
   );
-  
-  Map<String, dynamic> toJson() {
+
+  factory MusicListModule.fromMap2(Map<String, dynamic> json) =>
+      MusicListModule(
+        id: json['id'].toString(),
+        title: json['title'].toString(),
+        subtitle: json['subTitle'].toString(),
+        audio: json['audio'].toString(),
+        image: json['image'].toString(),
+        subCategoryId: json['subCategoryId'].toString(),
+        subCategoryName: json['subCategoryName'].toString(),
+        lyrics: json['lyrics'].toString(),
+      );
+
+  Map<String, dynamic> toJson(MusicListModule data) {
     return {
-      '_id': id,
-      'image': image,
-      'title': title,
-      'subtitle': subtitle,
-      'audio': audio,
-      'subcategory_id': subCategoryId,
-      'subCategoryName': subCategoryName,
-      'lyrics' : lyrics,
-  };
- }
+      'id': data.id.toString(),
+      'title': data.title.toString(),
+      'subtitle': data.subtitle.toString(),
+      'audio': data.audio.toString(),
+      'image': data.image.toString(),
+      'subCategoryId': data.subCategoryId.toString(),
+      'subCategoryName': data.subCategoryName.toString(),
+      'lyrics': data.lyrics.toString(),
+    };
+  }
 }

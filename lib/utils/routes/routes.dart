@@ -4,6 +4,7 @@ import 'package:boilerplate_new_version/presentation/music/music_list.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayListScreen/music_playlist_screen.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/musicPlayer_DownloadedScreen.dart';
 import 'package:boilerplate_new_version/presentation/musicPlayer/musicPlayer_screen.dart';
+import 'package:boilerplate_new_version/presentation/recent_play_list/recent_music_list.dart';
 import 'package:boilerplate_new_version/presentation/searchMusicScreen/search_music_screen.dart';
 import 'package:boilerplate_new_version/presentation/subCategories/sub_category_list.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,8 @@ class Routes {
   static const String musicPlayerDownloadedScreen =
       '/musicPlayerDownloadedScreen';
   static const String musicPlayListScreen = '/musicPlayListScreen';
+  static const String recentMusicPlayListScreen = '/recentMusicPlayListScreen';
+  
 
   static final routes = <String, WidgetBuilder>{
     home: (BuildContext context) => HomeScreen(),
@@ -39,5 +42,7 @@ class Routes {
     musicPlayerDownloadedScreen:
         (BuildContext context) => MusicPlayerDownloadedScreen(),
     musicPlayListScreen: (BuildContext context) => MusicPlayListScreen(),
+    recentMusicPlayListScreen: (BuildContext context) => RecentMusicList()
+    
   };
 }

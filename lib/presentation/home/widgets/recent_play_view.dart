@@ -1,5 +1,8 @@
 import 'package:boilerplate_new_version/constants/app_theme.dart';
+import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sizer/sizer.dart';
 
 class RecentPlayView extends StatelessWidget {
   final String id;
@@ -20,7 +23,11 @@ class RecentPlayView extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GestureDetector(
-        onTap: () {},
+        onTap: () {
+           Navigator.of(
+                      context,
+                    ).pushNamed(Routes.recentMusicPlayListScreen);
+        },
         child: Container(
           width: 150, // adjust as needed
           height: 180, // adjust as needed
@@ -31,7 +38,7 @@ class RecentPlayView extends StatelessWidget {
                   tag: id,
                   child: FadeInImage(
                     placeholder: AssetImage('assets/icon/icon.png'),
-                    image: AssetImage("assets/images/demo_img.jpg"),
+                    image: NetworkImage(image),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -57,13 +64,14 @@ class RecentPlayView extends StatelessWidget {
                   child: Row(
                     children: [
                       // Flexible text column
-                      Flexible(
+                      Container(
+                        width: 22.w,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Ek Tara Rasta", // Title
+                              title, // Title
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 14,
@@ -74,7 +82,7 @@ class RecentPlayView extends StatelessWidget {
                               maxLines: 1,
                             ),
                             Text(
-                              "Ej Sitara", // Subtitle
+                             subTitle, // Subtitle
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 12,
@@ -86,14 +94,14 @@ class RecentPlayView extends StatelessWidget {
                           ],
                         ),
                       ),
-                      SizedBox(width: 8),
-                      // Icon buttons in a fixed-width box
+                     
+                    //  SizedBox(width: 13,),
                       SizedBox(
-                        width: 60, // small but enough space for 2 icons
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Icon(Icons.download_rounded, size: 20),
+                            SvgPicture.asset("assets/svg/download_icon.svg" , height: 20, width: 20,),
+                            SizedBox(width: 2,),
                             Icon(Icons.more_vert_outlined, size: 20),
                           ],
                         ),
