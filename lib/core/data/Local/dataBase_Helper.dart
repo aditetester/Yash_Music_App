@@ -8,6 +8,9 @@ class MusicPlayerDBHelper {
   static Database? _database; // Singleton Database
 
   String _MusicPlayerTable = 'music_table';
+  String _MusicPlayListTable = 'musicplaylist_table';
+  String _recentPlayListTable = 'recentPlayList_table';
+
   String? id = 'id';
   String? title = 'title';
   String? subTitle = 'subTitle';
@@ -36,6 +39,10 @@ class MusicPlayerDBHelper {
 
   String get getMusicPlayerTableName => _MusicPlayerTable;
 
+  String get getMusicPlayListTable => _MusicPlayListTable;
+
+  String get getRecentPlayListTable => _recentPlayListTable;
+
   Future<Database> get database async {
     if (_database == null) {
       _database = await initializeDatabase();
@@ -44,10 +51,9 @@ class MusicPlayerDBHelper {
   }
 
   Future<Database> initializeDatabase() async {
-  
     Directory directory = await getApplicationDocumentsDirectory();
     String path = directory.path + 'music.db';
-    
+
     // print("DataBasePath: $path");
 
     var musicDatabase = await openDatabase(
@@ -64,6 +70,17 @@ class MusicPlayerDBHelper {
       '$subTitle TEXT, $audio TEXT, $image TEXT, $subCategoryId TEXT, '
       '$subCategoryName TEXT, $lyrics TEXT)',
     );
+    await db.execute(
+      'CREATE TABLE $_MusicPlayListTable($id TEXT, $title TEXT, '
+      '$subTitle TEXT, $audio TEXT, $image TEXT, $subCategoryId TEXT, '
+      '$subCategoryName TEXT, $lyrics TEXT)',
+    );
+
+    await db.execute(
+      'CREATE TABLE $_recentPlayListTable($id TEXT, $title TEXT, '
+      '$subTitle TEXT, $audio TEXT, $image TEXT, $subCategoryId TEXT, '
+      '$subCategoryName TEXT, $lyrics TEXT)',
+    );
   }
 
   // Fetch Operation: Get all note objects from database
@@ -71,6 +88,20 @@ class MusicPlayerDBHelper {
     Database db = await this.database;
     //		var result = await db.rawQuery('SELECT * FROM $noteTable order by $colPriority ASC');
     var result = await db.query(_MusicPlayerTable, orderBy: '$id ASC');
+    return result;
+  }
+
+  Future<List<Map<String, dynamic>>> getPlayListMapList() async {
+    Database db = await this.database;
+    //		var result = await db.rawQuery('SELECT * FROM $noteTable order by $colPriority ASC');
+    var result = await db.query(_MusicPlayListTable, orderBy: '$id ASC');
+    return result;
+  }
+
+  Future<List<Map<String, dynamic>>> getRecentPlayListMapList() async {
+    Database db = await this.database;
+    //		var result = await db.rawQuery('SELECT * FROM $noteTable order by $colPriority ASC');
+    var result = await db.query(_recentPlayListTable, orderBy: '$id DESC');
     return result;
   }
 
@@ -92,7 +123,6 @@ class MusicPlayerDBHelper {
   //   );
   //   return result;
   // }
-
 
   Future<int> getCount() async {
     Database db = await this.database;

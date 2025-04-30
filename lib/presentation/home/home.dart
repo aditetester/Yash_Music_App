@@ -238,67 +238,75 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _builderRecentPlay(BuildContext context) {
-    _recentPlay = _recentPlayListStore.AllMusic;
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 20.0, top: 15, right: 18),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Recently Played", style: AppThemeData.textThemeBold),
-              GestureDetector(
-                onTap:
-                    () => Navigator.of(
-                      context,
-                    ).pushNamed(Routes.recentMusicPlayListScreen),
-                child: Text("See all", style: AppThemeData.textThemeRegular),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 10),
-        Padding(
-          padding: const EdgeInsets.only(left: 18.0, top: 10),
-          child:
-              (_isLoading || (_recentPlay?.isNotEmpty ?? false))
-                  ? SizedBox(
-                    height: 18.h, // Set the height only if there is content
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: _isLoading ? 5 : _recentPlay!.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          width: 38.w,
-                          margin: EdgeInsets.only(right: 10),
-                          child:
-                              _isLoading
-                                  ? _shimmerBox(
-                                    width: 38.w,
-                                    height: 18.h,
-                                    borderRadius: BorderRadius.circular(10),
-                                  )
-                                  : RecentPlayView(
-                                    id: _recentPlay![index].id ?? "",
-                                    title:
-                                        _recentPlay![index].title ?? "No Title",
-                                    subTitle:
-                                        _recentPlay![index].subtitle ?? "",
-                                    image: _recentPlay![index].image ?? "",
-                                  ),
-                        );
-                      },
-                    ),
-                  )
-                  : Padding(
-                    padding: const EdgeInsets.only(top: 20.0, bottom: 20),
+    return Observer(
+      builder: (context) {
+        _recentPlay = _recentPlayListStore.AllMusic;
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, top: 15, right: 18),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Recently Played", style: AppThemeData.textThemeBold),
+                  GestureDetector(
+                    onTap:
+                        () => Navigator.of(
+                          context,
+                        ).pushNamed(Routes.recentMusicPlayListScreen),
                     child: Text(
-                      "No Recent Play available",
-                      style: AppThemeData.textThemeMedium,
+                      "See all",
+                      style: AppThemeData.textThemeRegular,
                     ),
                   ),
-        ),
-      ],
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.only(left: 18.0, top: 10),
+              child:
+                  (_isLoading || (_recentPlay?.isNotEmpty ?? false))
+                      ? SizedBox(
+                        height: 18.h, // Set the height only if there is content
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: _isLoading ? 5 : _recentPlay!.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              width: 38.w,
+                              margin: EdgeInsets.only(right: 10),
+                              child:
+                                  _isLoading
+                                      ? _shimmerBox(
+                                        width: 38.w,
+                                        height: 18.h,
+                                        borderRadius: BorderRadius.circular(10),
+                                      )
+                                      : RecentPlayView(
+                                        id: _recentPlay![index].id ?? "",
+                                        title:
+                                            _recentPlay![index].title ??
+                                            "No Title",
+                                        subTitle:
+                                            _recentPlay![index].subtitle ?? "",
+                                        image: _recentPlay![index].image ?? "",
+                                      ),
+                            );
+                          },
+                        ),
+                      )
+                      : Padding(
+                        padding: const EdgeInsets.only(top: 20.0, bottom: 20),
+                        child: Text(
+                          "No Recent Play available",
+                          style: AppThemeData.textThemeMedium,
+                        ),
+                      ),
+            ),
+          ],
+        );
+      },
     );
   }
 

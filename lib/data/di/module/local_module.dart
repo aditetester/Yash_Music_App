@@ -1,8 +1,5 @@
 import 'dart:async';
-
-import 'package:boilerplate_new_version/core/data/Local/db_helper_playlist.dart';
-import 'package:boilerplate_new_version/core/data/Local/db_helper_recent_play.dart';
-import 'package:boilerplate_new_version/core/data/local/database_helper.dart';
+import 'package:boilerplate_new_version/core/data/Local/dataBase_Helper.dart';
 import 'package:boilerplate_new_version/data/network/local/downloaded_list.dart';
 import 'package:boilerplate_new_version/data/network/local/music_playlist.dart';
 import 'package:boilerplate_new_version/data/network/local/recent_music_list.dart';
@@ -15,8 +12,7 @@ class LocalModule {
   static Future<void> configureLocalModuleInjection() async {
     //Local:---------------------------------------------------------------
     getIt.registerSingleton<MusicPlayerDBHelper>(MusicPlayerDBHelper());
-    getIt.registerSingleton<MusicPlayListDBHelper>(MusicPlayListDBHelper());
-    getIt.registerSingleton<RecentPlayListDBHelper>(RecentPlayListDBHelper());
+
 
     // preference manager:------------------------------------------------------
     getIt.registerSingletonAsync<SharedPreferences>(
@@ -31,10 +27,11 @@ class LocalModule {
     );
 
     getIt.registerSingleton<LocalMusicPlayList>(
-      LocalMusicPlayList(getIt<MusicPlayListDBHelper>()),
+      LocalMusicPlayList(getIt<MusicPlayerDBHelper>()),
     );
+   
     getIt.registerSingleton<LocalRecentPlayList>(
-      LocalRecentPlayList(getIt<RecentPlayListDBHelper>()),
+      LocalRecentPlayList(getIt<MusicPlayerDBHelper>()),
     );
     
   }

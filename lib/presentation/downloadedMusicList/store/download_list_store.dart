@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:boilerplate_new_version/core/stores/error/error_store.dart';
 import 'package:boilerplate_new_version/data/network/apis/lyricsPlayer/lyricsPlayer_api.dart';
 import 'package:boilerplate_new_version/domain/entity/downloaded_list/downloaded.dart';

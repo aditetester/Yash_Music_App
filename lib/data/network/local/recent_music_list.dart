@@ -1,14 +1,14 @@
 import 'dart:async';
-import 'package:boilerplate_new_version/core/data/Local/db_helper_playlist.dart';
-import 'package:boilerplate_new_version/core/data/Local/db_helper_recent_play.dart';
+import 'package:boilerplate_new_version/core/data/Local/dataBase_Helper.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicModule_list.dart';
 import 'package:sqflite/sqflite.dart';
 
 class LocalRecentPlayList {
   // dio instance
-  final RecentPlayListDBHelper _dioClient;
+  MusicPlayerDBHelper _dioClient;
   MusicListModule module = MusicListModule();
+  
 
   // injecting dio instance
   LocalRecentPlayList(this._dioClient);

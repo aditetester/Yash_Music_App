@@ -1,4 +1,5 @@
-import 'package:boilerplate_new_version/core/data/local/database_helper.dart';
+import 'dart:async';
+import 'package:boilerplate_new_version/core/data/Local/dataBase_Helper.dart';
 import 'package:boilerplate_new_version/domain/entity/downloaded_list/downloaded.dart';
 import 'package:boilerplate_new_version/domain/entity/downloaded_list/downloaded_list.dart';
 import 'package:sqflite/sqflite.dart';
@@ -9,16 +10,14 @@ class LocalDownloadedMusicList {
   DownloadedListModule module = DownloadedListModule();
 
   // injecting dio instance
-  LocalDownloadedMusicList(this._dioClient){
-   _dioClient.initializeDatabase();
-  }
+  LocalDownloadedMusicList(this._dioClient);
 
   /// Returns list of post in response
   Future<AllDownloadedList> getMusicList() async {
     try {
       await _dioClient.initializeDatabase();
       final res = await _dioClient.getMusicMapList();
-      print("objectdd: $res");
+
       return AllDownloadedList.fromJson(res);
     } catch (e) {
       print(e.toString());
