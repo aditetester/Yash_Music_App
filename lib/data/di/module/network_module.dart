@@ -1,6 +1,7 @@
-import 'package:boilerplate_new_version/data/network/apis/lyricsPlayer/lyricsPlayer_api.dart';
-import 'package:boilerplate_new_version/data/network/apis/musicList/musicList_api.dart';
-import 'package:boilerplate_new_version/data/network/apis/subCategories/subCategories_api.dart';
+
+import 'package:boilerplate_new_version/data/network/apis/lyrics/LyricsPlayer_api.dart';
+import 'package:boilerplate_new_version/data/network/apis/music_list/musicList_api.dart';
+import 'package:boilerplate_new_version/data/network/apis/sub_categories/subCategories_api.dart';
 import '../../../core/data/network/dio/configs/dio_configs.dart';
 import '../../../core/data/network/dio/dio_client.dart';
 import '../../network/apis/categories/categories_api.dart';

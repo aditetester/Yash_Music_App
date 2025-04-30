@@ -1,17 +1,17 @@
 import 'dart:async';
 
 import 'package:boilerplate_new_version/data/network/apis/categories/categories_api.dart';
-import 'package:boilerplate_new_version/data/network/apis/musicList/musicList_api.dart';
-import 'package:boilerplate_new_version/data/network/apis/subCategories/subCategories_api.dart';
+import 'package:boilerplate_new_version/data/network/apis/music_list/musicList_api.dart';
+import 'package:boilerplate_new_version/data/network/apis/sub_categories/subCategories_api.dart';
 import 'package:boilerplate_new_version/data/network/local/downloaded_list.dart';
 import 'package:boilerplate_new_version/data/network/local/music_playlist.dart';
 import 'package:boilerplate_new_version/data/network/local/recent_music_list.dart';
 import 'package:boilerplate_new_version/data/repository/categories/categories_respository_imp.dart';
-import 'package:boilerplate_new_version/data/repository/downloadedList/downloaded_respository_imp.dart';
-import 'package:boilerplate_new_version/data/repository/musicList/musicList_respository_imp.dart';
-import 'package:boilerplate_new_version/data/repository/musicPlayList/playlist_respository_imp.dart';
+import 'package:boilerplate_new_version/data/repository/downloaded_list/downloaded_respository_imp.dart';
+import 'package:boilerplate_new_version/data/repository/music_list/musicList_respository_imp.dart';
+import 'package:boilerplate_new_version/data/repository/music_play_list/playlist_respository_imp.dart';
 import 'package:boilerplate_new_version/data/repository/recent_play_list/recent_playlist_respository_imp.dart';
-import 'package:boilerplate_new_version/data/repository/subcategories/subCategories_respository_imp.dart';
+import 'package:boilerplate_new_version/data/repository/sub_categories/subCategories_respository_imp.dart';
 
 import '../../../di/service_locator.dart';
 import '../../../domain/repository/setting/setting_repository.dart';

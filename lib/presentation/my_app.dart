@@ -1,6 +1,6 @@
 import 'package:boilerplate_new_version/presentation/home/home.dart';
 import 'package:boilerplate_new_version/presentation/music/music_list.dart';
-import 'package:boilerplate_new_version/presentation/musicPlayer/musicPlayer_screen.dart';
+import 'package:boilerplate_new_version/presentation/music_player/musicPlayer_screen.dart';
 import 'package:sizer/sizer.dart';
 import '../constants/app_theme.dart';
 import '../constants/strings.dart';
@@ -9,7 +9,7 @@ import '../utils/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../di/service_locator.dart';
-import 'package:boilerplate_new_version/presentation/splashScreen/splash_screen.dart';
+import 'package:boilerplate_new_version/presentation/splash_screen/splash_screen.dart';
 
 class MyApp extends StatelessWidget {
   final ThemeStore _themeStore = getIt<ThemeStore>();
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       builder: (context) {
         return Sizer(
           builder: (context, orientation, deviceType) => MaterialApp(
-            showSemanticsDebugger: false,
+            // showSemanticsDebugger: true,
             debugShowCheckedModeBanner: false,
             title: Strings.appName,
             theme:

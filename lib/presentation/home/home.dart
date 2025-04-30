@@ -2,10 +2,11 @@ import 'dart:async';
 import 'package:boilerplate_new_version/constants/app_theme.dart';
 import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
+import 'package:boilerplate_new_version/presentation/downloaded_music_list/store/download_list_store.dart';
 import 'package:boilerplate_new_version/presentation/home/store/homeController/home_store.dart';
 import 'package:boilerplate_new_version/presentation/home/widgets/recent_play_view.dart';
 import 'package:boilerplate_new_version/presentation/home/widgets/top_playlist_view.dart';
-import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
+import 'package:boilerplate_new_version/presentation/music_player/store/musicController/music_controller_store.dart';
 import 'package:boilerplate_new_version/presentation/recent_play_list/store/recent_music_list_store.dart';
 import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:boilerplate_new_version/widgets/app_drawer.dart';
@@ -30,7 +31,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final RecentMusicListStore _recentPlayListStore =
       getIt<RecentMusicListStore>();
-  TextEditingController _searchController = TextEditingController();
+  final DownloadListStore _downloadListStore = getIt<DownloadListStore>();
+
   List<String> _filteredSongs = [];
   List<MusicListModule>? _recentPlay = [];
   bool _isLoading = true;
@@ -40,27 +42,13 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _filteredSongs = _homeControllerStore.recentlyPlayedSongs;
     _recentPlayListStore.fetchRecentMusicList();
+    _downloadListStore.fetchDownloadedMusicList();
 
     // Simulate loading for 3 seconds
     Timer(Duration(seconds: 2), () {
       setState(() {
         _isLoading = false;
       });
-    });
-  }
-
-  void _filterSongs(String query) {
-    setState(() {
-      if (query.isEmpty) {
-        _filteredSongs = _homeControllerStore.recentlyPlayedSongs;
-      } else {
-        _filteredSongs =
-            _homeControllerStore.recentlyPlayedSongs
-                .where(
-                  (song) => song.toLowerCase().contains(query.toLowerCase()),
-                )
-                .toList();
-      }
     });
   }
 
@@ -184,7 +172,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 child: TextFormField(
                   enabled: false,
-                  controller: _searchController,
                   cursorColor: Colors.black,
                   cursorHeight: 20,
                   style: AppThemeData.textThemeMedium,

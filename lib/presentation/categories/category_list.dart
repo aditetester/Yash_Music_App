@@ -2,7 +2,7 @@ import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/domain/entity/categories/category.dart';
 import 'package:boilerplate_new_version/presentation/categories/store/categories_store.dart';
 import 'package:boilerplate_new_version/presentation/categories/widgets/category_items.dart';
-import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
+import 'package:boilerplate_new_version/presentation/music_player/store/musicController/music_controller_store.dart';
 import 'package:boilerplate_new_version/widgets/bottom_downloadedMusicPlayer_bar.dart';
 import 'package:boilerplate_new_version/widgets/bottom_musicPlayer_bar.dart';
 import 'package:flutter/material.dart';

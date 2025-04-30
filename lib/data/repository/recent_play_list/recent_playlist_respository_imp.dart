@@ -19,5 +19,11 @@ class RecentPlayListRespositoryImp extends RecentPlayListRepository {
   Future<int> insert(MusicListModule data) async {
    return await _localRecentPlayList.insertRecentPlayList(data);
   }
+
+  @override
+  Future<int> delete(String id) async {
+   return await _localRecentPlayList.deleteRecentPlay(id);
+  }
+  
   
 }

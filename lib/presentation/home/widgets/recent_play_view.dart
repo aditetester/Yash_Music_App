@@ -1,4 +1,6 @@
 import 'package:boilerplate_new_version/constants/app_theme.dart';
+import 'package:boilerplate_new_version/di/service_locator.dart';
+import 'package:boilerplate_new_version/presentation/downloaded_music_list/store/download_list_store.dart';
 import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -20,13 +22,13 @@ class RecentPlayView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final DownloadListStore _downloadListStore = getIt<DownloadListStore>();
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GestureDetector(
         onTap: () {
-           Navigator.of(
-                      context,
-                    ).pushNamed(Routes.recentMusicPlayListScreen);
+          Navigator.of(context).pushNamed(Routes.recentMusicPlayListScreen);
         },
         child: Container(
           width: 150, // adjust as needed
@@ -57,7 +59,6 @@ class RecentPlayView extends StatelessWidget {
                       bottomRight: Radius.circular(10),
                       topLeft: Radius.circular(10),
                       topRight: Radius.circular(10),
-                      
                     ),
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 8),
@@ -82,7 +83,7 @@ class RecentPlayView extends StatelessWidget {
                               maxLines: 1,
                             ),
                             Text(
-                             subTitle, // Subtitle
+                              subTitle, // Subtitle
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 12,
@@ -94,14 +95,29 @@ class RecentPlayView extends StatelessWidget {
                           ],
                         ),
                       ),
-                     
-                    //  SizedBox(width: 13,),
+
+                      //  SizedBox(width: 13,),
                       SizedBox(
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            SvgPicture.asset("assets/svg/download_icon.svg" , height: 20, width: 20,),
-                            SizedBox(width: 2,),
+                            _downloadListStore.getDownloadedList?.contains(
+                                      title.toString(),
+                                    ) ??
+                                    false
+                                ? SvgPicture.asset(
+                                  "assets/svg/downloaded_icon.svg",
+                                  height: 2.h,
+                                  width: 2.w,
+                                )
+                                : SvgPicture.asset(
+                                  "assets/svg/download_icon.svg",
+                                  height: 2.h,
+                                  width: 2.w,
+                                ),
+                          SizedBox(width: 5,),
                             Icon(Icons.more_vert_outlined, size: 20),
                           ],
                         ),

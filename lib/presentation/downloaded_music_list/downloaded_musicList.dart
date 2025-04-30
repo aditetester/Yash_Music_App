@@ -1,10 +1,8 @@
 import 'package:boilerplate_new_version/di/service_locator.dart';
-import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
+import 'package:boilerplate_new_version/domain/entity/downloaded_list/downloaded.dart';
 import 'package:boilerplate_new_version/presentation/downloaded_music_list/store/download_list_store.dart';
-import 'package:boilerplate_new_version/presentation/music/store/music_list_store.dart';
-import 'package:boilerplate_new_version/presentation/music/widgets/music_items.dart';
+import 'package:boilerplate_new_version/presentation/downloaded_music_list/widgets/download_music_items.dart';
 import 'package:boilerplate_new_version/presentation/music_player/store/musicController/music_controller_store.dart';
-import 'package:boilerplate_new_version/presentation/recent_play_list/store/recent_music_list_store.dart';
 import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:boilerplate_new_version/widgets/bottom_downloadedMusicPlayer_bar.dart';
 import 'package:boilerplate_new_version/widgets/bottom_musicPlayer_bar.dart';
@@ -12,44 +10,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:sizer/sizer.dart';
-import 'package:shimmer/shimmer.dart';
-import 'dart:async';
 
-class MusicList extends StatefulWidget {
-  const MusicList({super.key});
+class DownloadedMusicPlayList extends StatefulWidget {
+  const DownloadedMusicPlayList({super.key});
 
   @override
-  State<MusicList> createState() => _MusicListState();
+  State<DownloadedMusicPlayList> createState() =>
+      _DownloadedMusicPlayListState();
 }
 
-class _MusicListState extends State<MusicList> {
-  final MusicListStore _MusicListStore = getIt<MusicListStore>();
+class _DownloadedMusicPlayListState extends State<DownloadedMusicPlayList> {
   final MusicControllerStore _musicControllerStore =
       getIt<MusicControllerStore>();
-  final RecentMusicListStore _recentPlayListStore =
-      getIt<RecentMusicListStore>();
   final DownloadListStore _downloadListStore = getIt<DownloadListStore>();
-
-  final TextEditingController _searchController = TextEditingController();
-
-  List<MusicListModule>? allMusicList = [];
-  List<MusicListModule> filteredMusicList = [];
-
-  bool showShimmer = true;
+  TextEditingController _searchController = TextEditingController();
+  List<DownloadedListModule>? allMusicList = [];
+  List<DownloadedListModule> filteredMusicList = [];
 
   @override
   void initState() {
     super.initState();
-    _MusicListStore.fetchMusicList();
-    _recentPlayListStore.fetchRecentMusicList();
+
     _downloadListStore.fetchDownloadedMusicList();
     _searchController.addListener(_filterMusicList);
-
-    Timer(Duration(seconds: 2), () {
-      setState(() {
-        showShimmer = false;
-      });
-    });
   }
 
   @override
@@ -63,11 +46,13 @@ class _MusicListState extends State<MusicList> {
     if (allMusicList != null && allMusicList!.isNotEmpty) {
       setState(() {
         filteredMusicList =
-            allMusicList!
-                .where((music) => music.title!.toLowerCase().contains(query))
-                .toList();
+            allMusicList!.where((music) {
+              final title = music.title!.toLowerCase();
+              return title.contains(query);
+            }).toList();
       });
     } else {
+      // If the list is null or empty, ensure filteredMusicList is also empty
       setState(() {
         filteredMusicList = [];
       });
@@ -76,8 +61,6 @@ class _MusicListState extends State<MusicList> {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> subcategory =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     return Scaffold(
       body: Container(
         height: double.infinity,
@@ -88,16 +71,21 @@ class _MusicListState extends State<MusicList> {
             fit: BoxFit.cover,
           ),
         ),
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            //App Bar Section
             Padding(
               padding: const EdgeInsets.only(left: 8.0, top: 15, right: 8.0),
-              child: _builderTopArea(context, subcategory['name'].toString()),
+              child: _builderTopArea(context, "Downloads".toString()),
             ),
-            Expanded(
-              child: _builderBodyArea(context, subcategory['id'].toString()),
-            ),
+            Expanded(child: _builderBodyArea(context, '')),
+
+            // Categories Section
+            // CategoryViewScreen(),
+            // SizedBox(height: 15),
           ],
         ),
       ),
@@ -105,7 +93,9 @@ class _MusicListState extends State<MusicList> {
         builder:
             (context) => IntrinsicHeight(
               child: Column(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize:
+                    MainAxisSize
+                        .min, // Ensure the column takes only required height
                 children: [
                   _musicControllerStore.isDownloadedPlaying
                       ? BottomDownloadedMusicPlayerBar(
@@ -114,6 +104,7 @@ class _MusicListState extends State<MusicList> {
                       : BottomMusicPlayerBar(
                         musicControllerStore: _musicControllerStore,
                       ),
+                  // AdsScreen(),
                 ],
               ),
             ),
@@ -122,30 +113,107 @@ class _MusicListState extends State<MusicList> {
   }
 
   Widget _builderTopArea(BuildContext context, String heading) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        IconButton(
-          onPressed: () => Navigator.of(context).pop(),
-          icon: Image.asset(
-            'assets/images/drawer_back_icon.png',
-            height: 7.5.h,
-            width: 7.5.w,
+        // First Row: Back button and Title
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0, top: 15, right: 8.0),
+          child: Row(
+            children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: Image.asset(
+                  'assets/images/drawer_back_icon.png',
+                  height: 7.5.h,
+                  width: 7.5.w,
+                ),
+              ),
+              SizedBox(width: 5),
+              Text(
+                heading,
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
           ),
         ),
-        SizedBox(width: 5),
-        Expanded(
-          child: Container(
-            height: 4.h,
-            alignment: Alignment.centerLeft,
-            child: Text(
-              "$heading Songs",
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
+
+        // Second Row: Tabs
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _downloadListStore.changeTab(0);
+                  });
+                },
+                child: Column(
+                  children: [
+                    Text(
+                      "Downloads",
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight:
+                            _downloadListStore.getcurrentTabIndex == 0
+                                ? FontWeight.w600
+                                : FontWeight.w400,
+                        fontSize: 14,
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Container(
+                      height: 3,
+                      width: 35.w,
+                      color:
+                          _downloadListStore.getcurrentTabIndex == 0
+                              ? Colors.blue
+                              : Colors.transparent,
+                    ),
+                  ],
+                ),
               ),
-            ),
+              SizedBox(width: 30),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _downloadListStore.changeTab(1);
+                  });
+                },
+                child: Column(
+                  children: [
+                    Text(
+                      "Downloading",
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight:
+                            _downloadListStore.getcurrentTabIndex == 1
+                                ? FontWeight.w600
+                                : FontWeight.w400,
+                        fontSize: 14,
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Container(
+                      height: 3,
+                      width: 35.w,
+                      color:
+                          _downloadListStore.getcurrentTabIndex == 1
+                              ? Colors.blue
+                              : Colors.transparent,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ],
@@ -153,88 +221,71 @@ class _MusicListState extends State<MusicList> {
   }
 
   Widget _builderBodyArea(BuildContext context, String subCategoryId) {
-    return Observer(
-      builder: (_) {
-        _MusicListStore.SelectedMusicList(subCategoryId);
+    return Expanded(
+      child:
+          _downloadListStore.getcurrentTabIndex == 0
+              ? Observer(
+                builder: (_) {
+                  if (_downloadListStore.fetchFuture.status ==
+                      FutureStatus.pending) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (_downloadListStore.fetchFuture.status ==
+                      FutureStatus.fulfilled) {
+                    allMusicList = _downloadListStore.AllDownloadedMusic;
 
-        allMusicList = _MusicListStore.AllMusic;
+                    if (allMusicList == null || allMusicList!.isEmpty) {
+                      return const Center(
+                        child: Text("No Music List available"),
+                      );
+                    }
 
-        if (showShimmer) {
-          return ListView.builder(
-            padding: EdgeInsets.zero,
-            itemCount: 6,
-            itemBuilder:
-                (context, index) => Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12.0,
-                    vertical: 8.0,
-                  ),
-                  child: Shimmer.fromColors(
-                    baseColor: Colors.grey[300]!,
-                    highlightColor: Colors.grey[100]!,
-                    child: Container(
-                      height: 10.h,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                  ),
+                    if (_searchController.text.isEmpty) {
+                      filteredMusicList = allMusicList!;
+                      _musicControllerStore.AllDownloadedMusic = allMusicList!;
+                    }
+
+                    return ListView.builder(
+                      itemCount: filteredMusicList.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            _musicControllerStore.playDownloadNext(
+                              currentIndex: index,
+                              nextplay: filteredMusicList[index],
+                            );
+                            Navigator.of(context).pushNamed(
+                              Routes.musicPlayerDownloadedScreen,
+                              arguments: filteredMusicList[index],
+                            );
+                          },
+                          child: DownloadedMusicItems(
+                            index: index,
+                            music: filteredMusicList[index],
+                          ),
+                        );
+                      },
+                    );
+                  } else {
+                    return const Center(child: Text("An error occurred"));
+                  }
+                },
+              )
+              : Center(
+                child: Text(
+                  "No songs are downloading",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
-          );
-        }
-
-        if (allMusicList == null || allMusicList!.isEmpty) {
-          return Center(child: Text("No Music List available"));
-        }
-
-        filteredMusicList = allMusicList!;
-        _musicControllerStore.AllMusic = allMusicList!;
-
-        return ListView.builder(
-          padding: EdgeInsets.zero,
-          itemCount: filteredMusicList.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                _recentPlayListStore.insertRecentPlayList(
-                  id: filteredMusicList[index].id.toString(),
-                  title: filteredMusicList[index].title.toString(),
-                  subTitle: filteredMusicList[index].subtitle.toString(),
-                  audio: filteredMusicList[index].audio.toString(),
-                  image: filteredMusicList[index].image.toString(),
-                  subCategoryId: filteredMusicList[index].subCategoryId.toString(),
-                  subCategoryName: filteredMusicList[index].subCategoryName.toString(),
-                  lyrics: filteredMusicList[index].lyrics.toString(),
-                );
-                _musicControllerStore.playNext(
-                  currentIndex: index,
-                  nextplay: filteredMusicList[index],
-                );
-                Navigator.of(context).pushNamed(
-                  Routes.musicPlayer,
-                  arguments: filteredMusicList[index],
-                );
-              },
-              child: MusicItems(
-                totalDuration: "00:00",
-                index: index,
-                music: filteredMusicList[index],
               ),
-            );
-          },
-        );
-      },
     );
   }
 }
 
-// old UI---------------------------------------------------------
+
+//old UI-------------------------------------------------------------------------------------
 // import 'package:boilerplate_new_version/di/service_locator.dart';
-// import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
+// import 'package:boilerplate_new_version/domain/entity/downloaded_list/downloaded.dart';
 // import 'package:boilerplate_new_version/presentation/downloadedMusicList/store/download_list_store.dart';
-// import 'package:boilerplate_new_version/presentation/music/store/music_list_store.dart';
-// import 'package:boilerplate_new_version/presentation/music/widgets/music_items.dart';
+// import 'package:boilerplate_new_version/presentation/downloadedMusicList/widgets/download_music_items.dart';
 // import 'package:boilerplate_new_version/presentation/musicPlayer/store/musicController/music_controller_store.dart';
 // import 'package:boilerplate_new_version/utils/routes/routes.dart';
 // import 'package:boilerplate_new_version/widgets/bottom_downloadedMusicPlayer_bar.dart';
@@ -243,28 +294,28 @@ class _MusicListState extends State<MusicList> {
 // import 'package:flutter_mobx/flutter_mobx.dart';
 // import 'package:mobx/mobx.dart';
 
-// class MusicList extends StatefulWidget {
-//   const MusicList({super.key});
+// class DownloadedMusicPlayList extends StatefulWidget {
+//   const DownloadedMusicPlayList({super.key});
 
 //   @override
-//   State<MusicList> createState() => _MusicListState();
+//   State<DownloadedMusicPlayList> createState() => _DownloadedMusicPlayListState();
 // }
 
-// class _MusicListState extends State<MusicList> {
-//   MusicListStore _MusicListStore = getIt<MusicListStore>();
+// class _DownloadedMusicPlayListState extends State<DownloadedMusicPlayList> {
+
 //   final MusicControllerStore _musicControllerStore =
 //       getIt<MusicControllerStore>();
 //   final DownloadListStore _downloadListStore = getIt<DownloadListStore>();
 //   TextEditingController _searchController = TextEditingController();
-//   List<MusicListModule>? allMusicList = [];
-//   List<MusicListModule> filteredMusicList = [];
+//   List<DownloadedListModule>? allMusicList = [];
+//   List<DownloadedListModule> filteredMusicList = [];
+
 
 //   @override
 //   void initState() {
 //     super.initState();
-//     _MusicListStore.fetchMusicList();
+   
 //     _downloadListStore.fetchDownloadedMusicList();
-
 //     _searchController.addListener(_filterMusicList);
 //   }
 
@@ -294,11 +345,8 @@ class _MusicListState extends State<MusicList> {
 
 //   @override
 //   Widget build(BuildContext context) {
-//     final  Map<String, dynamic> subcategory =
-//         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-//     //  "6715f190725b819f0474bbd9";
 //     return Scaffold(
-//       appBar: AppBar(title: Text(subcategory['name']), centerTitle: true),
+//       appBar: AppBar(title: Text('Downloaded Music List'), centerTitle: true),
 //       body: GestureDetector(
 //         onTap: () => FocusScope.of(context).unfocus(),
 //         child: Column(
@@ -349,15 +397,13 @@ class _MusicListState extends State<MusicList> {
 //             Expanded(
 //               child: Observer(
 //                 builder: (_) {
-//                   _MusicListStore.SelectedMusicList(subcategory['id']);
-
-//                   if (_MusicListStore.fetchPostsFuture.status ==
-//                           FutureStatus.pending &&
-//                       _musicControllerStore.isInitialized) {
+                 
+//                   if (_downloadListStore.fetchFuture.status ==
+//                           FutureStatus.pending) {
 //                     return const Center(child: CircularProgressIndicator());
-//                   } else if (_MusicListStore.fetchPostsFuture.status ==
+//                   } else if (_downloadListStore.fetchFuture.status ==
 //                       FutureStatus.fulfilled) {
-//                     allMusicList = _MusicListStore.AllMusic;
+//                     allMusicList = _downloadListStore.AllDownloadedMusic;
 
 //                     if (allMusicList == null || allMusicList!.isEmpty) {
 //                       return const Center(
@@ -368,7 +414,7 @@ class _MusicListState extends State<MusicList> {
 //                     // Update filtered list on initial load
 //                     if (_searchController.text.isEmpty) {
 //                       filteredMusicList = allMusicList!;
-//                       _musicControllerStore.AllMusic = allMusicList!;
+//                         _musicControllerStore.AllDownloadedMusic = allMusicList!;
 //                     }
 
 //                     return ListView.builder(
@@ -376,16 +422,16 @@ class _MusicListState extends State<MusicList> {
 //                       itemBuilder: (context, index) {
 //                         return GestureDetector(
 //                           onTap: () {
-//                             _musicControllerStore.playNext(
-//                              currentIndex: index,
-//                              nextplay: filteredMusicList[index],
+//                             _musicControllerStore.playDownloadNext(
+//                              _downloadListStore.getcurrentTabIndex:  index,
+//                              nextplay:  filteredMusicList[index],
 //                             );
 //                             Navigator.of(context).pushNamed(
-//                               Routes.musicPlayer,
+//                               Routes.musicPlayerDownloadedScreen,
 //                               arguments: filteredMusicList[index],
 //                             );
 //                           },
-//                           child: MusicItems(index: index, music: filteredMusicList[index]),
+//                           child: DownloadedMusicItems(index: index, music: filteredMusicList[index]),
 //                         );
 //                       },
 //                     );
