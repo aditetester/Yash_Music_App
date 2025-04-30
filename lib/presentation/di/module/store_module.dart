@@ -6,6 +6,8 @@ import 'package:boilerplate_new_version/domain/usecase/downloaded_list/insert_Do
 import 'package:boilerplate_new_version/domain/usecase/music_list/get_musicList_usecase.dart';
 import 'package:boilerplate_new_version/domain/usecase/music_play_list/get_music_playlist_usecase.dart';
 import 'package:boilerplate_new_version/domain/usecase/music_play_list/insert_music_playlist_usecase.dart';
+import 'package:boilerplate_new_version/domain/usecase/music_play_list_category/get_category_playlist_usecase.dart';
+import 'package:boilerplate_new_version/domain/usecase/music_play_list_category/insert_category_playlist_usecase.dart';
 import 'package:boilerplate_new_version/domain/usecase/recent_play_list/delete_recent_playist_usecase.dart';
 import 'package:boilerplate_new_version/domain/usecase/recent_play_list/get_recent_playist_usecase.dart';
 import 'package:boilerplate_new_version/domain/usecase/recent_play_list/insert_recent_playist_usecase.dart';
@@ -27,7 +29,7 @@ import '../../home/store/theme/theme_store.dart';
 
 class StoreModule {
   static Future<void> configureStoreModuleInjection() async {
-     // factories:---------------------------------------------------------------
+    // factories:---------------------------------------------------------------
     getIt.registerFactory(() => ErrorStore());
     getIt.registerFactory(() => FormErrorStore());
     getIt.registerFactory(
@@ -36,51 +38,56 @@ class StoreModule {
     // stores:------------------------------------------------------------------
 
     getIt.registerSingleton<ThemeStore>(
-      ThemeStore(
-        getIt<SettingRepository>(),
-        getIt<ErrorStore>(),
-      ),
+      ThemeStore(getIt<SettingRepository>(), getIt<ErrorStore>()),
     );
-    getIt.registerSingleton<HomeControllerStore>(
-      HomeControllerStore(),
+    getIt.registerSingleton<HomeControllerStore>(HomeControllerStore());
+    getIt.registerSingleton<CategoryStore>(
+      CategoryStore(getIt<GetCategoryUseCase>(), getIt<ErrorStore>()),
     );
-     getIt.registerSingleton<CategoryStore>(
-      CategoryStore(getIt<GetCategoryUseCase>(),
-        getIt<ErrorStore>(),),
+    getIt.registerSingleton<SubCategoriesStore>(
+      SubCategoriesStore(getIt<GetSubCategoryUseCase>(), getIt<ErrorStore>()),
     );
-     getIt.registerSingleton<SubCategoriesStore>(
-      SubCategoriesStore(getIt<GetSubCategoryUseCase>(),
-        getIt<ErrorStore>(),));
 
-      getIt.registerSingleton<MusicControllerStore>(
+    getIt.registerSingleton<MusicControllerStore>(
       MusicControllerStore(
         getIt<LyricsApi>(),
         getIt<SettingRepository>(),
         getIt<ErrorStore>(),
-      ));
+      ),
+    );
 
-      getIt.registerSingleton<MusicListStore>(
-      MusicListStore(getIt<GetMusiclistUsecase>(),
-        getIt<ErrorStore>(),));
+    getIt.registerSingleton<MusicListStore>(
+      MusicListStore(getIt<GetMusiclistUsecase>(), getIt<ErrorStore>()),
+    );
 
-      getIt.registerSingleton<DownloadListStore>(
-      DownloadListStore(getIt<GetDownloadedMusiclistUsecase>(),
-      getIt<InsertMusicsUseCase>(),
-        getIt<ErrorStore>(),getIt<LyricsApi>()));
+    getIt.registerSingleton<DownloadListStore>(
+      DownloadListStore(
+        getIt<GetDownloadedMusiclistUsecase>(),
+        getIt<InsertMusicsUseCase>(),
+        getIt<ErrorStore>(),
+        getIt<LyricsApi>(),
+      ),
+    );
 
+    getIt.registerSingleton<MusicPlayListStore>(
+      MusicPlayListStore(
+        getIt<GetCategoryPlayListUsecase>(),
+        getIt<InsertCategoryPlayListUseCase>(),
+        getIt<GetMusicPlayListUsecase>(),
+        getIt<InsertMusicsPlayListUseCase>(),
+        getIt<ErrorStore>(),
+        getIt<LyricsApi>(),
+      ),
+    );
 
-      getIt.registerSingleton<MusicPlayListStore>(
-      MusicPlayListStore(getIt<GetMusicPlayListUsecase>(),
-      getIt<InsertMusicsPlayListUseCase>(),
-        getIt<ErrorStore>(),getIt<LyricsApi>()));
-
-
-      getIt.registerSingleton<RecentMusicListStore>(
-      RecentMusicListStore(getIt<GetRecentPlayListUsecase>(),
-      getIt<DeleteRecentPlayListUseCase>(),
-      getIt<InsertRecentPlayListUseCase>(),
-        getIt<ErrorStore>(),getIt<LyricsApi>()));
-
-
+    getIt.registerSingleton<RecentMusicListStore>(
+      RecentMusicListStore(
+        getIt<GetRecentPlayListUsecase>(),
+        getIt<DeleteRecentPlayListUseCase>(),
+        getIt<InsertRecentPlayListUseCase>(),
+        getIt<ErrorStore>(),
+        getIt<LyricsApi>(),
+      ),
+    );
   }
 }

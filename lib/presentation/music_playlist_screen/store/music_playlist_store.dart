@@ -1,9 +1,13 @@
 import 'package:boilerplate_new_version/core/stores/error/error_store.dart';
 import 'package:boilerplate_new_version/data/network/apis/lyrics/LyricsPlayer_api.dart';
+import 'package:boilerplate_new_version/domain/entity/category_play_list/category.dart';
+import 'package:boilerplate_new_version/domain/entity/category_play_list/category_play_list.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicModule_list.dart';
 import 'package:boilerplate_new_version/domain/usecase/music_play_list/get_music_playlist_usecase.dart';
 import 'package:boilerplate_new_version/domain/usecase/music_play_list/insert_music_playlist_usecase.dart';
+import 'package:boilerplate_new_version/domain/usecase/music_play_list_category/get_category_playlist_usecase.dart';
+import 'package:boilerplate_new_version/domain/usecase/music_play_list_category/insert_category_playlist_usecase.dart';
 import 'package:mobx/mobx.dart';
 
 part 'music_playlist_store.g.dart';
@@ -11,12 +15,13 @@ part 'music_playlist_store.g.dart';
 class MusicPlayListStore = _MusicPlayListStore with _$MusicPlayListStore;
 
 abstract class _MusicPlayListStore with Store {
-
   MusicListModule? _currentPlayListSong;
-
+  CategoryPlayListModule? _currentategoryPlayList;
   final LyricsApi lyricsApi;
 
   // use cases:-----------------------------------------------------------------
+  final GetCategoryPlayListUsecase _getCategoryPlayListUsecase;
+  final InsertCategoryPlayListUseCase _insertCategoryPlayListUseCase;
   final GetMusicPlayListUsecase _getMusicPlayListUsecase;
   final InsertMusicsPlayListUseCase _insertMusicsUseCase;
 
@@ -26,33 +31,85 @@ abstract class _MusicPlayListStore with Store {
   @observable
   List<String>? _PlayListSong = [];
 
-  // store variables:-----------------------------------------------------------
-  static ObservableFuture<AllMusicList?> emptyMusicListResponse =
-      ObservableFuture.value(null);
-
   @observable
-  ObservableFuture<AllMusicList?> fetchFuture =
-      ObservableFuture<AllMusicList?>(emptyMusicListResponse);
+  List<String>? _categoryList = [];
 
   @observable
   List<MusicListModule>? AllMusicPlayList;
 
+  @observable
+  List<CategoryPlayListModule>? AllCategoryList;
+
   // constructor:---------------------------------------------------------------
   _MusicPlayListStore(
+    this._getCategoryPlayListUsecase,
+    this._insertCategoryPlayListUseCase,
     this._getMusicPlayListUsecase,
     this._insertMusicsUseCase,
     this.errorStore,
     this.lyricsApi,
   );
 
+  // store variables:-----------------------------------------------------------
+  static ObservableFuture<AllCategoryPlayList?> emptyMusicListResponse =
+      ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<AllCategoryPlayList?> fetchFuture =
+      ObservableFuture<AllCategoryPlayList?>(emptyMusicListResponse);
+
+  static ObservableFuture<AllMusicList?> emptyMusicListResponse2 =
+      ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<AllMusicList?> fetchFuture2 =
+      ObservableFuture<AllMusicList?>(emptyMusicListResponse2);
+
   @computed
   List<String>? get getPlayListSong => _PlayListSong;
 
+  @computed
+  List<String>? get getCategoryPlayList => _categoryList;
+
   // actions:-------------------------------------------------------------------
   @action
+  @action
+  Future<void> fetchCategoryPlayList() async {
+    final future = _getCategoryPlayListUsecase.call(params: null);
+    fetchFuture = ObservableFuture(future);
+
+    await future
+        .then((MusicList) {
+          AllCategoryList = MusicList.categorytdata;
+
+          if (AllCategoryList!.isNotEmpty) {
+            _categoryList =
+                AllCategoryList!.map((songs) {
+                  return songs.name.toString();
+                }).toList();
+          }
+        })
+        .catchError((error) {
+          errorStore.errorMessage = error;
+        });
+  }
+
+  @action
+  Future<void> insertCategoryPlayList({
+    required String name,
+    required String totalSongs,
+  }) async {
+    _currentategoryPlayList = CategoryPlayListModule(
+      name: name,
+      totalSongs: totalSongs,
+    );
+    await _insertCategoryPlayListUseCase.call(params: _currentategoryPlayList!);
+    fetchCategoryPlayList();
+  }
+
   Future<void> fetchMusicPlayList() async {
     final future = _getMusicPlayListUsecase.call(params: null);
-    fetchFuture = ObservableFuture(future);
+    fetchFuture2 = ObservableFuture(future);
 
     await future
         .then((MusicList) {
@@ -77,9 +134,9 @@ abstract class _MusicPlayListStore with Store {
     required String subTitle,
     required String audio,
     required String image,
-    required String lyrics,
     required String subCategoryId,
     required String subCategoryName,
+    required String lyrics,
   }) async {
     _currentPlayListSong = MusicListModule(
       id: id,
@@ -87,22 +144,19 @@ abstract class _MusicPlayListStore with Store {
       subtitle: subTitle,
       audio: audio,
       image: image,
-      lyrics: lyrics,
       subCategoryId: subCategoryId,
       subCategoryName: subCategoryName,
+      lyrics: lyrics,
     );
-
-    final future = await _insertMusicsUseCase.call(
-      params: _currentPlayListSong!,
-    );
+    await _insertMusicsUseCase.call(params: _currentPlayListSong!);
     fetchMusicPlayList();
   }
 
   @action
   Future<void> SelectedMusicList(String subCategoryId) async {
-    AllMusicPlayList =  AllMusicPlayList!
+    AllMusicPlayList =
+        AllMusicPlayList!
             .where((element) => element.subCategoryId == subCategoryId)
             .toList();
-
   }
 }

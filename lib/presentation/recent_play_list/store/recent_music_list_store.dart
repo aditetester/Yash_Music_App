@@ -31,6 +31,9 @@ abstract class _RecentMusicListStore with Store {
   @observable
   List<String>? _recentSongList = [];
 
+  @observable
+  List<MusicListModule>? AllMusic;
+
   // constructor:---------------------------------------------------------------
   _RecentMusicListStore(
     this._getRecentMusicPlayListUsecase,
@@ -48,9 +51,6 @@ abstract class _RecentMusicListStore with Store {
   ObservableFuture<AllMusicList?> fetchPostsFuture =
       ObservableFuture<AllMusicList?>(emptyMusicListResponse);
 
-  @observable
-  List<MusicListModule>? AllMusic;
-
   // actions:-------------------------------------------------------------------
   @action
   Future<void> fetchRecentMusicList() async {
@@ -66,7 +66,7 @@ abstract class _RecentMusicListStore with Store {
               }).toList();
         })
         .catchError((error) {
-          print("objobj: $error");
+         
           errorStore.errorMessage = error;
         });
     removeLastDuplicate();
@@ -100,11 +100,10 @@ abstract class _RecentMusicListStore with Store {
   }
 
   void removeLastDuplicate() {
-    if (_recentSongList == null) return;
+    if (_recentSongList!.isEmpty) return;
 
     final seen = <String>{};
     final duplicates = <String>{};
-
     // First, find duplicates
     for (var song in _recentSongList!) {
       if (!seen.add(song)) {
@@ -117,9 +116,10 @@ abstract class _RecentMusicListStore with Store {
       final lastIndex = _recentSongList!.lastIndexOf(dup);
       if (lastIndex != -1) {
         _deleteRecentPlayListUseCase.call(
-          params: AllMusic![lastIndex].id.toString(),
+          params: AllMusic![lastIndex].recentId.toString(),
         );
         _recentSongList!.removeAt(lastIndex);
+        fetchRecentMusicList();
       }
     }
   }

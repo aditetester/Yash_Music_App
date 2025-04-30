@@ -1,13 +1,17 @@
 import 'package:boilerplate_new_version/constants/app_theme.dart';
 import 'package:boilerplate_new_version/di/service_locator.dart';
+import 'package:boilerplate_new_version/domain/entity/category_play_list/category.dart';
+import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
 import 'package:boilerplate_new_version/domain/entity/sub_categories/subCategory.dart';
 import 'package:boilerplate_new_version/presentation/music_player/store/musicController/music_controller_store.dart';
+import 'package:boilerplate_new_version/presentation/music_playlist_screen/store/music_playlist_store.dart';
 import 'package:boilerplate_new_version/presentation/sub_categories/store/sub_categories_store.dart';
 import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:boilerplate_new_version/widgets/bottom_downloadedMusicPlayer_bar.dart';
 import 'package:boilerplate_new_version/widgets/bottom_musicPlayer_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobx/mobx.dart';
 import 'package:sizer/sizer.dart';
 import 'package:shimmer/shimmer.dart'; // << added shimmer import
@@ -22,8 +26,15 @@ class MusicPlayListScreen extends StatefulWidget {
 class _MusicPlayListScreenState extends State<MusicPlayListScreen> {
   final MusicControllerStore _musicControllerStore =
       getIt<MusicControllerStore>();
+
+  final MusicPlayListStore _musicPlayListStore = getIt<MusicPlayListStore>();
+
+  @observable
+  List<CategoryPlayListModule>? AllCategoryPlayList;
+
   @override
   void initState() {
+    AllCategoryPlayList = _musicPlayListStore.AllCategoryList;
     super.initState();
   }
 
@@ -55,7 +66,7 @@ class _MusicPlayListScreenState extends State<MusicPlayListScreen> {
                       _builderTopArea(context, "My Playlist"),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: _builderBodyArea(context, ''),
+                        child: _builderBodyArea(context),
                       ),
                       SizedBox(height: 15),
                     ],
@@ -127,12 +138,12 @@ class _MusicPlayListScreenState extends State<MusicPlayListScreen> {
     );
   }
 
-  Widget _builderBodyArea(BuildContext context, String categoryId) {
+  Widget _builderBodyArea(BuildContext context) {
     return GridView.builder(
       padding: EdgeInsets.zero,
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
-      itemCount: 3,
+      itemCount: (_musicPlayListStore.AllCategoryList?.length ?? 0) + 1,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 20,
@@ -141,7 +152,59 @@ class _MusicPlayListScreenState extends State<MusicPlayListScreen> {
       ),
       itemBuilder: (context, index) {
         return GestureDetector(
-          onTap: () {},
+          onTap: () {
+            if (index != 0) {
+              Navigator.of(context).pushNamed(
+                Routes.musicPlayListView,
+                arguments: {'id': "1", 'name': "New PlayList"},
+              );
+            } else {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  String playlistName = '';
+                  return AlertDialog(
+                    title: Text('Create Playlist'),
+                    content: TextField(
+                      onChanged: (value) {
+                        playlistName = value;
+                      },
+                      decoration: InputDecoration(
+                        hintText: 'Enter playlist name',
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // close dialog
+                        },
+                        child: Text('Cancel'),
+                      ),
+                      ElevatedButton(
+                        onPressed:
+                            playlistName.isEmpty
+                                ? () {
+                                  // print("objobj: $playlistName");
+                                }
+                                : () async {
+                                  // close dialog
+                                  // Do something with playlistName, e.g., call a method
+                                  print("objobj: $playlistName");
+                                  await _musicPlayListStore
+                                      .insertCategoryPlayList(
+                                        name: playlistName,
+                                        totalSongs: "0",
+                                      );
+                                  Navigator.of(context).pop();
+                                },
+                        child: Text('Create'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            }
+          },
           child:
               index == 0
                   ? Container(
@@ -182,7 +245,7 @@ class _MusicPlayListScreenState extends State<MusicPlayListScreen> {
                     padding: EdgeInsets.zero,
                     child: Stack(
                       children: [
-                         Column(
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -190,37 +253,68 @@ class _MusicPlayListScreenState extends State<MusicPlayListScreen> {
                             Positioned.fill(
                               top: 0,
                               bottom: 50,
-                              child: ClipRRect(
+                              child:
+                                  index == 1
+                                      ? Container(
+                                        width: double.infinity,
+                                        height: 110,
+                                        decoration: BoxDecoration(
+                                          color: Color.fromARGB(
+                                            255,
+                                            29,
+                                            162,
+                                            244,
+                                          ),
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(24),
+                                            topRight: Radius.circular(24),
+                                            bottomLeft: Radius.circular(24),
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: SvgPicture.asset(
+                                            "assets/svg/lyrics_icon.svg",
+                                            height: 40,
+                                            width: 40,
+                                          ),
+                                        ),
+                                      )
+                                      : ClipRRect(
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(16),
+                                          topRight: Radius.circular(16),
+                                          bottomLeft: Radius.circular(16),
+                                        ),
+                                        child: GridView.count(
+                                          padding: EdgeInsets.zero,
+                                          crossAxisCount: 2,
+                                          shrinkWrap: true,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          childAspectRatio: 2 / 1.3,
+                                          mainAxisSpacing: 0,
+                                          crossAxisSpacing: 0,
 
-                                borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16), bottomLeft: Radius.circular(16)),
-                                child: GridView.count(
-                                  padding: EdgeInsets.zero,
-                                  crossAxisCount: 2,
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  childAspectRatio: 2 / 1.3,
-                                  mainAxisSpacing: 0,
-                                  crossAxisSpacing: 0,
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/demo_img.jpg',
-                                      fit: BoxFit.cover,
-                                    ),
-                                    Image.asset(
-                                      'assets/images/demo_img.jpg',
-                                      fit: BoxFit.cover,
-                                    ),
-                                    Image.asset(
-                                      'assets/images/demo_img.jpg',
-                                      fit: BoxFit.cover,
-                                    ),
-                                    Image.asset(
-                                      'assets/images/demo_img.jpg',
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ],
-                                ),
-                              ),
+                                          children: [
+                                            Image.asset(
+                                              'assets/images/demo_img.jpg',
+                                              fit: BoxFit.cover,
+                                            ),
+                                            Image.asset(
+                                              'assets/images/demo_img.jpg',
+                                              fit: BoxFit.cover,
+                                            ),
+                                            Image.asset(
+                                              'assets/images/demo_img.jpg',
+                                              fit: BoxFit.cover,
+                                            ),
+                                            Image.asset(
+                                              'assets/images/demo_img.jpg',
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                             ),
                           ],
                         ),
@@ -228,9 +322,19 @@ class _MusicPlayListScreenState extends State<MusicPlayListScreen> {
                           top: 110,
                           bottom: 0,
                           child: Container(
-                            padding: EdgeInsets.only(left:  10, top: 10, right: 10),
-                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(bottomRight: Radius.circular(16), bottomLeft: Radius.circular(16))),
-                            
+                            padding: EdgeInsets.only(
+                              left: 10,
+                              top: 10,
+                              right: 10,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                bottomRight: Radius.circular(16),
+                                bottomLeft: Radius.circular(16),
+                              ),
+                            ),
+
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -240,21 +344,29 @@ class _MusicPlayListScreenState extends State<MusicPlayListScreen> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'Power of Attitud',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-
+                                    Container(
+                                      width: 100,
+                                      child: Text(
+                                        AllCategoryPlayList![index - 1].name
+                                            .toString(),
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
-                                    
+
                                     Text(
-                                      '42 Songs',
-                                      style: TextStyle(color: Colors.grey[600], fontFamily: 'Poppins',
+                                      '${AllCategoryPlayList![index - 1].totalSongs.toString()} Songs',
+                                      style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontFamily: 'Poppins',
                                         fontSize: 8,
-                                        fontWeight: FontWeight.w400, ),
+                                        fontWeight: FontWeight.w400,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -279,7 +391,6 @@ class _MusicPlayListScreenState extends State<MusicPlayListScreen> {
                             ),
                           ),
                         ),
-                       
                       ],
                     ),
                   ),
@@ -288,3 +399,176 @@ class _MusicPlayListScreenState extends State<MusicPlayListScreen> {
     );
   }
 }
+
+//  return GridView.builder(
+//       padding: EdgeInsets.zero,
+//       shrinkWrap: true,
+//       physics: NeverScrollableScrollPhysics(),
+//       itemCount: 3,
+//       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//         crossAxisCount: 2,
+//         crossAxisSpacing: 20,
+//         mainAxisSpacing: 20,
+//         childAspectRatio: 1,
+//       ),
+//       itemBuilder: (context, index) {
+//         return GestureDetector(
+//           onTap: () {},
+//           child:
+//               index == 0
+//                   ? Container(
+//                     decoration: BoxDecoration(
+//                       borderRadius: BorderRadius.circular(16),
+//                       gradient: LinearGradient(
+//                         colors: [
+//                           Color.fromARGB(255, 29, 162, 244),
+//                           Color.fromARGB(255, 29, 162, 244),
+//                         ],
+//                         begin: Alignment.centerLeft,
+//                         end: Alignment.centerRight,
+//                       ),
+//                     ),
+//                     padding: EdgeInsets.symmetric(horizontal: 12),
+//                     child: Column(
+//                       crossAxisAlignment: CrossAxisAlignment.center,
+//                       mainAxisAlignment: MainAxisAlignment.center,
+//                       mainAxisSize: MainAxisSize.min,
+//                       children: [
+//                         Icon(Icons.add, color: Colors.white, size: 20),
+//                         Text(
+//                           "Add New Playlist",
+//                           style: TextStyle(
+//                             fontFamily: 'Poppins',
+//                             fontSize: 12,
+//                             color: Colors.white,
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//                   )
+//                   : Container(
+//                     decoration: BoxDecoration(
+//                       color: Colors.white,
+//                       borderRadius: BorderRadius.circular(24),
+//                     ),
+//                     padding: EdgeInsets.zero,
+//                     child: Stack(
+//                       children: [
+//                         Column(
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           mainAxisSize: MainAxisSize.min,
+//                           children: [
+//                             // 2x2 Grid of images
+//                             Positioned.fill(
+//                               top: 0,
+//                               bottom: 50,
+//                               child: ClipRRect(
+//                                 borderRadius: BorderRadius.only(
+//                                   topLeft: Radius.circular(16),
+//                                   topRight: Radius.circular(16),
+//                                   bottomLeft: Radius.circular(16),
+//                                 ),
+//                                 child: GridView.count(
+//                                   padding: EdgeInsets.zero,
+//                                   crossAxisCount: 2,
+//                                   shrinkWrap: true,
+//                                   physics: NeverScrollableScrollPhysics(),
+//                                   childAspectRatio: 2 / 1.3,
+//                                   mainAxisSpacing: 0,
+//                                   crossAxisSpacing: 0,
+//                                   children: [
+//                                     Image.asset(
+//                                       'assets/images/demo_img.jpg',
+//                                       fit: BoxFit.cover,
+//                                     ),
+//                                     Image.asset(
+//                                       'assets/images/demo_img.jpg',
+//                                       fit: BoxFit.cover,
+//                                     ),
+//                                     Image.asset(
+//                                       'assets/images/demo_img.jpg',
+//                                       fit: BoxFit.cover,
+//                                     ),
+//                                     Image.asset(
+//                                       'assets/images/demo_img.jpg',
+//                                       fit: BoxFit.cover,
+//                                     ),
+//                                   ],
+//                                 ),
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                         Positioned.fill(
+//                           top: 110,
+//                           bottom: 0,
+//                           child: Container(
+//                             padding: EdgeInsets.only(
+//                               left: 10,
+//                               top: 10,
+//                               right: 10,
+//                             ),
+//                             decoration: BoxDecoration(
+//                               color: Colors.white,
+//                               borderRadius: BorderRadius.only(
+//                                 bottomRight: Radius.circular(16),
+//                                 bottomLeft: Radius.circular(16),
+//                               ),
+//                             ),
+
+//                             child: Row(
+//                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                               crossAxisAlignment: CrossAxisAlignment.start,
+//                               children: [
+//                                 Column(
+//                                   mainAxisSize: MainAxisSize.max,
+//                                   mainAxisAlignment: MainAxisAlignment.start,
+//                                   crossAxisAlignment: CrossAxisAlignment.start,
+//                                   children: [
+//                                     Text(
+//                                       'Power of Attitud',
+//                                       style: TextStyle(
+//                                         fontFamily: 'Poppins',
+//                                         fontSize: 12,
+//                                         fontWeight: FontWeight.bold,
+//                                       ),
+//                                     ),
+
+//                                     Text(
+//                                       '42 Songs',
+//                                       style: TextStyle(
+//                                         color: Colors.grey[600],
+//                                         fontFamily: 'Poppins',
+//                                         fontSize: 8,
+//                                         fontWeight: FontWeight.w400,
+//                                       ),
+//                                     ),
+//                                   ],
+//                                 ),
+//                                 // Play button aligned to bottom right
+//                                 Align(
+//                                   alignment: Alignment.topCenter,
+//                                   child: Container(
+//                                     height: 30,
+//                                     width: 30,
+//                                     decoration: BoxDecoration(
+//                                       shape: BoxShape.circle,
+//                                       color: Colors.blue,
+//                                     ),
+//                                     child: Icon(
+//                                       Icons.play_arrow,
+//                                       color: Colors.white,
+//                                       size: 20,
+//                                     ),
+//                                   ),
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//         );
+//       },
+//     );

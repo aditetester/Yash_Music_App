@@ -8,7 +8,6 @@ class LocalRecentPlayList {
   // dio instance
   MusicPlayerDBHelper _dioClient;
   MusicListModule module = MusicListModule();
-  
 
   // injecting dio instance
   LocalRecentPlayList(this._dioClient);
@@ -27,26 +26,25 @@ class LocalRecentPlayList {
   }
 
   Future<int> insertRecentPlayList(MusicListModule data) async {
-
     Database db = await _dioClient.database;
-    var value =  module.toJson(data);
-    
+    var value = module.toJson(data);
+
     // print("objectData: ${_dioClient.getMusicPlayerTableName} , ${value}");
-   
-    var result = await db.insert(_dioClient.getRecentPlayListTable.toString(), value);
-    
+
+    var result = await db.insert(
+      _dioClient.getRecentPlayListTable.toString(),
+      value,
+    );
+
     return result;
   }
 
-
   Future<int> deleteRecentPlay(String id) async {
-     Database db = await _dioClient.database;
+    Database db = await _dioClient.database;
     int result = await db.rawDelete(
-      'DELETE FROM ${_dioClient.getRecentPlayListTable.toString()} WHERE id = $id',
+      'DELETE FROM ${_dioClient.getRecentPlayListTable.toString()} WHERE recentId = ?',
+      [id],
     );
     return result;
   }
-
-
-
 }

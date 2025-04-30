@@ -16,6 +16,13 @@ mixin _$MusicPlayListStore on _MusicPlayListStore, Store {
           Computed<List<String>?>(() => super.getPlayListSong,
               name: '_MusicPlayListStore.getPlayListSong'))
       .value;
+  Computed<List<String>?>? _$getCategoryPlayListComputed;
+
+  @override
+  List<String>? get getCategoryPlayList => (_$getCategoryPlayListComputed ??=
+          Computed<List<String>?>(() => super.getCategoryPlayList,
+              name: '_MusicPlayListStore.getCategoryPlayList'))
+      .value;
 
   late final _$_PlayListSongAtom =
       Atom(name: '_MusicPlayListStore._PlayListSong', context: context);
@@ -33,19 +40,19 @@ mixin _$MusicPlayListStore on _MusicPlayListStore, Store {
     });
   }
 
-  late final _$fetchFutureAtom =
-      Atom(name: '_MusicPlayListStore.fetchFuture', context: context);
+  late final _$_categoryListAtom =
+      Atom(name: '_MusicPlayListStore._categoryList', context: context);
 
   @override
-  ObservableFuture<AllMusicList?> get fetchFuture {
-    _$fetchFutureAtom.reportRead();
-    return super.fetchFuture;
+  List<String>? get _categoryList {
+    _$_categoryListAtom.reportRead();
+    return super._categoryList;
   }
 
   @override
-  set fetchFuture(ObservableFuture<AllMusicList?> value) {
-    _$fetchFutureAtom.reportWrite(value, super.fetchFuture, () {
-      super.fetchFuture = value;
+  set _categoryList(List<String>? value) {
+    _$_categoryListAtom.reportWrite(value, super._categoryList, () {
+      super._categoryList = value;
     });
   }
 
@@ -65,13 +72,73 @@ mixin _$MusicPlayListStore on _MusicPlayListStore, Store {
     });
   }
 
-  late final _$fetchMusicPlayListAsyncAction =
-      AsyncAction('_MusicPlayListStore.fetchMusicPlayList', context: context);
+  late final _$AllCategoryListAtom =
+      Atom(name: '_MusicPlayListStore.AllCategoryList', context: context);
 
   @override
-  Future<void> fetchMusicPlayList() {
-    return _$fetchMusicPlayListAsyncAction
-        .run(() => super.fetchMusicPlayList());
+  List<CategoryPlayListModule>? get AllCategoryList {
+    _$AllCategoryListAtom.reportRead();
+    return super.AllCategoryList;
+  }
+
+  @override
+  set AllCategoryList(List<CategoryPlayListModule>? value) {
+    _$AllCategoryListAtom.reportWrite(value, super.AllCategoryList, () {
+      super.AllCategoryList = value;
+    });
+  }
+
+  late final _$fetchFutureAtom =
+      Atom(name: '_MusicPlayListStore.fetchFuture', context: context);
+
+  @override
+  ObservableFuture<AllCategoryPlayList?> get fetchFuture {
+    _$fetchFutureAtom.reportRead();
+    return super.fetchFuture;
+  }
+
+  @override
+  set fetchFuture(ObservableFuture<AllCategoryPlayList?> value) {
+    _$fetchFutureAtom.reportWrite(value, super.fetchFuture, () {
+      super.fetchFuture = value;
+    });
+  }
+
+  late final _$fetchFuture2Atom =
+      Atom(name: '_MusicPlayListStore.fetchFuture2', context: context);
+
+  @override
+  ObservableFuture<AllMusicList?> get fetchFuture2 {
+    _$fetchFuture2Atom.reportRead();
+    return super.fetchFuture2;
+  }
+
+  @override
+  set fetchFuture2(ObservableFuture<AllMusicList?> value) {
+    _$fetchFuture2Atom.reportWrite(value, super.fetchFuture2, () {
+      super.fetchFuture2 = value;
+    });
+  }
+
+  late final _$fetchCategoryPlayListAsyncAction = AsyncAction(
+      '_MusicPlayListStore.fetchCategoryPlayList',
+      context: context);
+
+  @override
+  Future<void> fetchCategoryPlayList() {
+    return _$fetchCategoryPlayListAsyncAction
+        .run(() => super.fetchCategoryPlayList());
+  }
+
+  late final _$insertCategoryPlayListAsyncAction = AsyncAction(
+      '_MusicPlayListStore.insertCategoryPlayList',
+      context: context);
+
+  @override
+  Future<void> insertCategoryPlayList(
+      {required String name, required String totalSongs}) {
+    return _$insertCategoryPlayListAsyncAction.run(
+        () => super.insertCategoryPlayList(name: name, totalSongs: totalSongs));
   }
 
   late final _$insertMusicPlayListAsyncAction =
@@ -84,18 +151,18 @@ mixin _$MusicPlayListStore on _MusicPlayListStore, Store {
       required String subTitle,
       required String audio,
       required String image,
-      required String lyrics,
       required String subCategoryId,
-      required String subCategoryName}) {
+      required String subCategoryName,
+      required String lyrics}) {
     return _$insertMusicPlayListAsyncAction.run(() => super.insertMusicPlayList(
         id: id,
         title: title,
         subTitle: subTitle,
         audio: audio,
         image: image,
-        lyrics: lyrics,
         subCategoryId: subCategoryId,
-        subCategoryName: subCategoryName));
+        subCategoryName: subCategoryName,
+        lyrics: lyrics));
   }
 
   late final _$SelectedMusicListAsyncAction =
@@ -110,9 +177,12 @@ mixin _$MusicPlayListStore on _MusicPlayListStore, Store {
   @override
   String toString() {
     return '''
-fetchFuture: ${fetchFuture},
 AllMusicPlayList: ${AllMusicPlayList},
-getPlayListSong: ${getPlayListSong}
+AllCategoryList: ${AllCategoryList},
+fetchFuture: ${fetchFuture},
+fetchFuture2: ${fetchFuture2},
+getPlayListSong: ${getPlayListSong},
+getCategoryPlayList: ${getCategoryPlayList}
     ''';
   }
 }

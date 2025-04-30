@@ -103,7 +103,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                           ),
                           IconButton(
                             icon: Icon(Icons.more_vert),
-                            onPressed: (){},
+                            onPressed: () {},
                           ),
                         ],
                       ),
@@ -390,11 +390,11 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                           _musicControllerStore.isDownloadedPlaying
                               ? BottomDownloadedMusicPlayerBar(
                                 musicControllerStore: _musicControllerStore,
-                               
+                                isTapEnable: false,
                               )
                               : BottomMusicPlayerBar(
                                 musicControllerStore: _musicControllerStore,
-                                 isTapEnable: false,
+                                isTapEnable: false,
                               ),
                           // AdsScreen(),
                         ],

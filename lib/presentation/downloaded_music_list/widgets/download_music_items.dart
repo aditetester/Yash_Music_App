@@ -139,12 +139,12 @@ class _DownloadedMusicItemsState extends State<DownloadedMusicItems> {
   }
 
   void showAddToPlaylistDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AddToPlaylistDialog();
-      },
-    );
+    // showDialog(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return AddToPlaylistDialog();
+    //   },
+    // );
   }
 
   String _formatDuration(String duration) {

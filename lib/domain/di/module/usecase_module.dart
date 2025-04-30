@@ -15,6 +15,8 @@ import 'package:boilerplate_new_version/domain/usecase/downloaded_list/insert_Do
 import 'package:boilerplate_new_version/domain/usecase/music_list/get_musicList_usecase.dart';
 import 'package:boilerplate_new_version/domain/usecase/music_play_list/get_music_playlist_usecase.dart';
 import 'package:boilerplate_new_version/domain/usecase/music_play_list/insert_music_playlist_usecase.dart';
+import 'package:boilerplate_new_version/domain/usecase/music_play_list_category/get_category_playlist_usecase.dart';
+import 'package:boilerplate_new_version/domain/usecase/music_play_list_category/insert_category_playlist_usecase.dart';
 import 'package:boilerplate_new_version/domain/usecase/recent_play_list/delete_recent_playist_usecase.dart';
 import 'package:boilerplate_new_version/domain/usecase/recent_play_list/get_recent_playist_usecase.dart';
 import 'package:boilerplate_new_version/domain/usecase/recent_play_list/insert_recent_playist_usecase.dart';
@@ -41,6 +43,13 @@ class UseCaseModule {
       InsertMusicsUseCase(getIt<DownloadedRespositoryImp>()),
     );
 
+    getIt.registerSingleton<GetCategoryPlayListUsecase>(
+      GetCategoryPlayListUsecase(getIt<PlayListRespositoryImp>()),
+    );
+    getIt.registerSingleton<InsertCategoryPlayListUseCase>(
+      InsertCategoryPlayListUseCase(getIt<PlayListRespositoryImp>()),
+    );
+
     getIt.registerSingleton<GetMusicPlayListUsecase>(
       GetMusicPlayListUsecase(getIt<PlayListRespositoryImp>()),
     );
@@ -54,7 +63,7 @@ class UseCaseModule {
     getIt.registerSingleton<InsertRecentPlayListUseCase>(
       InsertRecentPlayListUseCase(getIt<RecentPlayListRespositoryImp>()),
     );
-      getIt.registerSingleton<DeleteRecentPlayListUseCase>(
+    getIt.registerSingleton<DeleteRecentPlayListUseCase>(
       DeleteRecentPlayListUseCase(getIt<RecentPlayListRespositoryImp>()),
     );
   }

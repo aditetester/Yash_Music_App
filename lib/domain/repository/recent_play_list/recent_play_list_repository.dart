@@ -7,6 +7,8 @@ abstract class RecentPlayListRepository {
   Future<AllMusicList> getRecentPlayList();
 
   Future<int> insert(MusicListModule params);
+
+  Future<int> delete(String params);
   
   
 }

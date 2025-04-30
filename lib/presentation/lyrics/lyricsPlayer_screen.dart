@@ -514,9 +514,11 @@ class _LyricsPlayerScreenState extends State<LyricsPlayerScreen> {
                       _musicControllerStore.isDownloadedPlaying
                           ? BottomDownloadedMusicPlayerBar(
                             musicControllerStore: _musicControllerStore,
+                            isTapEnable: false,
                           )
                           : BottomMusicPlayerBar(
                             musicControllerStore: _musicControllerStore,
+                            isTapEnable: false,
                           ),
                       // AdsScreen(),
                     ],

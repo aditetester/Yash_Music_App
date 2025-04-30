@@ -1,4 +1,6 @@
 import 'package:boilerplate_new_version/data/network/local/music_playlist.dart';
+import 'package:boilerplate_new_version/domain/entity/category_play_list/category.dart';
+import 'package:boilerplate_new_version/domain/entity/category_play_list/category_play_list.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
 import 'package:boilerplate_new_version/domain/entity/music_list/musicModule_list.dart';
 import 'package:boilerplate_new_version/domain/repository/music_play_list/playList_repository.dart';
@@ -14,10 +16,19 @@ class PlayListRespositoryImp extends PlayListRepository {
   Future<AllMusicList> getMusicPlayList() async {
     return await _LocalMusicPlayList.getMusicPlayList();
   }
-  
+
   @override
   Future<int> insert(MusicListModule data) async {
-   return await _LocalMusicPlayList.insertMusicPlayList(data);
+    return await _LocalMusicPlayList.insertMusicPlayList(data);
   }
-  
+
+  @override
+  Future<AllCategoryPlayList> getCategoryPlayList() async {
+    return await _LocalMusicPlayList.getCategoryPlayList();
+  }
+
+  @override
+  Future<int> insertCategory(CategoryPlayListModule data) async {
+    return await _LocalMusicPlayList.insertCategoryPlayList(data);
+  }
 }

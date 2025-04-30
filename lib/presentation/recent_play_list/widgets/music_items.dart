@@ -360,7 +360,7 @@ class _MusicItemsState extends State<MusicItems> {
                   context,
                 ).pushNamed(Routes.musicPlayer, arguments: widget.music);
               } else if (value == 'Add to Playlist') {
-                showAddToPlaylistDialog(context);
+                showAddToPlaylistDialog(context,widget.music );
               }
             },
             color: Color.fromARGB(255, 242, 242, 242), // background color
@@ -392,11 +392,11 @@ class _MusicItemsState extends State<MusicItems> {
     );
   }
 
-  void showAddToPlaylistDialog(BuildContext context) {
+  void showAddToPlaylistDialog(BuildContext context, MusicListModule music) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AddToPlaylistDialog();
+        return AddToPlaylistDialog(musicData: music,);
       },
     );
   }

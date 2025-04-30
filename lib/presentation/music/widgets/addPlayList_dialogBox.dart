@@ -1,28 +1,31 @@
+import 'package:boilerplate_new_version/di/service_locator.dart';
+import 'package:boilerplate_new_version/domain/entity/music_list/musicList.dart';
+import 'package:boilerplate_new_version/presentation/music_playlist_screen/store/music_playlist_store.dart';
 import 'package:flutter/material.dart';
 
 class AddToPlaylistDialog extends StatelessWidget {
+ MusicListModule musicData;
+
+  AddToPlaylistDialog({required this.musicData});
+
   final List<Map<String, dynamic>> playlists = [
-    {
-      "title": "Power of Attitude",
-      "subtitle": "42 Songs",
-      "image":
-          "https://example.com/image1.jpg", // Replace with real image or leave invalid to test fallback
-    },
-    {
-      "title": "Dark Love",
-      "subtitle": "22 Songs",
-      "image":
-          "https://example.com/image2.jpg", // Replace with real image or leave invalid
-    },
     {
       "title": "New Playlist",
       "subtitle": "0 Songs",
       "image": null, // This will trigger the fallback icon
     },
+    {
+      "title": "Power of Attitude",
+      "subtitle": "0 Songs",
+      "image":
+          "assets/images/demo_img.jpg", // Replace with real image or leave invalid to test fallback
+    },
   ];
+
 
   @override
   Widget build(BuildContext context) {
+    final MusicPlayListStore _musicPlayListStore = getIt<MusicPlayListStore>();
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       backgroundColor: Colors.grey.shade100,
@@ -84,6 +87,16 @@ class AddToPlaylistDialog extends StatelessWidget {
             ...playlists.map((playlist) {
               return InkWell(
                 onTap: () {
+                  _musicPlayListStore.insertMusicPlayList(
+                    id: musicData.id.toString(),
+                    title: musicData.title.toString(),
+                    subTitle: musicData.subtitle.toString(),
+                    audio: musicData.audio.toString(),
+                    image: musicData.image.toString(),
+                    subCategoryId: "2",
+                    subCategoryName: "Power Of Attitude",
+                    lyrics: musicData.lyrics.toString(),
+                  );
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("Added to '${playlist["title"]}'")),
@@ -156,9 +169,4 @@ class AddToPlaylistDialog extends StatelessWidget {
       child: const Icon(Icons.music_note, color: Colors.blue),
     );
   }
-}
-
-// Usage:
-void showAddToPlaylistDialog(BuildContext context) {
-  showDialog(context: context, builder: (context) => AddToPlaylistDialog());
 }

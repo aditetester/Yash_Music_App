@@ -143,28 +143,32 @@ class _MusicListState extends State<RecentMusicList> {
 
         _musicControllerStore.AllMusic = allMusicList!;
 
-        return ListView.builder(
-          padding: EdgeInsets.zero,
-          itemCount:allMusicList!.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                _musicControllerStore.playNext(
-                  currentIndex: index,
-                  nextplay: allMusicList![index],
-                );
-                Navigator.of(context).pushNamed(
-                  Routes.musicPlayer,
-                  arguments: allMusicList![index],
+        return Observer(
+          builder: (context) {
+            return ListView.builder(
+              padding: EdgeInsets.zero,
+              itemCount:allMusicList!.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    _musicControllerStore.playNext(
+                      currentIndex: index,
+                      nextplay: allMusicList![index],
+                    );
+                    Navigator.of(context).pushNamed(
+                      Routes.musicPlayer,
+                      arguments: allMusicList![index],
+                    );
+                  },
+                  child: MusicItems(
+                    totalDuration: "00:00",
+                    index: index,
+                    music: allMusicList![index],
+                  ),
                 );
               },
-              child: MusicItems(
-                totalDuration: "00:00",
-                index: index,
-                music: allMusicList![index],
-              ),
             );
-          },
+          }
         );
       },
     );

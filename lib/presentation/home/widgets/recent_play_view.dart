@@ -3,6 +3,7 @@ import 'package:boilerplate_new_version/di/service_locator.dart';
 import 'package:boilerplate_new_version/presentation/downloaded_music_list/store/download_list_store.dart';
 import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sizer/sizer.dart';
 
@@ -97,30 +98,34 @@ class RecentPlayView extends StatelessWidget {
                       ),
 
                       //  SizedBox(width: 13,),
-                      SizedBox(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            _downloadListStore.getDownloadedList?.contains(
-                                      title.toString(),
-                                    ) ??
-                                    false
-                                ? SvgPicture.asset(
-                                  "assets/svg/downloaded_icon.svg",
-                                  height: 2.h,
-                                  width: 2.w,
-                                )
-                                : SvgPicture.asset(
-                                  "assets/svg/download_icon.svg",
-                                  height: 2.h,
-                                  width: 2.w,
-                                ),
-                          SizedBox(width: 5,),
-                            Icon(Icons.more_vert_outlined, size: 20),
-                          ],
-                        ),
+                      Observer(
+                        builder: (context) {
+                          return SizedBox(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                _downloadListStore.getDownloadedList?.contains(
+                                          title.toString(),
+                                        ) ??
+                                        false
+                                    ? SvgPicture.asset(
+                                      "assets/svg/downloaded_icon.svg",
+                                      height: 2.h,
+                                      width: 2.w,
+                                    )
+                                    : SvgPicture.asset(
+                                      "assets/svg/download_icon.svg",
+                                      height: 2.h,
+                                      width: 2.w,
+                                    ),
+                              SizedBox(width: 5,),
+                                Icon(Icons.more_vert_outlined, size: 20),
+                              ],
+                            ),
+                          );
+                        }
                       ),
                     ],
                   ),

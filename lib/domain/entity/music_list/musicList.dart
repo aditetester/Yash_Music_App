@@ -1,6 +1,7 @@
 import 'package:boilerplate_new_version/core/data/network/constants/network_constants.dart';
 
 class MusicListModule {
+  String? recentId;
   String? id;
   String? title;
   String? subtitle;
@@ -9,7 +10,9 @@ class MusicListModule {
   String? subCategoryId;
   String? subCategoryName;
   String? lyrics;
-  MusicListModule({
+  MusicListModule(
+    {
+    this.recentId,
     this.id,
     this.title,
     this.image,
@@ -33,6 +36,20 @@ class MusicListModule {
 
   factory MusicListModule.fromMap2(Map<String, dynamic> json) =>
       MusicListModule(
+        recentId: json['recentId'].toString(),
+        id: json['id'].toString(),
+        title: json['title'].toString(),
+        subtitle: json['subTitle'].toString(),
+        audio: json['audio'].toString(),
+        image: json['image'].toString(),
+        subCategoryId: json['subCategoryId'].toString(),
+        subCategoryName: json['subCategoryName'].toString(),
+        lyrics: json['lyrics'].toString(),
+      );
+
+  factory MusicListModule.fromMap3(Map<String, dynamic> json) =>
+      MusicListModule(
+        recentId: json['localId'].toString(),
         id: json['id'].toString(),
         title: json['title'].toString(),
         subtitle: json['subTitle'].toString(),

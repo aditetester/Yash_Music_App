@@ -9,19 +9,19 @@ part of 'recent_music_list_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$RecentMusicListStore on _RecentMusicListStore, Store {
-  late final _$fetchPostsFutureAtom =
-      Atom(name: '_RecentMusicListStore.fetchPostsFuture', context: context);
+  late final _$_recentSongListAtom =
+      Atom(name: '_RecentMusicListStore._recentSongList', context: context);
 
   @override
-  ObservableFuture<AllMusicList?> get fetchPostsFuture {
-    _$fetchPostsFutureAtom.reportRead();
-    return super.fetchPostsFuture;
+  List<String>? get _recentSongList {
+    _$_recentSongListAtom.reportRead();
+    return super._recentSongList;
   }
 
   @override
-  set fetchPostsFuture(ObservableFuture<AllMusicList?> value) {
-    _$fetchPostsFutureAtom.reportWrite(value, super.fetchPostsFuture, () {
-      super.fetchPostsFuture = value;
+  set _recentSongList(List<String>? value) {
+    _$_recentSongListAtom.reportWrite(value, super._recentSongList, () {
+      super._recentSongList = value;
     });
   }
 
@@ -38,6 +38,22 @@ mixin _$RecentMusicListStore on _RecentMusicListStore, Store {
   set AllMusic(List<MusicListModule>? value) {
     _$AllMusicAtom.reportWrite(value, super.AllMusic, () {
       super.AllMusic = value;
+    });
+  }
+
+  late final _$fetchPostsFutureAtom =
+      Atom(name: '_RecentMusicListStore.fetchPostsFuture', context: context);
+
+  @override
+  ObservableFuture<AllMusicList?> get fetchPostsFuture {
+    _$fetchPostsFutureAtom.reportRead();
+    return super.fetchPostsFuture;
+  }
+
+  @override
+  set fetchPostsFuture(ObservableFuture<AllMusicList?> value) {
+    _$fetchPostsFutureAtom.reportWrite(value, super.fetchPostsFuture, () {
+      super.fetchPostsFuture = value;
     });
   }
 
@@ -62,9 +78,9 @@ mixin _$RecentMusicListStore on _RecentMusicListStore, Store {
       required String subTitle,
       required String audio,
       required String image,
-      required String lyrics,
       required String subCategoryId,
-      required String subCategoryName}) {
+      required String subCategoryName,
+      required String lyrics}) {
     return _$insertRecentPlayListAsyncAction.run(() => super
         .insertRecentPlayList(
             id: id,
@@ -72,16 +88,16 @@ mixin _$RecentMusicListStore on _RecentMusicListStore, Store {
             subTitle: subTitle,
             audio: audio,
             image: image,
-            lyrics: lyrics,
             subCategoryId: subCategoryId,
-            subCategoryName: subCategoryName));
+            subCategoryName: subCategoryName,
+            lyrics: lyrics));
   }
 
   @override
   String toString() {
     return '''
-fetchPostsFuture: ${fetchPostsFuture},
-AllMusic: ${AllMusic}
+AllMusic: ${AllMusic},
+fetchPostsFuture: ${fetchPostsFuture}
     ''';
   }
 }

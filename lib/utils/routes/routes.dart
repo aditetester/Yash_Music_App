@@ -4,6 +4,7 @@ import 'package:boilerplate_new_version/presentation/music/music_list.dart';
 import 'package:boilerplate_new_version/presentation/music_playlist_screen/music_playlist_screen.dart';
 import 'package:boilerplate_new_version/presentation/music_player/musicPlayer_DownloadedScreen.dart';
 import 'package:boilerplate_new_version/presentation/music_player/musicPlayer_screen.dart';
+import 'package:boilerplate_new_version/presentation/music_playlist_screen/widgets/music_play_list.dart';
 import 'package:boilerplate_new_version/presentation/recent_play_list/recent_music_list.dart';
 import 'package:boilerplate_new_version/presentation/search_music_screen/search_music_screen.dart';
 import 'package:boilerplate_new_version/presentation/sub_categories/sub_category_list.dart';
@@ -26,6 +27,8 @@ class Routes {
   static const String musicPlayerDownloadedScreen =
       '/musicPlayerDownloadedScreen';
   static const String musicPlayListScreen = '/musicPlayListScreen';
+  static const String musicPlayListView = '/musicPlayListView';
+  
   static const String recentMusicPlayListScreen = '/recentMusicPlayListScreen';
   
 
@@ -42,6 +45,7 @@ class Routes {
     musicPlayerDownloadedScreen:
         (BuildContext context) => MusicPlayerDownloadedScreen(),
     musicPlayListScreen: (BuildContext context) => MusicPlayListScreen(),
+    musicPlayListView : (BuildContext context) => MusicPlayListView(),
     recentMusicPlayListScreen: (BuildContext context) => RecentMusicList()
     
   };

@@ -1,5 +1,6 @@
 import 'package:boilerplate_new_version/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
+
 class SubCategoryItem extends StatelessWidget {
   final String id;
   final String title;
@@ -10,7 +11,9 @@ class SubCategoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void ViewSubCategories() async {
-      Navigator.of(context).pushNamed(Routes.musicList , arguments: id);
+      Navigator.of(
+        context,
+      ).pushNamed(Routes.musicList, arguments: {'id': id, 'name': title});
     }
 
     return ClipRRect(
